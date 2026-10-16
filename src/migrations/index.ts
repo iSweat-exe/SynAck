@@ -1,5 +1,7 @@
 import * as migration_20261016_174801_initial from './20261016_174801_initial';
 import * as migration_20261016_193601_sso_users from './20261016_193601_sso_users';
+import * as migration_20261016_225346_protocols from './20261016_225346_protocols';
+import * as migration_20261016_230342_courses_card_fields from './20261016_230342_courses_card_fields';
 
 export const migrations = [
   {
@@ -10,6 +12,16 @@ export const migrations = [
   {
     up: migration_20261016_193601_sso_users.up,
     down: migration_20261016_193601_sso_users.down,
-    name: '20261016_193601_sso_users'
+    name: '20261016_193601_sso_users',
+  },
+  {
+    up: migration_20261016_225346_protocols.up,
+    down: migration_20261016_225346_protocols.down,
+    name: '20261016_225346_protocols',
+  },
+  {
+    up: migration_20261016_230342_courses_card_fields.up,
+    down: migration_20261016_230342_courses_card_fields.down,
+    name: '20261016_230342_courses_card_fields'
   },
 ];

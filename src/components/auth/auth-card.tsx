@@ -21,9 +21,6 @@ export function AuthCard({
       <div className="receipt flex flex-col gap-6 px-6 pt-8 sm:px-8">
         <div className="flex flex-col items-center gap-2 text-center">
           <Logo className="w-36" />
-          <p className="text-[0.7rem] tracking-[0.2em] text-muted-foreground uppercase">
-            Programmation &amp; protocoles réseau
-          </p>
         </div>
 
         <hr className="receipt-rule" />
@@ -52,7 +49,7 @@ export function AuthCard({
           ) : null}
           <div aria-hidden className="barcode w-full max-w-48" />
           <p className="text-[0.7rem] tracking-[0.2em] uppercase">
-            Merci de votre visite
+            Prêt à commencer ?
           </p>
         </div>
       </div>

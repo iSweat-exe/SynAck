@@ -108,7 +108,7 @@ V1 scope in one line: **1 path** ("Introduction to Programming", JS + Python), *
 ### P1.4 Permissions and roles `area: auth` `area: db`
 Delivered in three PRs: (1) database, (2) app sign-in (P2.4), (3) Payload wired to the same accounts. **Decision: the back office is SSO only** (GitHub and Discord through Supabase Auth, same accounts as the app, no Payload password).
 - [x] **PR 1, database**: single permissions file `src/lib/permissions.ts` (closed list of 20, `resource.action` format); tables `roles`, `role_permissions`, `user_roles`, `audit_log`; `private.has_permission(user, permission)` plus `public.has_permission(permission)` for the signed-in user; starting presets (Member, Junior instructor, Senior instructor, Administrator) with a test that the migration matches the TypeScript list; every new account becomes a Member; `private.grant_role` / `private.revoke_role` (service role only, audited, last administrator protected); RLS on all four tables, read-only through the API; new `public` tables closed to the API roles by default; pgTAP tests (RLS, deny by default, immediate effect of a revocation)
-- [x] **PR 2, app sign-in** (see P2.4): Supabase Auth with GitHub and Discord (`/sign-in`, `/auth/callback`, sign-out), session refresh in `src/proxy.ts`, `/account` and the age gate `/welcome`. Code verified locally with real sessions; the OAuth round trip itself is validated on Vercel (see the setup list in the root README)
+- [x] **PR 2, app sign-in** (see P2.4): Supabase Auth with GitHub and Discord (`/sign-in`, `/auth/callback`, sign-out), session refresh in `src/proxy.ts`, `/profile` and the age gate `/welcome`. Code verified locally with real sessions; the OAuth round trip itself is validated on Vercel (see the setup list in the root README)
 - [x] **PR 3, Payload on the same accounts**: custom auth strategy (`src/lib/payload-auth.ts`) reading the Supabase session; local email/password strategy disabled; `/admin` reserved for accounts with `cms.access` (Payload user created on first sign-in, linked by `supabaseId`); permissions read from Postgres on every request through `public.my_permissions()` and used by the Payload `access` functions and publish hooks instead of "any signed-in user"; GitHub/Discord buttons on the admin login page and a sign-out that ends the Supabase session. Unit-tested with mocks; the real OAuth round trip into `/admin` is still to validate on Vercel
 - [ ] Bootstrap: sign in once with GitHub, then grant yourself `administrator` with `select private.grant_role('<user uuid>', 'administrator');` in the Supabase SQL editor; then retire the first email/password Payload account
 - [ ] Short-lived JWT (Supabase settings); sensitive actions (publish, delete, moderate, manage roles) re-read permissions from the database, which `has_permission` already does
@@ -118,8 +118,11 @@ Delivered in three PRs: (1) database, (2) app sign-in (P2.4), (3) Payload wired 
 ### P1.5 Theme and layout `area: ui`
 - [x] DESIGN.md §3 tokens as CSS variables + Tailwind theme (primary / neutral / semantic palette, `bg-primary-400`...), role tokens (`--bg`, `--ink`, `--outline`, `--shadow`) with a light and a dark set; a Vitest test checks that the palette matches the document
 - [x] **Space Mono** (4 variants, `font-synthesis: none`, self-hosted through `next/font`, accents shown on `/design-system`). Not applied to the Payload admin, which keeps its own UI
-- [x] Button restyled: Primary / Secondary, 3 sizes, icon-only, hover / pressed / disabled states (no visible focus ring, by decision), inline link
+- [x] Button restyled: Primary / Secondary / Danger, 3 sizes, icon-only, hover / pressed / disabled states (no visible focus ring, by decision), inline link
 - [x] Switch: off / on with a simple knob slide, disabled, hover / pressed (native checkbox with `role="switch"`)
+- [x] Instant search and multi-criteria filters on the section pages (`catalog-filter`, unit-tested)
+- [x] Four sections in the header (Parcours, Protocoles, Articles, Cursus) with a page each, content cards (banner and logo slot), and the error pages (404, 401, 403, 500)
+- [x] Site header with the account menu (avatar, profile, admin panel with `cms.access`, sign-out), home as the landing page after sign-in, redesigned `/profile`; the receipt style stays for the sign-in page only
 - [x] `AuthCard` as a receipt (logo, dashed rules, beta badge, small print, barcode, torn edge) and a `Logo` component from the supplied PNGs; SVG, dark-mode variant and favicon still to produce
 - [x] Dashed background with a click ripple (`DashBackground`) on the sign-in, welcome and account pages
 - [x] Card and Alert (semantic colors, light and dark), built from the button style (outline, hard shadow); the sign-in, welcome and account pages use them
@@ -136,7 +139,7 @@ Delivered in three PRs: (1) database, (2) app sign-in (P2.4), (3) Payload wired 
 *Exit: a visitor reads a public course; a signed-in user runs a JS and a Python exercise, uses hints, takes a quiz; their progress is saved.*
 
 ### P2.1 Public course rendering `area: ui` `area: seo`
-- [ ] Path / Course / Chapter pages server-rendered, ISR with revalidation on publish
+- [x] Course page `/paths/<slug>` (chapters with a table of contents, text and protocol-diagram blocks, ISR refreshed on publish, draft preview) and the list of CMS courses on `/paths`; still to do: path pages, a page per chapter, meta tags, Open Graph, structured data
 - [ ] Meta tags, Open Graph, structured data, `sitemap.xml`, `robots.txt`
 - [ ] A first demo chapter readable on mobile (16–18 px body, ~65 characters wide)
 
@@ -157,7 +160,7 @@ Delivered in three PRs: (1) database, (2) app sign-in (P2.4), (3) Payload wired 
 - [x] `profiles` (nickname, avatar, leaderboard opt-in), created with the account; **minimum age 15** declaration recorded server-side (`declare_age()`), enforced by the `/welcome` gate (declining deletes the account). The nickname chooser UI comes with the leaderboard (P3.4)
 - [x] RLS: everyone reads/writes only their own profile, and cannot write the age declaration directly (pgTAP)
 - [ ] `progress`, `exercise_attempts`, `quiz_results`; progress per course (%)
-- [ ] Account deletion and data export in the profile: `delete_my_account()` exists (used by the age refusal); a button in `/account` and the data export are still to build
+- [ ] Account deletion and data export in the profile: `delete_my_account()` exists (used by the age refusal); a button in `/profile` and the data export are still to build
 - [ ] Sign-in rate limiting (`rate_limits` table + SQL function)
 
 ### P2.5 Hints and solution `area: exercises` `area: cms`
@@ -181,8 +184,8 @@ Delivered in three PRs: (1) database, (2) app sign-in (P2.4), (3) Payload wired 
 *Exit: protocol modules playable without an account; badges, streaks, SM-2 reviews and a leaderboard secured server-side.*
 
 ### P3.1 Protocol modules `area: protocols`
-- [ ] Payload "Protocol animation" block (scenario + parameters)
-- [ ] **TCP**: SYN / SYN-ACK / ACK handshake, losses, retransmissions
+- [x] Payload "Protocol diagrams" collection (editors build the diagrams without code, preview, drafts, validation) and a "Protocol diagram" chapter block; the diagram always fits the screen
+- [x] **TCP**: SYN / SYN-ACK / ACK handshake, losses, retransmissions (`/protocols/tcp`, with the reusable `SequenceDiagram` engine; the Payload "Protocol animation" block and the other protocols are still to do)
 - [ ] **HTTP playground**: raw requests to a fake server simulated in a Worker
 - [ ] **DNS** then **TLS** (resolution, handshake)
 - [ ] Available without an account (acquisition lever)

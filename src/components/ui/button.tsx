@@ -9,6 +9,7 @@ const buttonVariants = cva("", {
     variant: {
       primary: "btn btn-primary",
       secondary: "btn btn-secondary",
+      danger: "btn btn-danger",
       link: "link cursor-pointer",
     },
     size: {

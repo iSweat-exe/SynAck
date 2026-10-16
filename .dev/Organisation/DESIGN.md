@@ -117,6 +117,9 @@ The style is **neo-brutalist**: thick, almost-black outline; hard drop shadow of
 - `neutral-300` bevel on the bottom and right edges.
 - Text in Space Mono Bold, `neutral-950`.
 
+### Danger button (derived from the kit)
+For destructive and sign-out actions: the soft red of the alerts (`danger-100` background, `danger-900` text, `danger-500` bevel; swapped in dark mode), same outline, shadow and states as the other buttons. In menus, a danger item is `danger-900` text and turns `danger-500` when highlighted.
+
 ### Switches (three visible states)
 - Pill-shaped track, `primary-50` background, `neutral-950` outline, hard shadow.
 - Inner knob: `primary-400` (elongated), `primary-200` (round, centered), `neutral-400` (elongated).
@@ -197,6 +200,31 @@ The screenshots have no known scale: border, radius, shadow offset and bevel mus
 - **Input / textarea**: `surface` background, outline `u` = 2 px, radius 2u like the buttons, height 48 px. Invalid: `danger-500` outline. Disabled: like a disabled button.
 - **Badge**: outlined pill, 24 px high, `neutral` / `secondary` / `primary` (full `primary-400` fill) and the four semantic variants in the soft tones (100 background, 900 text; swapped in dark mode), because the saturated 500 fills clashed with the pink palette.
 - **Tabs**: small outlined boxes; the selected one is `primary-400` with a hard shadow; the panel is an outlined surface.
+
+### Navigation and content cards
+The header carries the four sections as links: **Parcours** (`/paths`), **Protocoles** (`/protocols`), **Articles** (`/articles`) and **Cursus** (`/roadmaps`, roadmaps such as Fullstack or Software developer). The current one is filled with `primary-400` and outlined; on small screens the links move to a scrollable second row. Each section has its own page of **content cards**: a banner (random for now, generated from a seed by the DiceBear API in the site palette; to be replaced by CMS images), a square logo slot overlapping the banner (the technology's icon), tags, title and description. A card with a link lifts toward its shadow on hover; one without is dashed and flat ("Bientôt disponible").
+
+### Search and filters
+Each section page has an instant search (a field with a magnifier, every word must match the title, description, level or tags, accents and case ignored) and filter **chips** (toggle pills, `primary-400` when pressed) for the level and the theme. Criteria combine: the search and the groups all have to match, while several choices inside one group are alternatives. The result count is announced (`aria-live`), a "Réinitialiser" link clears everything, and an alert explains an empty result.
+
+### Protocol diagrams
+Animated **sequence diagrams** explain a protocol exchange between two machines (TCP, then HTTP, DNS, TLS).
+
+- **Engine**: `SequenceDiagram` draws a `Scenario` as SVG, animated with CSS (no animation library). Two lifelines (dashed), the actors on top with their **state** badge (`LISTEN`, `SYN_SENT`, `ESTABLISHED`...), and one slanted arrow per message (a message takes time): the arrow draws itself, a pill carrying the message name flies along it and fades when it lands, then the label and the arrowhead stay. Colors come from the tokens (primary for the main messages, secondary for acknowledgements, info for data, danger for a lost packet, warning for a wait).
+- **Scenario = data** (`src/lib/protocol-diagram.ts`, example `src/lib/scenarios/tcp-handshake.ts`): the actors, then steps with `from`, `to`, `label`, `detail`, `tone`, a `note` (the sentence shown while the message is played), the `states` of the actors once it has arrived, and an optional `lossy` block (what to say if the packet is lost, during the wait, and on the retransmission). It is plain JSON-like data so it can move to the CMS (the planned "Protocol animation" block) and be written without code.
+- **Interaction**: play / pause, previous, next, restart, a chip per step to jump to it (clicking an arrow works too), and a **"Simuler une perte de paquet"** switch: every `lossy` message is then lost on the way (red cross), followed by a wait and a retransmission, so the reader sees how the protocol recovers. Everything is keyboard-operable; a screen-reader list gives the text of every step; `prefers-reduced-motion` turns the animation off.
+- **Fits the screen**: on a protocol page the diagram is drawn to the height that is left under the header (`variant="stage"`), so the whole schema is always visible without scrolling, with the controls, the explanation and the step chips in a column beside it (below it on small screens, where the drawing is capped at about half of the screen height). Inside a flowing page (`variant="inline"`) it is capped at 70% of the screen height.
+- **Created in the CMS**: editors make diagrams in *Protocol diagrams* (Payload), with no code: the two machines (name, subtitle, initial state), then the messages one by one (who sends to whom, name, detail, a sentence, the state of each machine afterwards, and an optional "can be lost" with its three explanations). The site builds `/protocols/<slug>` from it, lists it on `/protocols` with the other protocols, and a *Preview* button opens the draft at `/preview/protocols/<slug>` for accounts with back-office access. Publishing refreshes the public pages at once (they are otherwise cached for a minute). A *Protocol diagram* block lets a course chapter embed a diagram. Half-filled messages are skipped rather than breaking the page. Diagrams that ship with the site (TCP) can be overridden by a CMS diagram with the same slug.
+- **Adding a protocol**: an editor creates it in the CMS; a developer can also write a `Scenario` in code. No new component either way. What the engine does not cover yet (several machines, a timeline of a congestion window, user-driven sending of a packet, editable parameters such as the delay or the loss rate) will be added as new step kinds or widgets, with the same data-first approach.
+
+### Course page
+`/paths/<slug>` shows a course from the CMS: title, level and theme badges, summary, then on wide screens a sticky list of chapters on the left (dashed rule) and the chapters on the right, each under an anchored title. A chapter's blocks are rendered in order: the **text** (rich text with our own markup, 65-character measure, links re-checked and external ones protected), and the **protocol diagrams**, which play in place inside an outlined card with a link to the full-screen page. A diagram that is not published, was deleted or has no usable message is left out for the public. Courses made in the CMS are listed on `/paths` before the planned ones; the *Preview* button of the CMS shows the draft at `/preview/courses/<slug>` (back-office accounts only).
+
+### Error pages
+404 (global and in the site), 401, 403 and 500 (page and root layout) share one card: the status code in a `primary-400` block like the logo's "Ack", a title, an explanation and the way out, on the dashed background.
+
+### Site header and account menu
+Sticky header with the bottom outline: the logo on the left, the account corner on the right. Signed out: a Primary "Se connecter" button. Signed in: the round avatar (provider picture, or the initials on `primary-400`) as a button with no shadow; it opens a menu (outlined surface, hard shadow, dashed separators, highlighted item in `primary-400`) with the profile, the admin panel and the design system for accounts with `cms.access`, and the sign-out. The header reads the session in the browser so the pages stay static.
 
 ### Auth ticket
 The sign-in, welcome and account pages share `AuthCard`, styled as a **receipt**: the logo and a tagline centered on top, sections separated by dashed rules, a title with the "Bêta" badge, the actions, the small print, a decorative barcode and a torn (zigzag) bottom edge. No header band. The outline and the hard shadow follow the torn edge (chained drop-shadows on a wrapper, the paper is masked). The logo comes from the supplied PNGs (`public/brand`), through a `Logo` component.

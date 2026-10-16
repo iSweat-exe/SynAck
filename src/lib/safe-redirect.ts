@@ -2,7 +2,7 @@
 // query parameter cannot be used as an open redirect to another site.
 export function safeRedirectPath(
   next: string | null | undefined,
-  fallback = "/account",
+  fallback = "/",
 ): string {
   if (!next) return fallback;
   if (!next.startsWith("/")) return fallback;

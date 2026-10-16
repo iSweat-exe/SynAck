@@ -7,6 +7,11 @@ import type { NextConfig } from "next";
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const nextConfig: NextConfig = {
+  experimental: {
+    // 404 for unmatched URLs across the several root layouts (site and Payload), and forbidden() / unauthorized().
+    globalNotFound: true,
+    authInterrupts: true,
+  },
   turbopack: {
     root: path.resolve(dirname),
     rules: {

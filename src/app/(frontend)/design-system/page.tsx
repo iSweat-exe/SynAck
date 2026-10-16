@@ -2,8 +2,15 @@ import type { Metadata } from "next";
 import { ArrowRight, Download, Plus } from "lucide-react";
 import type { ReactNode } from "react";
 
+import { SequenceDiagram } from "@/components/protocols/sequence-diagram";
+import { ContentCard } from "@/components/site/content-card";
+import { ErrorCard } from "@/components/site/error-screen";
+import { AccountMenu } from "@/components/site/user-menu";
 import { SwitchDemo } from "@/components/design-system/switch-demo";
 import { ThemeScope } from "@/components/design-system/theme-scope";
+
+import { tcpHandshake } from "@/lib/scenarios/tcp-handshake";
+
 import { Alert } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -35,6 +42,10 @@ const SECTIONS = [
   { id: "inputs", label: "Inputs" },
   { id: "badges", label: "Badges" },
   { id: "tabs", label: "Tabs" },
+  { id: "menus", label: "Menus" },
+  { id: "content-cards", label: "Content cards" },
+  { id: "diagrams", label: "Diagrams" },
+  { id: "errors", label: "Errors" },
   { id: "cards", label: "Cards" },
   { id: "alerts", label: "Alerts" },
   { id: "next", label: "To come" },
@@ -246,22 +257,22 @@ export default function DesignSystemPage() {
         >
           <Block
             title="Variants and sizes"
-            note="Primary is the main action of a screen, Secondary the other ones. Three sizes: sm, md (default), lg."
+            note="Primary is the main action of a screen, Secondary the other ones, Danger a destructive or sign-out action. Three sizes: sm, md (default), lg."
           >
             <div className="flex flex-col gap-8">
-              {(["primary", "secondary"] as const).map((variant) => (
+              {(["primary", "secondary", "danger"] as const).map((variant) => (
                 <div
                   key={variant}
                   className="flex flex-wrap items-center gap-x-8 gap-y-6"
                 >
                   <Button variant={variant} size="sm">
-                    {variant === "primary" ? "Primary" : "Secondary"} sm
+                    {variant[0].toUpperCase() + variant.slice(1)} sm
                   </Button>
                   <Button variant={variant} size="md">
-                    {variant === "primary" ? "Primary" : "Secondary"} md
+                    {variant[0].toUpperCase() + variant.slice(1)} md
                   </Button>
                   <Button variant={variant} size="lg">
-                    {variant === "primary" ? "Primary" : "Secondary"} lg
+                    {variant[0].toUpperCase() + variant.slice(1)} lg
                   </Button>
                 </div>
               ))}
@@ -273,24 +284,25 @@ export default function DesignSystemPage() {
             note="Hover moves the button toward its shadow, pressed sinks it, disabled is flat and gray. Try them for real on any button."
           >
             <div className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-5">
-              {(["primary", "secondary"] as const).flatMap((variant) =>
-                FORCED_STATES.map(({ label, force }) => (
-                  <div
-                    key={`${variant}-${label}`}
-                    className="flex flex-col items-start gap-4"
-                  >
-                    <span className="text-xs text-muted-foreground">
-                      {variant} / {label.toLowerCase()}
-                    </span>
-                    <Button
-                      variant={variant}
-                      disabled={force === "disabled"}
-                      data-force={force === "disabled" ? undefined : force}
+              {(["primary", "secondary", "danger"] as const).flatMap(
+                (variant) =>
+                  FORCED_STATES.map(({ label, force }) => (
+                    <div
+                      key={`${variant}-${label}`}
+                      className="flex flex-col items-start gap-4"
                     >
-                      {label}
-                    </Button>
-                  </div>
-                )),
+                      <span className="text-xs text-muted-foreground">
+                        {variant} / {label.toLowerCase()}
+                      </span>
+                      <Button
+                        variant={variant}
+                        disabled={force === "disabled"}
+                        data-force={force === "disabled" ? undefined : force}
+                      >
+                        {label}
+                      </Button>
+                    </div>
+                  )),
               )}
             </div>
           </Block>
@@ -530,9 +542,112 @@ export default function DesignSystemPage() {
         </Section>
 
         <Section
+          id="menus"
+          title="Menus and avatars"
+          description="The account menu of the site header: the profile picture (or the initials) as a button, and a dropdown with the profile, the admin panel for accounts with the right permission, and the sign-out. Built on Base UI: arrow keys, Escape and focus handling included."
+        >
+          <Block
+            title="Account menu"
+            note="Open it. The first one is an account with back-office access, the second a plain member without a picture."
+          >
+            <div className="flex flex-wrap items-start gap-12 pb-48">
+              <AccountMenu
+                user={{
+                  name: "ada-lovelace",
+                  email: "ada@example.test",
+                  canUseCms: true,
+                }}
+              />
+              <AccountMenu user={{ name: "Grace Hopper", canUseCms: false }} />
+            </div>
+          </Block>
+        </Section>
+
+        <Section
+          id="content-cards"
+          title="Content cards"
+          description="A card for a path, a protocol, an article or a roadmap: a banner on top (random for now, generated from a seed by an API), a logo slot overlapping it, tags, a title and a description."
+        >
+          <Block
+            title="Available and coming soon"
+            note="With a link the card moves toward its shadow on hover. Without one it is dashed and flat: not available yet."
+          >
+            <div className="grid gap-8 pr-2 sm:grid-cols-2">
+              <ContentCard
+                href="#content-cards"
+                seed="ds-python"
+                icon="python"
+                title="Python pour débuter"
+                description="Un langage lisible pour apprendre à raisonner en code."
+                tags={["Débutant", "Python"]}
+              />
+              <ContentCard
+                seed="ds-tcp"
+                icon="network"
+                title="TCP : le handshake"
+                description="SYN, SYN-ACK, ACK, pertes et retransmissions, animés pas à pas."
+                tags={["Transport", "Animé"]}
+              />
+            </div>
+          </Block>
+        </Section>
+
+        <Section
+          id="diagrams"
+          title="Protocol diagrams"
+          description="Animated sequence diagrams that explain a protocol exchange. A scenario is plain data (actors, messages, a sentence per step, the state of each machine): the same engine draws any protocol. Play it, step through it, jump to a step, or switch on a packet loss."
+        >
+          <Block
+            title="Sequence diagram"
+            note="The TCP handshake. The full page is /protocols/tcp."
+          >
+            <SequenceDiagram scenario={tcpHandshake} />
+          </Block>
+        </Section>
+
+        <Section
+          id="errors"
+          title="Error pages"
+          description="The screens shown for common errors, on the dashed background: 404 (global and in the site), 401, 403 and 500 (page and root layout). Shown here as cards."
+        >
+          <Block title="404, 401, 403, 500">
+            <div className="grid gap-8 pr-2 sm:grid-cols-2">
+              <ErrorCard
+                code="404"
+                title="Page introuvable"
+                description="Cette page n'existe pas, ou elle a été déplacée."
+              >
+                <Button>Retour à l&apos;accueil</Button>
+              </ErrorCard>
+              <ErrorCard
+                code="401"
+                title="Connexion requise"
+                description="Connectez-vous avec GitHub ou Discord pour accéder à cette page."
+              >
+                <Button>Se connecter</Button>
+              </ErrorCard>
+              <ErrorCard
+                code="403"
+                title="Accès refusé"
+                description="Votre compte n'a pas les droits nécessaires pour voir cette page."
+              >
+                <Button variant="secondary">Retour à l&apos;accueil</Button>
+              </ErrorCard>
+              <ErrorCard
+                code="500"
+                title="Une erreur est survenue"
+                description="Quelque chose s'est mal passé de notre côté. Réessayez dans un instant."
+              >
+                <Button>Réessayer</Button>
+              </ErrorCard>
+            </div>
+          </Block>
+        </Section>
+
+        <Section
           id="cards"
           title="Cards"
-          description="An outlined surface with the same hard shadow as the buttons. Used to group content: the sign-in, welcome and account pages are built with it."
+          description="An outlined surface with the same hard shadow as the buttons. Used to group content: the welcome and profile pages are built with it."
         >
           <Block
             title="Basic and with actions"
