@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 
 import { CatalogPage } from "@/components/site/catalog-page";
-import { ARTICLES } from "@/lib/catalog";
 
 export const metadata: Metadata = {
   title: "Articles | SynAck",
@@ -14,7 +13,7 @@ export default function ArticlesPage() {
     <CatalogPage
       title="Articles"
       description="La veille technique : des articles courts, écrits à la main, sur ce qui bouge dans les technologies."
-      items={ARTICLES}
+      section="articles"
     />
   );
 }

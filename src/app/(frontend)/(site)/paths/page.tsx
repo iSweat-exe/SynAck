@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 
 import { CatalogPage } from "@/components/site/catalog-page";
-import { PATHS } from "@/lib/catalog";
 
 export const metadata: Metadata = {
   title: "Parcours | SynAck",
@@ -14,7 +13,7 @@ export default function PathsPage() {
     <CatalogPage
       title="Parcours"
       description="Des cours courts, des exercices dans le navigateur et des quiz : apprenez un langage ou une technologie pas à pas."
-      items={PATHS}
+      section="paths"
     />
   );
 }

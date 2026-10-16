@@ -21,24 +21,31 @@ import {
 } from "react-icons/si";
 
 // Placeholder catalog of the four sections of the site, until the content comes from the CMS. Each entry
-// has an icon for the card's logo slot and a seed for the generated banner.
+// has an icon for the card's logo slot; the banner is generated from its id.
 export type CatalogIcon = ComponentType<{ className?: string }>;
+
+export const LEVELS = ["Débutant", "Intermédiaire", "Avancé"] as const;
+export type Level = (typeof LEVELS)[number];
 
 export type CatalogItem = {
   id: string;
   title: string;
   description: string;
+  level?: Level;
   tags: string[];
   icon: CatalogIcon;
 };
 
-export const PATHS: CatalogItem[] = [
+export type Section = "paths" | "protocols" | "articles" | "roadmaps";
+
+const PATHS: CatalogItem[] = [
   {
     id: "intro-programming",
     title: "Introduction à la programmation",
     description:
       "Variables, conditions, boucles, fonctions : les bases, en JS et en Python.",
-    tags: ["Débutant", "JS & Python"],
+    level: "Débutant",
+    tags: ["JavaScript", "Python"],
     icon: Binary,
   },
   {
@@ -46,14 +53,16 @@ export const PATHS: CatalogItem[] = [
     title: "JavaScript de zéro",
     description:
       "Le langage du web, des premiers pas aux fonctions et aux objets.",
-    tags: ["Débutant", "JavaScript"],
+    level: "Débutant",
+    tags: ["JavaScript", "Web"],
     icon: SiJavascript,
   },
   {
     id: "python",
     title: "Python pour débuter",
     description: "Un langage lisible pour apprendre à raisonner en code.",
-    tags: ["Débutant", "Python"],
+    level: "Débutant",
+    tags: ["Python"],
     icon: SiPython,
   },
   {
@@ -61,14 +70,16 @@ export const PATHS: CatalogItem[] = [
     title: "TypeScript en pratique",
     description:
       "Ajouter des types à votre JavaScript, sans se prendre la tête.",
-    tags: ["Intermédiaire", "TypeScript"],
+    level: "Intermédiaire",
+    tags: ["TypeScript", "Web"],
     icon: SiTypescript,
   },
   {
     id: "react",
     title: "Construire avec React",
     description: "Composants, état et rendu : bâtir une interface vivante.",
-    tags: ["Intermédiaire", "React"],
+    level: "Intermédiaire",
+    tags: ["React", "Web"],
     icon: SiReact,
   },
   {
@@ -76,17 +87,19 @@ export const PATHS: CatalogItem[] = [
     title: "Rust, la mémoire sans peur",
     description:
       "Ownership et emprunts : comprendre ce que le compilateur vous dit.",
-    tags: ["Avancé", "Rust"],
+    level: "Avancé",
+    tags: ["Rust", "Systèmes"],
     icon: SiRust,
   },
 ];
 
-export const PROTOCOLS: CatalogItem[] = [
+const PROTOCOLS: CatalogItem[] = [
   {
     id: "tcp",
     title: "TCP : le handshake",
     description:
       "SYN, SYN-ACK, ACK, pertes et retransmissions, animés pas à pas.",
+    level: "Débutant",
     tags: ["Transport", "Animé"],
     icon: Network,
   },
@@ -95,6 +108,7 @@ export const PROTOCOLS: CatalogItem[] = [
     title: "HTTP : le bac à sable",
     description:
       "Écrivez des requêtes brutes et lisez les réponses d'un faux serveur.",
+    level: "Débutant",
     tags: ["Application", "Interactif"],
     icon: Globe,
   },
@@ -103,6 +117,7 @@ export const PROTOCOLS: CatalogItem[] = [
     title: "DNS : de l'adresse à l'IP",
     description:
       "Suivez une résolution de nom, du résolveur aux serveurs racine.",
+    level: "Intermédiaire",
     tags: ["Application", "Animé"],
     icon: Server,
   },
@@ -110,35 +125,36 @@ export const PROTOCOLS: CatalogItem[] = [
     id: "tls",
     title: "TLS : la poignée de main chiffrée",
     description: "Comment deux inconnus s'accordent sur un secret, en public.",
+    level: "Avancé",
     tags: ["Sécurité", "Animé"],
     icon: Lock,
   },
 ];
 
-export const ARTICLES: CatalogItem[] = [
+const ARTICLES: CatalogItem[] = [
   {
     id: "veille-1",
     title: "Premier article de veille",
     description: "Un sujet d'actualité technique, expliqué simplement.",
-    tags: ["Veille", "À venir"],
+    tags: ["Veille", "Web"],
     icon: Newspaper,
   },
   {
     id: "veille-2",
     title: "Deuxième article de veille",
     description: "Un autre regard sur ce qui bouge dans l'écosystème.",
-    tags: ["Veille", "À venir"],
+    tags: ["Veille", "Sécurité"],
     icon: Newspaper,
   },
 ];
 
-export const ROADMAPS: CatalogItem[] = [
+const ROADMAPS: CatalogItem[] = [
   {
     id: "fullstack",
     title: "Développeur Fullstack",
     description:
       "De l'interface à la base de données : le parcours complet du web.",
-    tags: ["Cursus", "Web"],
+    tags: ["Web", "Métier"],
     icon: Layers,
   },
   {
@@ -146,7 +162,7 @@ export const ROADMAPS: CatalogItem[] = [
     title: "Développeur Software",
     description:
       "Algorithmes, structures de données et conception de logiciels.",
-    tags: ["Cursus", "Logiciel"],
+    tags: ["Logiciel", "Métier"],
     icon: Cpu,
   },
   {
@@ -154,24 +170,31 @@ export const ROADMAPS: CatalogItem[] = [
     title: "Réseaux et systèmes",
     description:
       "Comprendre ce qui circule sur le câble, et les machines au bout.",
-    tags: ["Cursus", "Infra"],
+    tags: ["Infra", "Métier"],
     icon: Route,
   },
   {
     id: "devops",
     title: "DevOps",
     description: "Conteneurs, déploiement et automatisation de bout en bout.",
-    tags: ["Cursus", "Ops"],
+    tags: ["Infra", "Métier"],
     icon: SiDocker,
   },
   {
     id: "security",
     title: "Cybersécurité",
     description: "Attaquer pour mieux défendre : les bases de la sécurité.",
-    tags: ["Cursus", "Sécurité"],
+    tags: ["Sécurité", "Métier"],
     icon: ShieldCheck,
   },
 ];
+
+export const CATALOG: Record<Section, CatalogItem[]> = {
+  paths: PATHS,
+  protocols: PROTOCOLS,
+  articles: ARTICLES,
+  roadmaps: ROADMAPS,
+};
 
 // Random banner for a card, generated by the DiceBear API from a seed (stable for a given seed), in the
 // palette of the site. Temporary: banners will come from the CMS.

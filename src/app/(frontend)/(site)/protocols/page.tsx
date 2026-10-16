@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 
 import { CatalogPage } from "@/components/site/catalog-page";
-import { PROTOCOLS } from "@/lib/catalog";
 
 export const metadata: Metadata = {
   title: "Protocoles | SynAck",
@@ -14,7 +13,7 @@ export default function ProtocolsPage() {
     <CatalogPage
       title="Protocoles"
       description="Comprenez ce qui se passe vraiment sur le réseau : des animations et des bacs à sable pour TCP, HTTP, DNS et TLS."
-      items={PROTOCOLS}
+      section="protocols"
     />
   );
 }

@@ -686,6 +686,31 @@
     letter-spacing: -0.02em;
   }
 
+  /* Filter chip: a toggle pill; pressed it takes the main color. */
+  .chip {
+    --u: 2px;
+    height: 2rem;
+    padding-inline: 0.75rem;
+    border: var(--u) solid var(--outline);
+    border-radius: 9999px;
+    background: var(--btn-secondary-bg);
+    color: var(--btn-secondary-ink);
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .chip:hover {
+    background: var(--accent-bg);
+    color: var(--accent-ink);
+  }
+  .chip[aria-pressed="true"] {
+    background: var(--primary-400);
+    color: var(--on-fill);
+  }
+
   /* Site header */
   .site-header {
     border-bottom: 2px solid var(--outline);

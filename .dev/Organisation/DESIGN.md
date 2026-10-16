@@ -204,6 +204,9 @@ The screenshots have no known scale: border, radius, shadow offset and bevel mus
 ### Navigation and content cards
 The header carries the four sections as links: **Parcours** (`/paths`), **Protocoles** (`/protocols`), **Articles** (`/articles`) and **Cursus** (`/roadmaps`, roadmaps such as Fullstack or Software developer). The current one is filled with `primary-400` and outlined; on small screens the links move to a scrollable second row. Each section has its own page of **content cards**: a banner (random for now, generated from a seed by the DiceBear API in the site palette; to be replaced by CMS images), a square logo slot overlapping the banner (the technology's icon), tags, title and description. A card with a link lifts toward its shadow on hover; one without is dashed and flat ("Bientôt disponible").
 
+### Search and filters
+Each section page has an instant search (a field with a magnifier, every word must match the title, description, level or tags, accents and case ignored) and filter **chips** (toggle pills, `primary-400` when pressed) for the level and the theme. Criteria combine: the search and the groups all have to match, while several choices inside one group are alternatives. The result count is announced (`aria-live`), a "Réinitialiser" link clears everything, and an alert explains an empty result.
+
 ### Error pages
 404 (global and in the site), 401, 403 and 500 (page and root layout) share one card: the status code in a `primary-400` block like the logo's "Ack", a title, an explanation and the way out, on the dashed background.
 

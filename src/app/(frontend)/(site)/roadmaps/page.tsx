@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 
 import { CatalogPage } from "@/components/site/catalog-page";
-import { ROADMAPS } from "@/lib/catalog";
 
 export const metadata: Metadata = {
   title: "Cursus | SynAck",
@@ -14,7 +13,7 @@ export default function RoadmapsPage() {
     <CatalogPage
       title="Cursus"
       description="Des feuilles de route pour savoir quoi apprendre, dans quel ordre, pour viser un métier : développeur fullstack, software, réseaux, sécurité…"
-      items={ROADMAPS}
+      section="roadmaps"
     />
   );
 }
