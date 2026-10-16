@@ -117,7 +117,10 @@ export default async function ProfilePage() {
           <Card>
             <CardTitle className="text-xl">Session</CardTitle>
             {canUseCms ? (
-              <Button render={<Link href="/admin" prefetch={false} />}>
+              <Button
+                render={<Link href="/admin" prefetch={false} />}
+                nativeButton={false}
+              >
                 Ouvrir le panel admin
               </Button>
             ) : null}
