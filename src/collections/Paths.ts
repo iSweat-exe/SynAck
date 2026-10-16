@@ -1,6 +1,10 @@
 import type { CollectionConfig } from "payload";
 
-import { publishedOrSignedIn } from "@/collections/access";
+import {
+  publishedOrEditor,
+  publishRequires,
+  requirePermission,
+} from "@/collections/access";
 import { slugField } from "@/fields/slug";
 
 export const Paths: CollectionConfig = {
@@ -11,8 +15,15 @@ export const Paths: CollectionConfig = {
     group: "Learning",
     defaultColumns: ["title", "level", "_status"],
   },
-  access: { read: publishedOrSignedIn },
+  access: {
+    read: publishedOrEditor,
+    readVersions: requirePermission("cms.access"),
+    create: requirePermission("paths.manage"),
+    update: requirePermission("paths.manage"),
+    delete: requirePermission("paths.manage"),
+  },
   versions: { drafts: true },
+  hooks: { beforeChange: [publishRequires("paths.manage")] },
   fields: [
     { name: "title", type: "text", required: true },
     slugField(),

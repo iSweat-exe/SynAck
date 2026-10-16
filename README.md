@@ -35,7 +35,9 @@ One-time setup for a hosted project:
 2. Supabase > Authentication > URL Configuration: *Site URL* = the site URL; *Redirect URLs* = `<site URL>/auth/callback` (and `http://localhost:3000/auth/callback` for local work).
 3. GitHub OAuth app and Discord application: *callback URL* = `https://<project ref>.supabase.co/auth/v1/callback`; put each Client ID/secret in Supabase > Authentication > Providers.
 
-Pages: `/sign-in` (sign-in), `/welcome` (age confirmation, 15+), `/account` (account). Server code must read the user with `supabase.auth.getUser()`; the proxy only refreshes the session.
+Pages: `/sign-in` (sign-in), `/welcome` (age confirmation, 15+), `/account` (account).
+
+The back office (`/admin`) has no password: it uses the same GitHub/Discord accounts and only lets in accounts holding the `cms.access` permission. To bootstrap the first administrator, sign in once on `/sign-in`, then run `select private.grant_role('<user uuid>', 'administrator');` in the Supabase SQL editor (the uuid is in Authentication > Users) and open `/admin`. Server code must read the user with `supabase.auth.getUser()`; the proxy only refreshes the session.
 
 ### Local database
 
@@ -70,7 +72,7 @@ Checks run by CI: `npm run lint`, `npm run format:check`, `npm run typecheck`, `
 - `.github/`: CI/CD workflows, labels, issue and PR templates, rulesets to import (see [rulesets/README.md](.github/rulesets/README.md))
 - `docs/design/`: logo and UI kit images
 - `src/`: the Next.js application (App Router); `src/collections`, `src/blocks` and `src/fields` hold the Payload CMS configuration, `src/migrations` its migrations
-- `supabase/`: database migrations (to be created)
+- `supabase/`: database migrations, seed and pgTAP tests
 
 ## Contributing
 
