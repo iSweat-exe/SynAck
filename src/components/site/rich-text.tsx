@@ -12,6 +12,17 @@ import { isSafeUrl } from "@/lib/safe-url";
 // as plain text, and external links open with `rel="noopener noreferrer"`.
 const converters: JSXConvertersFunction = ({ defaultConverters }) => ({
   ...defaultConverters,
+  blocks: {
+    Code: ({ node }: { node: { fields: unknown } }) => {
+      const { language, code } = node.fields as {
+        language?: string;
+        code?: string;
+      };
+      return (
+        <CodeSnippet language={language ?? "plaintext"} code={code ?? ""} />
+      );
+    },
+  },
   link: ({ node, nodesToJSX }) => {
     const children = nodesToJSX({ nodes: node.children });
     const url: unknown = node.fields?.url;
@@ -29,6 +40,25 @@ const converters: JSXConvertersFunction = ({ defaultConverters }) => ({
     );
   },
 });
+
+const LANGUAGE_LABELS: Record<string, string> = {
+  javascript: "JavaScript",
+  python: "Python",
+  plaintext: "Résultat",
+};
+
+// A code sample: the language as a tab above a block of preformatted text. The code is rendered as text
+// (React escapes it), never as markup.
+function CodeSnippet({ language, code }: { language: string; code: string }) {
+  return (
+    <figure className="code-snippet">
+      <figcaption>{LANGUAGE_LABELS[language] ?? language}</figcaption>
+      <pre tabIndex={0}>
+        <code>{code}</code>
+      </pre>
+    </figure>
+  );
+}
 
 export function RichTextContent({ data }: { data: RichTextBody }) {
   return (

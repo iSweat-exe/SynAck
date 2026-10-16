@@ -172,8 +172,9 @@ Delivered in three PRs: (1) database, (2) app sign-in (P2.4), (3) Payload wired 
 - [ ] Payload Quiz block (questions, answers, explanations), result recorded
 
 ### P2.7 "Introduction to Programming" path `area: content`
-- [ ] Variables, conditionals, loops, functions, data structures
-- [ ] Alternate short explanation, exercise, quiz; exercises in **JS and Python**
+- [x] Variables, conditionals, loops, functions, data structures: the whole course is written (10 chapters, about 13,500 words with the code, in `content/courses/introduction-a-la-programmation`): welcome, first program, variables, conditions, loops, functions, lists, dictionaries, debugging, and a final project (a shop's till printing a receipt), one thread through the course. Every code sample was run in Node and Python (`npm run content:check`)
+- [x] Alternate short explanation, exercise, quiz; exercises in **JS and Python**: each chapter has the idea, a worked example, a summary, a quiz (with a recall question from an earlier chapter), a bug to fix, an exercise and the answers with their explanation, in both languages. Quizzes and exercises are text with answers for now; the interactive Exercise and Quiz blocks (P2.2, P2.6) will replace them
+- [x] Courses can be written as Markdown files and loaded into the CMS (`npm run content:import`), with a code block in the editor and on the site
 - [ ] Senior instructor review (draft → review → publish workflow tested end to end)
 - [ ] **Done when**: the whole path can be published from Payload without touching code
 

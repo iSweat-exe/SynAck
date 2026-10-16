@@ -73,3 +73,50 @@ describe("RichTextContent links", () => {
     expect(html).toContain("cliquez");
   });
 });
+
+describe("RichTextContent code samples", () => {
+  function codeState(language: string, code: string) {
+    return {
+      root: {
+        type: "root",
+        version: 1,
+        direction: "ltr",
+        format: "",
+        indent: 0,
+        children: [
+          {
+            type: "block",
+            version: 2,
+            format: "",
+            fields: { id: "c1", blockType: "Code", language, code },
+          },
+        ],
+      },
+    } as never;
+  }
+
+  it("shows the code as text under its language", () => {
+    const html = renderToStaticMarkup(
+      <RichTextContent data={codeState("python", 'print("Bonjour")')} />,
+    );
+    expect(html).toContain("Python");
+    expect(html).toContain("print(&quot;Bonjour&quot;)");
+  });
+
+  it("never turns the code into markup", () => {
+    const html = renderToStaticMarkup(
+      <RichTextContent
+        data={codeState("javascript", "<script>alert(1)</script>")}
+      />,
+    );
+    expect(html).not.toContain("<script>");
+    expect(html).toContain("&lt;script&gt;");
+  });
+
+  it("labels the plain-text output of a program", () => {
+    const html = renderToStaticMarkup(
+      <RichTextContent data={codeState("plaintext", "Bonjour !")} />,
+    );
+    expect(html).toContain("Résultat");
+  });
+});

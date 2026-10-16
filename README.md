@@ -54,6 +54,22 @@ npm run db:stop
 
 Editors create animated protocol diagrams in the back office, *Protocol diagrams*: describe the two machines, then each message (sender, name, detail, a sentence of explanation, the machines' state afterwards, and whether readers can make it get lost). The page `/protocols/<slug>` is built from it, the *Preview* button shows the draft, and publishing refreshes the site. The format is documented in `.dev/Organisation/DESIGN.md` (Protocol diagrams). A course (`/paths/<slug>`) embeds a diagram with the *Protocol diagram* block of a chapter.
 
+### Writing a course in Markdown
+
+Typing a whole course into the CMS editor is slow, so courses can be written as Markdown files and loaded into the CMS. A course is a folder in `content/courses/<slug>/`:
+
+- `course.md`: front matter only (`title`, `slug`, `summary`, `level`, `icon`, `tags`);
+- `01-something.md`, `02-other.md`...: one file per chapter, starting with a `# Chapter title` line, then the lesson. Write section headings with `##` (they appear one level lower under the chapter title); use fenced code blocks with a language (` ```javascript `, ` ```python `, ` ```plaintext ` for an output); no tables or raw HTML (the editor cannot represent them).
+
+```bash
+npm run content:check -- content/courses/<slug>                    # runs every code sample and reports its output
+npm run content:import -- content/courses/<slug> --dry-run         # reads and converts, writes nothing
+npm run content:import -- content/courses/<slug>                   # creates or updates the course as a draft
+npm run content:import -- content/courses/<slug> --publish         # ... and publishes it
+```
+
+The import needs `DATABASE_URI` and `PAYLOAD_SECRET` (read from `.env`), updates the course with the same slug (the Markdown is the source of truth), and acts as the operator: whoever runs it has access to the database. `npm test` checks that every chapter follows the structure of the course (an objective, a quiz, a bug to fix, an exercise, the answers).
+
 ### Content management (Payload CMS)
 
 The back office is served at `/admin`, the REST API at `/api`. Payload stores its tables in the `payload` schema of the same Postgres database, and schema changes always go through versioned migrations (auto-push is disabled):

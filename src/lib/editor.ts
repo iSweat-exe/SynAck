@@ -1,5 +1,7 @@
 import {
+  BlocksFeature,
   BlockquoteFeature,
+  CodeBlock,
   BoldFeature,
   FixedToolbarFeature,
   HeadingFeature,
@@ -34,6 +36,20 @@ export const editor = lexicalEditor({
     OrderedListFeature(),
     BlockquoteFeature(),
     HorizontalRuleFeature(),
+    // Code samples: a block with a language (JavaScript, Python or plain text for an output).
+    BlocksFeature({
+      blocks: [
+        CodeBlock({
+          slug: "Code",
+          defaultLanguage: "javascript",
+          languages: {
+            javascript: "JavaScript",
+            python: "Python",
+            plaintext: "Texte (résultat affiché)",
+          },
+        }),
+      ],
+    }),
     LinkFeature({
       enabledCollections: [],
       fields: ({ defaultFields }) =>

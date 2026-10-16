@@ -29,10 +29,17 @@ export const authorOrPermission =
     return false;
   };
 
+// Server-side tools (the content importer, run by someone with database access) mark their requests as
+// trusted through the Local API `context`. The REST and GraphQL APIs never let a client set it.
+function isTrustedImport(req: { context?: Record<string, unknown> }) {
+  return req.context?.trustedImport === true;
+}
+
 // Publishing is a separate permission from editing: a draft can be saved without it.
 export const publishRequires =
   (permission: Permission): CollectionBeforeChangeHook =>
   ({ data, req }) => {
+    if (isTrustedImport(req)) return data;
     if (data._status === "published" && !can(req.user, permission)) {
       throw new APIError("You are not allowed to publish.", 403);
     }
