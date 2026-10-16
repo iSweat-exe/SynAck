@@ -594,6 +594,98 @@
     color: var(--on-fill);
   }
 
+  /* Header navigation links */
+  .nav-link {
+    --u: 2px;
+    display: inline-flex;
+    align-items: center;
+    height: 2.25rem;
+    padding-inline: 0.875rem;
+    border: var(--u) solid transparent;
+    border-radius: calc(var(--u) * 2);
+    color: var(--ink);
+    font-size: 0.875rem;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+  .nav-link:hover {
+    background: var(--accent-bg);
+    color: var(--accent-ink);
+  }
+  .nav-link-current,
+  .nav-link-current:hover {
+    border-color: var(--outline);
+    background: var(--primary-400);
+    color: var(--on-fill);
+  }
+
+  /* Content card: banner, a logo slot overlapping it, then the text. */
+  .content-card {
+    --u: 2px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: var(--u) solid var(--outline);
+    border-radius: calc(var(--u) * 4);
+    background: var(--surface);
+    color: var(--ink);
+    text-decoration: none;
+    box-shadow: calc(var(--u) * 2) calc(var(--u) * 2) 0 var(--shadow);
+    transition:
+      transform 80ms ease-out,
+      box-shadow 80ms ease-out;
+  }
+  .content-card-link:hover {
+    transform: translate(var(--u), var(--u));
+    box-shadow: var(--u) var(--u) 0 var(--shadow);
+  }
+  .content-card-soon {
+    border-style: dashed;
+    box-shadow: none;
+  }
+  .content-card-banner {
+    height: 8rem;
+    overflow: hidden;
+    border-bottom: var(--u) solid var(--outline);
+    background: var(--primary-100);
+  }
+  .content-card-soon .content-card-banner {
+    border-bottom-style: dashed;
+  }
+  .content-card-banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .content-card-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    margin-top: -1.75rem;
+    border: var(--u) solid var(--outline);
+    border-radius: calc(var(--u) * 3);
+    background: var(--surface);
+    color: var(--ink);
+  }
+
+  /* Status code of an error page, in a pink block like the "Ack" of the logo. */
+  .error-code {
+    align-self: flex-start;
+    padding: 0.25rem 1.25rem;
+    border: 2px solid var(--outline);
+    border-radius: 0.75rem;
+    background: var(--primary-400);
+    color: var(--on-fill);
+    font-size: 4rem;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
   /* Site header */
   .site-header {
     border-bottom: 2px solid var(--outline);

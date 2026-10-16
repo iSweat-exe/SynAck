@@ -1,10 +1,36 @@
+import { ContentCard } from "@/components/site/content-card";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardDescription, CardTitle } from "@/components/ui/card";
+import { Layers, Network, Newspaper, Binary } from "lucide-react";
 
-const SOON = [
-  { title: "Introduction à la programmation", tag: "Parcours" },
-  { title: "Le handshake TCP, en vrai", tag: "Protocoles" },
-  { title: "Veille technique", tag: "Articles" },
+const SECTIONS = [
+  {
+    href: "/paths",
+    title: "Parcours",
+    description: "Des cours courts et des exercices dans le navigateur.",
+    tags: ["Cours", "Exercices"],
+    icon: Binary,
+  },
+  {
+    href: "/protocols",
+    title: "Protocoles",
+    description: "TCP, HTTP, DNS et TLS, animés et interactifs.",
+    tags: ["Réseau", "Interactif"],
+    icon: Network,
+  },
+  {
+    href: "/articles",
+    title: "Articles",
+    description: "La veille technique, en articles courts.",
+    tags: ["Veille"],
+    icon: Newspaper,
+  },
+  {
+    href: "/roadmaps",
+    title: "Cursus",
+    description: "Des feuilles de route pour viser un métier.",
+    tags: ["Roadmaps"],
+    icon: Layers,
+  },
 ];
 
 export default function Home() {
@@ -23,22 +49,19 @@ export default function Home() {
         </p>
       </section>
 
-      <section aria-labelledby="soon" className="flex flex-col gap-6">
-        <h2 id="soon" className="text-xl font-bold">
-          Bientôt disponible
+      <section aria-labelledby="explore" className="flex flex-col gap-6">
+        <h2 id="explore" className="text-xl font-bold">
+          Explorer
         </h2>
-        <ul className="grid gap-8 pr-2 sm:grid-cols-2 lg:grid-cols-3">
-          {SOON.map(({ title, tag }) => (
-            <li key={title}>
-              <Card className="h-full border-dashed shadow-none">
-                <Badge variant="secondary" className="self-start">
-                  {tag}
-                </Badge>
-                <CardTitle className="text-xl">{title}</CardTitle>
-                <CardDescription>
-                  En préparation : le contenu apparaîtra ici.
-                </CardDescription>
-              </Card>
+        <ul className="grid gap-8 pr-2 sm:grid-cols-2 lg:grid-cols-4">
+          {SECTIONS.map(({ href, ...section }) => (
+            <li key={href} className="flex">
+              <ContentCard
+                {...section}
+                href={href}
+                seed={`home-${href}`}
+                className="w-full"
+              />
             </li>
           ))}
         </ul>

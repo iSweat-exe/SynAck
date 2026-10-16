@@ -201,6 +201,12 @@ The screenshots have no known scale: border, radius, shadow offset and bevel mus
 - **Badge**: outlined pill, 24 px high, `neutral` / `secondary` / `primary` (full `primary-400` fill) and the four semantic variants in the soft tones (100 background, 900 text; swapped in dark mode), because the saturated 500 fills clashed with the pink palette.
 - **Tabs**: small outlined boxes; the selected one is `primary-400` with a hard shadow; the panel is an outlined surface.
 
+### Navigation and content cards
+The header carries the four sections as links: **Parcours** (`/paths`), **Protocoles** (`/protocols`), **Articles** (`/articles`) and **Cursus** (`/roadmaps`, roadmaps such as Fullstack or Software developer). The current one is filled with `primary-400` and outlined; on small screens the links move to a scrollable second row. Each section has its own page of **content cards**: a banner (random for now, generated from a seed by the DiceBear API in the site palette; to be replaced by CMS images), a square logo slot overlapping the banner (the technology's icon), tags, title and description. A card with a link lifts toward its shadow on hover; one without is dashed and flat ("Bientôt disponible").
+
+### Error pages
+404 (global and in the site), 401, 403 and 500 (page and root layout) share one card: the status code in a `primary-400` block like the logo's "Ack", a title, an explanation and the way out, on the dashed background.
+
 ### Site header and account menu
 Sticky header with the bottom outline: the logo on the left, the account corner on the right. Signed out: a Primary "Se connecter" button. Signed in: the round avatar (provider picture, or the initials on `primary-400`) as a button with no shadow; it opens a menu (outlined surface, hard shadow, dashed separators, highlighted item in `primary-400`) with the profile, the admin panel and the design system for accounts with `cms.access`, and the sign-out. The header reads the session in the browser so the pages stay static.
 

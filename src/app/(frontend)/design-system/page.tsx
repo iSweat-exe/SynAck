@@ -2,9 +2,14 @@ import type { Metadata } from "next";
 import { ArrowRight, Download, Plus } from "lucide-react";
 import type { ReactNode } from "react";
 
+import { ContentCard } from "@/components/site/content-card";
+import { ErrorCard } from "@/components/site/error-screen";
 import { AccountMenu } from "@/components/site/user-menu";
 import { SwitchDemo } from "@/components/design-system/switch-demo";
 import { ThemeScope } from "@/components/design-system/theme-scope";
+import { Network } from "lucide-react";
+import { SiPython } from "react-icons/si";
+
 import { Alert } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -37,6 +42,8 @@ const SECTIONS = [
   { id: "badges", label: "Badges" },
   { id: "tabs", label: "Tabs" },
   { id: "menus", label: "Menus" },
+  { id: "content-cards", label: "Content cards" },
+  { id: "errors", label: "Errors" },
   { id: "cards", label: "Cards" },
   { id: "alerts", label: "Alerts" },
   { id: "next", label: "To come" },
@@ -550,6 +557,74 @@ export default function DesignSystemPage() {
                 }}
               />
               <AccountMenu user={{ name: "Grace Hopper", canUseCms: false }} />
+            </div>
+          </Block>
+        </Section>
+
+        <Section
+          id="content-cards"
+          title="Content cards"
+          description="A card for a path, a protocol, an article or a roadmap: a banner on top (random for now, generated from a seed by an API), a logo slot overlapping it, tags, a title and a description."
+        >
+          <Block
+            title="Available and coming soon"
+            note="With a link the card moves toward its shadow on hover. Without one it is dashed and flat: not available yet."
+          >
+            <div className="grid gap-8 pr-2 sm:grid-cols-2">
+              <ContentCard
+                href="#content-cards"
+                seed="ds-python"
+                icon={SiPython}
+                title="Python pour débuter"
+                description="Un langage lisible pour apprendre à raisonner en code."
+                tags={["Débutant", "Python"]}
+              />
+              <ContentCard
+                seed="ds-tcp"
+                icon={Network}
+                title="TCP : le handshake"
+                description="SYN, SYN-ACK, ACK, pertes et retransmissions, animés pas à pas."
+                tags={["Transport", "Animé"]}
+              />
+            </div>
+          </Block>
+        </Section>
+
+        <Section
+          id="errors"
+          title="Error pages"
+          description="The screens shown for common errors, on the dashed background: 404 (global and in the site), 401, 403 and 500 (page and root layout). Shown here as cards."
+        >
+          <Block title="404, 401, 403, 500">
+            <div className="grid gap-8 pr-2 sm:grid-cols-2">
+              <ErrorCard
+                code="404"
+                title="Page introuvable"
+                description="Cette page n'existe pas, ou elle a été déplacée."
+              >
+                <Button>Retour à l&apos;accueil</Button>
+              </ErrorCard>
+              <ErrorCard
+                code="401"
+                title="Connexion requise"
+                description="Connectez-vous avec GitHub ou Discord pour accéder à cette page."
+              >
+                <Button>Se connecter</Button>
+              </ErrorCard>
+              <ErrorCard
+                code="403"
+                title="Accès refusé"
+                description="Votre compte n'a pas les droits nécessaires pour voir cette page."
+              >
+                <Button variant="secondary">Retour à l&apos;accueil</Button>
+              </ErrorCard>
+              <ErrorCard
+                code="500"
+                title="Une erreur est survenue"
+                description="Quelque chose s'est mal passé de notre côté. Réessayez dans un instant."
+              >
+                <Button>Réessayer</Button>
+              </ErrorCard>
             </div>
           </Block>
         </Section>
