@@ -125,6 +125,8 @@ The style is **neo-brutalist**: thick, almost-black outline; hard drop shadow of
 ### Starting values (Proposal)
 The screenshots have no known scale: border, radius, shadow offset and bevel must be calibrated by visual comparison with the kit.
 
+**Measured on `ui-kit.png`** (pixel scan, button 251 px high): outline 5.5 px, hard shadow 12 px, bevel 11 px on both the bottom and the right edge, outer radius about 16 px. So, relative to the outline width `u`: **shadow = 2u, bevel = 2u, radius = 3u**. The implementation (`globals.css`, `.btn`) keeps these ratios with `u` = 2 px (sm, md) or 3 px (lg), and a fixed height per size. Live reference of every component: the `/design-system` page.
+
 ```css
 :root {
   /* Primary */

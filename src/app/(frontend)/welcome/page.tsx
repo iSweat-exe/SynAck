@@ -75,7 +75,7 @@ export default async function WelcomePage({
       </form>
 
       <form action={refuseAge} className="flex flex-col gap-2">
-        <Button type="submit" variant="outline" className="w-full">
+        <Button type="submit" variant="secondary" className="w-full">
           J&apos;ai moins de 15 ans
         </Button>
         <p className="text-xs text-muted-foreground">

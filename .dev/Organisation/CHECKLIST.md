@@ -116,10 +116,11 @@ Delivered in three PRs: (1) database, (2) app sign-in (P2.4), (3) Payload wired 
 - [ ] **Done when**: a test proves a role without a permission is refused by RLS **and** by Payload (RLS part proven by pgTAP in PR 1)
 
 ### P1.5 Theme and layout `area: ui`
-- [ ] DESIGN.md §4 tokens as CSS variables + Tailwind theme (primary / neutral / semantic palette)
-- [ ] **Space Mono** (4 variants, `font-synthesis: none`, self-hosted, accents tested)
-- [ ] Restyled components: Button (Primary/Secondary), Switch, then Card, Input, Tabs, Badge, Alert
-- [ ] Light/dark mode (user's choice); decide the shadow color in dark mode
+- [x] DESIGN.md §3 tokens as CSS variables + Tailwind theme (primary / neutral / semantic palette, `bg-primary-400`...), role tokens (`--bg`, `--ink`, `--outline`, `--shadow`) with a light and a dark set; a Vitest test checks that the palette matches the document
+- [x] **Space Mono** (4 variants, `font-synthesis: none`, self-hosted through `next/font`, accents shown on `/design-system`). Not applied to the Payload admin, which keeps its own UI
+- [x] Button restyled: Primary / Secondary, 3 sizes, icon-only, hover / pressed / focus / disabled states, inline link
+- [ ] Restyled components: Switch, then Card, Input, Tabs, Badge, Alert (add each to `/design-system` with all its variants)
+- [ ] Light/dark mode (user's choice, toggle only scoped to `/design-system` for now); decide the shadow color in dark mode (currently `neutral-50`)
 - [ ] Single `Logo` component (variants), base layout (header, footer, beta banner), 404/error pages
 - [ ] Produce SVG logo, dark variant, favicon, Open Graph image (DESIGN.md §5)
 - [ ] **Done when**: a "UI kit" page visually matches `docs/design/ui-kit.png` in both modes

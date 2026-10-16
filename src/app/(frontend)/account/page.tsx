@@ -58,18 +58,14 @@ export default async function AccountPage() {
 
       {canUseCms ? (
         <p className="text-sm">
-          <Link
-            className="underline underline-offset-4"
-            href="/admin"
-            prefetch={false}
-          >
+          <Link className="link" href="/admin" prefetch={false}>
             Accéder à l&apos;espace de gestion du contenu
           </Link>
         </p>
       ) : null}
 
       <form action="/auth/signout" method="post">
-        <Button type="submit" variant="outline">
+        <Button type="submit" variant="secondary">
           Se déconnecter
         </Button>
       </form>

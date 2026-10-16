@@ -4,127 +4,356 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* SynAck design system. Source of truth: .dev/Organisation/DESIGN.md (palette §3, components §4, dark
+   mode §6). Components use the role tokens (--bg, --ink, --outline...), never the raw tones, so a theme
+   switch only changes the roles. The raw tones are also exposed to Tailwind (bg-primary-400...). */
+
 @theme inline {
+  --font-sans: var(--font-space-mono), ui-monospace, monospace;
+  --font-mono: var(--font-space-mono), ui-monospace, monospace;
+  --font-heading: var(--font-space-mono), ui-monospace, monospace;
+
+  /* Palette */
+  --color-primary-950: var(--primary-950);
+  --color-primary-900: var(--primary-900);
+  --color-primary-800: var(--primary-800);
+  --color-primary-700: var(--primary-700);
+  --color-primary-600: var(--primary-600);
+  --color-primary-500: var(--primary-500);
+  --color-primary-400: var(--primary-400);
+  --color-primary-300: var(--primary-300);
+  --color-primary-200: var(--primary-200);
+  --color-primary-100: var(--primary-100);
+  --color-primary-50: var(--primary-50);
+  --color-neutral-950: var(--neutral-950);
+  --color-neutral-900: var(--neutral-900);
+  --color-neutral-800: var(--neutral-800);
+  --color-neutral-700: var(--neutral-700);
+  --color-neutral-600: var(--neutral-600);
+  --color-neutral-500: var(--neutral-500);
+  --color-neutral-400: var(--neutral-400);
+  --color-neutral-300: var(--neutral-300);
+  --color-neutral-200: var(--neutral-200);
+  --color-neutral-100: var(--neutral-100);
+  --color-neutral-50: var(--neutral-50);
+  --color-neutral-0: var(--neutral-0);
+  --color-success-100: var(--success-100);
+  --color-success-500: var(--success-500);
+  --color-success-900: var(--success-900);
+  --color-warning-100: var(--warning-100);
+  --color-warning-500: var(--warning-500);
+  --color-warning-900: var(--warning-900);
+  --color-danger-100: var(--danger-100);
+  --color-danger-500: var(--danger-500);
+  --color-danger-900: var(--danger-900);
+  --color-info-100: var(--info-100);
+  --color-info-500: var(--info-500);
+  --color-info-900: var(--info-900);
+
+  /* Roles (shadcn names, mapped to the palette) */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-link: var(--link);
+  --color-shadow: var(--shadow);
+
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: calc(var(--radius) * 0.75);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+  --radius-xl: calc(var(--radius) * 1.5);
+  --radius-2xl: calc(var(--radius) * 2);
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  /* Primary (pink). Main color: primary-400. */
+  --primary-950: #2b0519;
+  --primary-900: #470a2b;
+  --primary-800: #770d46;
+  --primary-700: #a71161;
+  --primary-600: #d11a7b;
+  --primary-500: #f656ab;
+  --primary-400: #fb84c3;
+  --primary-300: #fda3d2;
+  --primary-200: #fec2e1;
+  --primary-100: #ffe0f0;
+  --primary-50: #fff0f8;
+
+  /* Neutral */
+  --neutral-950: #121011;
+  --neutral-900: #1e1b1d;
+  --neutral-800: #2e292c;
+  --neutral-700: #453e42;
+  --neutral-600: #5f565b;
+  --neutral-500: #7f757b;
+  --neutral-400: #a9a0a5;
+  --neutral-300: #d1cace;
+  --neutral-200: #e6e1e4;
+  --neutral-100: #f3f0f2;
+  --neutral-50: #faf8f9;
+  --neutral-0: #ffffff;
+
+  /* Semantic: 100 = message background, 500 = accent / fill, 900 = text on the 100 background */
+  --success-100: #dcf7e8;
+  --success-500: #1fa463;
+  --success-900: #0f6b3f;
+  --warning-100: #fff1cc;
+  --warning-500: #f5a524;
+  --warning-900: #8a5a00;
+  --danger-100: #ffe0e0;
+  --danger-500: #e5484d;
+  --danger-900: #a4202a;
+  --info-100: #ddebff;
+  --info-500: #3b82f6;
+  --info-900: #1e4fb0;
+
+  /* Roles, light mode */
+  --bg: var(--neutral-100);
+  --ink: var(--neutral-950);
+  --surface: var(--neutral-0);
+  --surface-raised: var(--neutral-50);
+  --outline: var(--neutral-950);
+  --shadow: #000000;
+  --ring-color: var(--primary-600);
+  --link-color: var(--primary-700);
+  /* Text on a colored fill is always neutral-950 (contrast, DESIGN.md §3) */
+  --on-fill: var(--neutral-950);
+  --muted-bg: var(--neutral-200);
+  --muted-ink: var(--neutral-600);
+  --accent-bg: var(--primary-100);
+  --accent-ink: var(--neutral-950);
+
+  /* Buttons */
+  --btn-primary-bg: var(--primary-400);
+  --btn-primary-bevel: var(--primary-500);
+  --btn-secondary-bg: var(--primary-50);
+  --btn-secondary-ink: var(--neutral-950);
+  --btn-secondary-bevel: var(--neutral-300);
+  --btn-disabled-bg: var(--neutral-200);
+  --btn-disabled-bevel: var(--neutral-300);
+  --btn-disabled-ink: var(--neutral-500);
+  --btn-disabled-outline: var(--neutral-400);
+
+  --radius: 0.75rem;
 }
 
+/* Dark mode (DESIGN.md §6, proposal to validate: the hard shadow color is still to test). */
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --bg: var(--neutral-950);
+  --ink: var(--neutral-50);
+  --surface: var(--neutral-900);
+  --surface-raised: var(--neutral-800);
+  --outline: var(--neutral-50);
+  --shadow: var(--neutral-50);
+  --ring-color: var(--primary-300);
+  --link-color: var(--primary-300);
+
+  --btn-secondary-bg: var(--neutral-800);
+  --btn-secondary-ink: var(--neutral-50);
+  --btn-secondary-bevel: var(--neutral-700);
+  --btn-disabled-bg: var(--neutral-800);
+  --btn-disabled-bevel: var(--neutral-700);
+  --btn-disabled-ink: var(--neutral-500);
+  --btn-disabled-outline: var(--neutral-600);
+
+  --muted-bg: var(--neutral-800);
+  --muted-ink: var(--neutral-400);
+  --accent-bg: var(--neutral-800);
+  --accent-ink: var(--neutral-50);
+}
+
+:root,
+.dark {
+  /* shadcn role names: declared where the roles can change, so a theme switch reaches them */
+  --background: var(--bg);
+  --foreground: var(--ink);
+  --card: var(--surface);
+  --card-foreground: var(--ink);
+  --popover: var(--surface);
+  --popover-foreground: var(--ink);
+  --primary: var(--primary-400);
+  --primary-foreground: var(--on-fill);
+  --secondary: var(--btn-secondary-bg);
+  --secondary-foreground: var(--btn-secondary-ink);
+  --muted: var(--muted-bg);
+  --muted-foreground: var(--muted-ink);
+  --accent: var(--accent-bg);
+  --accent-foreground: var(--accent-ink);
+  --destructive: var(--danger-500);
+  --border: var(--outline);
+  --input: var(--outline);
+  --ring: var(--ring-color);
+  --link: var(--link-color);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply bg-background text-foreground;
-  }
   html {
     @apply font-sans;
+    /* Only the four real Space Mono variants are used: no synthesized bold or italic. */
+    font-synthesis: none;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+}
+
+/* Buttons (DESIGN.md §4): thick near-black outline, hard offset shadow without blur, darker bevel on the
+   bottom and right edges, rounded corners. A button's border is one unit (--u); its radius is 3u, its
+   hard shadow and its bevel 2u each: the proportions measured on docs/design/ui-kit.png. */
+@layer components {
+  .btn {
+    --u: 2px;
+    --btn-bg: var(--btn-primary-bg);
+    --btn-bevel: var(--btn-primary-bevel);
+    --btn-ink: var(--on-fill);
+    --offset: calc(var(--u) * 2);
+
+    position: relative;
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    border: var(--u) solid var(--outline);
+    border-radius: calc(var(--u) * 3);
+    background: var(--btn-bg);
+    color: var(--btn-ink);
+    font-family: var(--font-sans);
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    box-shadow:
+      var(--offset) var(--offset) 0 var(--shadow),
+      inset calc(var(--u) * -2) calc(var(--u) * -2) 0 var(--btn-bevel);
+    transition:
+      transform 80ms ease-out,
+      box-shadow 80ms ease-out;
+  }
+
+  .btn-primary {
+    --btn-bg: var(--btn-primary-bg);
+    --btn-bevel: var(--btn-primary-bevel);
+    --btn-ink: var(--on-fill);
+  }
+
+  .btn-secondary {
+    --btn-bg: var(--btn-secondary-bg);
+    --btn-bevel: var(--btn-secondary-bevel);
+    --btn-ink: var(--btn-secondary-ink);
+  }
+
+  /* Hover: the button moves toward its shadow, which shrinks. */
+  .btn:not(:disabled, [aria-disabled="true"]):hover,
+  .btn[data-force="hover"]:not(:disabled, [aria-disabled="true"]) {
+    --offset: var(--u);
+    transform: translate(var(--u), var(--u));
+  }
+
+  /* Press: the button sinks into the page (no shadow, shift equal to the shadow offset). */
+  .btn:not(:disabled, [aria-disabled="true"]):active,
+  .btn[data-force="active"]:not(:disabled, [aria-disabled="true"]) {
+    --offset: 0px;
+    transform: translate(calc(var(--u) * 2), calc(var(--u) * 2));
+  }
+
+  /* Keyboard focus: a ring that does not depend on hover, drawn outside the shadow. */
+  .btn:focus-visible,
+  .btn[data-force="focus"] {
+    outline: 3px solid var(--ring-color);
+    outline-offset: calc(var(--u) * 2 + 3px);
+  }
+
+  .btn:disabled,
+  .btn[aria-disabled="true"] {
+    --btn-bg: var(--btn-disabled-bg);
+    --btn-bevel: var(--btn-disabled-bevel);
+    --btn-ink: var(--btn-disabled-ink);
+    border-color: var(--btn-disabled-outline);
+    box-shadow: inset calc(var(--u) * -2) calc(var(--u) * -2) 0 var(--btn-bevel);
+    cursor: not-allowed;
+  }
+
+  .btn-sm {
+    --u: 2px;
+    height: 2.5rem;
+    padding-inline: 1rem;
+    font-size: 0.875rem;
+  }
+  .btn-md {
+    --u: 2px;
+    height: 3rem;
+    padding-inline: 1.5rem;
+    font-size: 1rem;
+  }
+  .btn-lg {
+    --u: 3px;
+    height: 3.5rem;
+    padding-inline: 2rem;
+    font-size: 1.125rem;
+  }
+
+  /* Square buttons: same height, no horizontal padding. */
+  .btn-icon-sm {
+    width: 2.5rem;
+    padding-inline: 0;
+  }
+  .btn-icon-md {
+    width: 3rem;
+    padding-inline: 0;
+  }
+  .btn-icon-lg {
+    width: 3.5rem;
+    padding-inline: 0;
+  }
+
+  .btn svg {
+    flex-shrink: 0;
+    pointer-events: none;
+    width: 1.25em;
+    height: 1.25em;
+  }
+
+  /* Inline link: primary-700 on light backgrounds (primary-400 would not have enough contrast). */
+  .link {
+    color: var(--link-color);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 2px;
+  }
+  .link:hover {
+    text-decoration-thickness: 3px;
+  }
+  .link:focus-visible {
+    outline: 3px solid var(--ring-color);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn {
+      transition: none;
+    }
   }
 }
