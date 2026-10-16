@@ -120,10 +120,13 @@ The style is **neo-brutalist**: thick, almost-black outline; hard drop shadow of
 ### Switches (three visible states)
 - Pill-shaped track, `primary-50` background, `neutral-950` outline, hard shadow.
 - Inner knob: `primary-400` (elongated), `primary-200` (round, centered), `neutral-400` (elongated).
-- **Proposed** interpretation: pink = on, light pink = intermediate or hover, gray = disabled. To confirm.
+- **Two states and one simple animation** (decided by the project creator): the knob just slides from one side to the other (150 ms), nothing else, no bounce or squash: pink knob on the right = **on**, gray knob on the left = **off**. The small light round knob on the kit is not used (it was only the middle frame of a possible animation, which was dropped). Disabled is a separate flat gray look, like a disabled button.
+- **Measured** (units of the outline width `u`): track 44u x 24u, knob 27u x 18u, 2u from the border, 3u from the side, hard shadow 1u. Implemented with a geometry unit of 1.5 px (66 x 36 px, a bit smaller than a small button: 88 x 48 px looked too big), the outline and the shadow staying at 2 px.
 
 ### Starting values (Proposal)
 The screenshots have no known scale: border, radius, shadow offset and bevel must be calibrated by visual comparison with the kit.
+
+**Measured on `ui-kit.png`** (pixel scan, button 251 px high): outline 5.5 px, hard shadow 12 px, bevel 11 px on both the bottom and the right edge, outer radius about 16 px. So, relative to the outline width `u`: shadow = 2u, bevel = 2u, radius = 3u. Those looked too round and too deep, so the implementation (`globals.css`, `.btn`) uses **radius = 2u, shadow = 1.5u, bevel = 2u** with `u` = 2 px (sm, md) or 3 px (lg), and a fixed height per size. Hover moves the button by half the shadow depth, pressed by all of it. Live reference of every component: the `/design-system` page.
 
 ```css
 :root {
@@ -185,10 +188,26 @@ The screenshots have no known scale: border, radius, shadow offset and bevel mus
 .btn-secondary { background: var(--primary-50);  --bevel: var(--neutral-300); }
 ```
 
+### Card and alert (derived from the kit, not in the screenshots)
+- **Card**: `surface` background, same outline (`u` = 2 px), radius 4u, hard shadow 2u (black).
+- **Alert**: semantic tones, 100 background and 900 text in light mode, swapped in dark mode; same outline and radius, no shadow (nothing to press). Icon per variant (info, success, warning, danger).
+- Forms and auth pages sit in a Card; provider sign-in buttons are Secondary, full width, so Primary stays reserved for the main action of a screen.
+
+### Input, badge and tabs (derived from the kit, not in the screenshots)
+- **Input / textarea**: `surface` background, outline `u` = 2 px, radius 2u like the buttons, height 48 px. Invalid: `danger-500` outline. Disabled: like a disabled button.
+- **Badge**: outlined pill, 24 px high, `neutral` / `secondary` / `primary` (full `primary-400` fill) and the four semantic variants in the soft tones (100 background, 900 text; swapped in dark mode), because the saturated 500 fills clashed with the pink palette.
+- **Tabs**: small outlined boxes; the selected one is `primary-400` with a hard shadow; the panel is an outlined surface.
+
+### Auth ticket
+The sign-in, welcome and account pages share `AuthCard`, styled as a **receipt**: the logo and a tagline centered on top, sections separated by dashed rules, a title with the "Bêta" badge, the actions, the small print, a decorative barcode and a torn (zigzag) bottom edge. No header band. The outline and the hard shadow follow the torn edge (chained drop-shadows on a wrapper, the paper is masked). The logo comes from the supplied PNGs (`public/brand`), through a `Logo` component.
+
+### Dashed background (auth pages)
+Short diagonal dashes on a staggered grid, `neutral-300` on the page background (`neutral-800` in dark mode). Clicking the empty background drops a ripple: the dashes it crosses tilt, stretch and turn `primary-400` while the wave passes, fading with time and distance. Canvas component `DashBackground`; no ripple when the user prefers reduced motion.
+
 ### States and interactions (Proposal, absent from the screenshots)
 - **Hover**: the button shifts slightly down and to the right and the shadow shrinks.
 - **Press**: the button "sinks" (shadow to zero, shift equal to the shadow offset).
-- **Keyboard focus**: an extra visible outline (for example a `primary-600` ring), so focus does not depend on hover.
+- **Keyboard focus**: **not drawn**, at the project creator's request (no ring on buttons, switches, tabs, links or fields). The outline is kept transparent so Windows high-contrast mode still shows it, and `--focus-ring` in `globals.css` brings a ring back with one line. Note that without a visible focus indicator, keyboard users cannot see where they are (WCAG 2.4.7).
 - **Disabled**: `neutral-200` background, `neutral-300` bevel, `neutral-500` text, reduced or removed shadow.
 - **Inline links**: `primary-600` or `primary-700` on a light background (sufficient contrast), not `primary-400`.
 
@@ -226,7 +245,7 @@ The screenshots only show light mode, but the `neutral` palette provides the nee
 | Raised surface | `neutral-50` | `neutral-800` |
 | Text | `neutral-950` | `neutral-50` |
 | Outline | `neutral-950` | `neutral-50` |
-| Hard shadow | `#000000` | `neutral-50` or `primary-400` (to test) |
+| Hard shadow | `#000000` | `#000000` (a light or colored shadow looks wrong in dark mode) |
 | Primary button | `primary-400`, `neutral-950` text | same |
 | Secondary button | `primary-50` background | `neutral-800` background, `neutral-50` text |
 
@@ -257,7 +276,6 @@ The exact three tints are still to be chosen (see §9). A more restrained altern
 
 ## 9. Open points
 
-- Confirm the interpretation of the three switch states
 - Calibrate border, radius, shadow offset and bevel against the screenshots
 - Validate dark mode (§6), notably the hard shadow color
 - Choose the three theme tints, or drop them in V1 (§7)

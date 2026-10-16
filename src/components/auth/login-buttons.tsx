@@ -1,15 +1,23 @@
 "use client";
 
+import { LoaderCircle } from "lucide-react";
+import type { ComponentType } from "react";
 import { useState } from "react";
+import { FaDiscord, FaGithub } from "react-icons/fa6";
 
+import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
 
 type Provider = "github" | "discord";
 
-const PROVIDERS: { id: Provider; label: string }[] = [
-  { id: "github", label: "Continuer avec GitHub" },
-  { id: "discord", label: "Continuer avec Discord" },
+const PROVIDERS: {
+  id: Provider;
+  label: string;
+  Icon: ComponentType<{ "aria-hidden"?: boolean }>;
+}[] = [
+  { id: "github", label: "Continuer avec GitHub", Icon: FaGithub },
+  { id: "discord", label: "Continuer avec Discord", Icon: FaDiscord },
 ];
 
 export function LoginButtons({ next }: { next: string }) {
@@ -37,22 +45,25 @@ export function LoginButtons({ next }: { next: string }) {
 
   return (
     <div className="flex flex-col gap-3">
-      {PROVIDERS.map(({ id, label }) => (
+      {PROVIDERS.map(({ id, label, Icon }) => (
         <Button
           key={id}
           type="button"
+          variant="secondary"
           size="lg"
+          className="w-full"
           disabled={pending !== null}
           onClick={() => signIn(id)}
         >
+          {pending === id ? (
+            <LoaderCircle aria-hidden className="motion-safe:animate-spin" />
+          ) : (
+            <Icon aria-hidden />
+          )}
           {pending === id ? "Redirection…" : label}
         </Button>
       ))}
-      {error ? (
-        <p role="alert" className="text-sm text-destructive">
-          {error}
-        </p>
-      ) : null}
+      {error ? <Alert variant="danger">{error}</Alert> : null}
     </div>
   );
 }

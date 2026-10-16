@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
+import { AuthCard } from "@/components/auth/auth-card";
+import { AuthShell } from "@/components/auth/auth-shell";
+import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { getSupabaseEnv } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
@@ -53,35 +56,30 @@ export default async function WelcomePage({
   if (profile?.age_declared_at) redirect("/account");
 
   return (
-    <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-6 p-6">
-      <div className="flex flex-col gap-2">
-        <h1 className="text-2xl font-bold">Bienvenue sur SynAck</h1>
-        <p className="text-sm text-muted-foreground">
-          SynAck est réservé aux personnes âgées d&apos;au moins 15 ans. Merci
-          de confirmer votre âge pour continuer.
-        </p>
-      </div>
+    <AuthShell>
+      <AuthCard
+        title="Bienvenue sur SynAck"
+        description="SynAck est réservé aux personnes âgées d'au moins 15 ans. Merci de confirmer votre âge pour continuer."
+      >
+        {error ? (
+          <Alert variant="danger">Une erreur est survenue. Réessayez.</Alert>
+        ) : null}
 
-      {error ? (
-        <p role="alert" className="text-sm text-destructive">
-          Une erreur est survenue. Réessayez.
-        </p>
-      ) : null}
+        <form action={confirmAge}>
+          <Button type="submit" size="lg" className="w-full">
+            J&apos;ai au moins 15 ans
+          </Button>
+        </form>
 
-      <form action={confirmAge}>
-        <Button type="submit" size="lg" className="w-full">
-          J&apos;ai au moins 15 ans
-        </Button>
-      </form>
-
-      <form action={refuseAge} className="flex flex-col gap-2">
-        <Button type="submit" variant="outline" className="w-full">
-          J&apos;ai moins de 15 ans
-        </Button>
-        <p className="text-xs text-muted-foreground">
-          Votre compte sera supprimé immédiatement.
-        </p>
-      </form>
-    </main>
+        <form action={refuseAge} className="flex flex-col gap-3">
+          <Button type="submit" variant="secondary" className="w-full">
+            J&apos;ai moins de 15 ans
+          </Button>
+          <p className="text-xs text-muted-foreground">
+            Votre compte sera supprimé immédiatement.
+          </p>
+        </form>
+      </AuthCard>
+    </AuthShell>
   );
 }

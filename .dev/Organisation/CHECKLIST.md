@@ -116,10 +116,15 @@ Delivered in three PRs: (1) database, (2) app sign-in (P2.4), (3) Payload wired 
 - [ ] **Done when**: a test proves a role without a permission is refused by RLS **and** by Payload (RLS part proven by pgTAP in PR 1)
 
 ### P1.5 Theme and layout `area: ui`
-- [ ] DESIGN.md §4 tokens as CSS variables + Tailwind theme (primary / neutral / semantic palette)
-- [ ] **Space Mono** (4 variants, `font-synthesis: none`, self-hosted, accents tested)
-- [ ] Restyled components: Button (Primary/Secondary), Switch, then Card, Input, Tabs, Badge, Alert
-- [ ] Light/dark mode (user's choice); decide the shadow color in dark mode
+- [x] DESIGN.md §3 tokens as CSS variables + Tailwind theme (primary / neutral / semantic palette, `bg-primary-400`...), role tokens (`--bg`, `--ink`, `--outline`, `--shadow`) with a light and a dark set; a Vitest test checks that the palette matches the document
+- [x] **Space Mono** (4 variants, `font-synthesis: none`, self-hosted through `next/font`, accents shown on `/design-system`). Not applied to the Payload admin, which keeps its own UI
+- [x] Button restyled: Primary / Secondary, 3 sizes, icon-only, hover / pressed / disabled states (no visible focus ring, by decision), inline link
+- [x] Switch: off / on with a simple knob slide, disabled, hover / pressed (native checkbox with `role="switch"`)
+- [x] `AuthCard` as a receipt (logo, dashed rules, beta badge, small print, barcode, torn edge) and a `Logo` component from the supplied PNGs; SVG, dark-mode variant and favicon still to produce
+- [x] Dashed background with a click ripple (`DashBackground`) on the sign-in, welcome and account pages
+- [x] Card and Alert (semantic colors, light and dark), built from the button style (outline, hard shadow); the sign-in, welcome and account pages use them
+- [x] Input / Textarea / Label, Badge (7 variants) and Tabs (Base UI), all on `/design-system`
+- [ ] Light/dark mode (user's choice, toggle only scoped to `/design-system` for now); dark-mode shadow stays black (decided)
 - [ ] Single `Logo` component (variants), base layout (header, footer, beta banner), 404/error pages
 - [ ] Produce SVG logo, dark variant, favicon, Open Graph image (DESIGN.md §5)
 - [ ] **Done when**: a "UI kit" page visually matches `docs/design/ui-kit.png` in both modes
