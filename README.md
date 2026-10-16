@@ -19,6 +19,19 @@ npm ci
 npm run dev
 ```
 
+### Local database
+
+Requires Docker and the [Supabase CLI](https://supabase.com/docs/guides/cli/getting-started).
+
+```bash
+npm run db:start   # start local Supabase (applies supabase/migrations, then seed.sql)
+npm run db:test    # run the pgTAP tests in supabase/tests
+npm run db:reset   # rebuild the local database from scratch
+npm run db:stop
+```
+
+Create a migration with `supabase migration new <name> < /dev/null`, then edit the generated file. Never edit a migration that is already on `main`: add a new one. Migrations are tested on every PR and applied to production automatically after merge (see the project README, §11 bis).
+
 Checks run by CI: `npm run lint`, `npm run format:check`, `npm run typecheck`, `npm test`, `npm run build`.
 
 ## Repository
