@@ -1,39 +1,17 @@
-import {
-  Binary,
-  Cpu,
-  Globe,
-  Layers,
-  Lock,
-  Network,
-  Newspaper,
-  Route,
-  Server,
-  ShieldCheck,
-} from "lucide-react";
-import type { ComponentType } from "react";
-import {
-  SiDocker,
-  SiJavascript,
-  SiPython,
-  SiReact,
-  SiRust,
-  SiTypescript,
-} from "react-icons/si";
+import type { IconName } from "@/lib/icon-names";
+import { LEVELS, type Level } from "@/lib/levels";
+
+export { LEVELS, type Level };
 
 // Placeholder catalog of the four sections of the site, until the content comes from the CMS. Each entry
 // has an icon for the card's logo slot; the banner is generated from its id.
-export type CatalogIcon = ComponentType<{ className?: string }>;
-
-export const LEVELS = ["Débutant", "Intermédiaire", "Avancé"] as const;
-export type Level = (typeof LEVELS)[number];
-
 export type CatalogItem = {
   id: string;
   title: string;
   description: string;
   level?: Level;
   tags: string[];
-  icon: CatalogIcon;
+  icon: IconName;
   // Page of the item once it exists; without it the card shows "Bientôt disponible".
   href?: string;
 };
@@ -48,7 +26,7 @@ const PATHS: CatalogItem[] = [
       "Variables, conditions, boucles, fonctions : les bases, en JS et en Python.",
     level: "Débutant",
     tags: ["JavaScript", "Python"],
-    icon: Binary,
+    icon: "binary",
   },
   {
     id: "javascript",
@@ -57,7 +35,7 @@ const PATHS: CatalogItem[] = [
       "Le langage du web, des premiers pas aux fonctions et aux objets.",
     level: "Débutant",
     tags: ["JavaScript", "Web"],
-    icon: SiJavascript,
+    icon: "javascript",
   },
   {
     id: "python",
@@ -65,7 +43,7 @@ const PATHS: CatalogItem[] = [
     description: "Un langage lisible pour apprendre à raisonner en code.",
     level: "Débutant",
     tags: ["Python"],
-    icon: SiPython,
+    icon: "python",
   },
   {
     id: "typescript",
@@ -74,7 +52,7 @@ const PATHS: CatalogItem[] = [
       "Ajouter des types à votre JavaScript, sans se prendre la tête.",
     level: "Intermédiaire",
     tags: ["TypeScript", "Web"],
-    icon: SiTypescript,
+    icon: "typescript",
   },
   {
     id: "react",
@@ -82,7 +60,7 @@ const PATHS: CatalogItem[] = [
     description: "Composants, état et rendu : bâtir une interface vivante.",
     level: "Intermédiaire",
     tags: ["React", "Web"],
-    icon: SiReact,
+    icon: "react",
   },
   {
     id: "rust",
@@ -91,7 +69,7 @@ const PATHS: CatalogItem[] = [
       "Ownership et emprunts : comprendre ce que le compilateur vous dit.",
     level: "Avancé",
     tags: ["Rust", "Systèmes"],
-    icon: SiRust,
+    icon: "rust",
   },
 ];
 
@@ -104,7 +82,7 @@ const PROTOCOLS: CatalogItem[] = [
       "SYN, SYN-ACK, ACK, pertes et retransmissions, animés pas à pas.",
     level: "Débutant",
     tags: ["Transport", "Animé"],
-    icon: Network,
+    icon: "network",
   },
   {
     id: "http",
@@ -113,7 +91,7 @@ const PROTOCOLS: CatalogItem[] = [
       "Écrivez des requêtes brutes et lisez les réponses d'un faux serveur.",
     level: "Débutant",
     tags: ["Application", "Interactif"],
-    icon: Globe,
+    icon: "globe",
   },
   {
     id: "dns",
@@ -122,7 +100,7 @@ const PROTOCOLS: CatalogItem[] = [
       "Suivez une résolution de nom, du résolveur aux serveurs racine.",
     level: "Intermédiaire",
     tags: ["Application", "Animé"],
-    icon: Server,
+    icon: "server",
   },
   {
     id: "tls",
@@ -130,7 +108,7 @@ const PROTOCOLS: CatalogItem[] = [
     description: "Comment deux inconnus s'accordent sur un secret, en public.",
     level: "Avancé",
     tags: ["Sécurité", "Animé"],
-    icon: Lock,
+    icon: "lock",
   },
 ];
 
@@ -140,14 +118,14 @@ const ARTICLES: CatalogItem[] = [
     title: "Premier article de veille",
     description: "Un sujet d'actualité technique, expliqué simplement.",
     tags: ["Veille", "Web"],
-    icon: Newspaper,
+    icon: "newspaper",
   },
   {
     id: "veille-2",
     title: "Deuxième article de veille",
     description: "Un autre regard sur ce qui bouge dans l'écosystème.",
     tags: ["Veille", "Sécurité"],
-    icon: Newspaper,
+    icon: "newspaper",
   },
 ];
 
@@ -158,7 +136,7 @@ const ROADMAPS: CatalogItem[] = [
     description:
       "De l'interface à la base de données : le parcours complet du web.",
     tags: ["Web", "Métier"],
-    icon: Layers,
+    icon: "layers",
   },
   {
     id: "software",
@@ -166,7 +144,7 @@ const ROADMAPS: CatalogItem[] = [
     description:
       "Algorithmes, structures de données et conception de logiciels.",
     tags: ["Logiciel", "Métier"],
-    icon: Cpu,
+    icon: "cpu",
   },
   {
     id: "network",
@@ -174,21 +152,21 @@ const ROADMAPS: CatalogItem[] = [
     description:
       "Comprendre ce qui circule sur le câble, et les machines au bout.",
     tags: ["Infra", "Métier"],
-    icon: Route,
+    icon: "route",
   },
   {
     id: "devops",
     title: "DevOps",
     description: "Conteneurs, déploiement et automatisation de bout en bout.",
     tags: ["Infra", "Métier"],
-    icon: SiDocker,
+    icon: "docker",
   },
   {
     id: "security",
     title: "Cybersécurité",
     description: "Attaquer pour mieux défendre : les bases de la sécurité.",
     tags: ["Sécurité", "Métier"],
-    icon: ShieldCheck,
+    icon: "shield",
   },
 ];
 

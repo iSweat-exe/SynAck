@@ -9,8 +9,6 @@ import {
   normalize,
 } from "@/lib/catalog-filter";
 
-const icon = () => null;
-
 const ITEMS: CatalogItem[] = [
   {
     id: "js",
@@ -18,7 +16,7 @@ const ITEMS: CatalogItem[] = [
     description: "Le langage du web.",
     level: "Débutant",
     tags: ["JavaScript", "Web"],
-    icon,
+    icon: "network",
   },
   {
     id: "py",
@@ -26,7 +24,7 @@ const ITEMS: CatalogItem[] = [
     description: "Un langage lisible.",
     level: "Débutant",
     tags: ["Python"],
-    icon,
+    icon: "network",
   },
   {
     id: "rust",
@@ -34,14 +32,14 @@ const ITEMS: CatalogItem[] = [
     description: "La mémoire sans peur : réseaux et systèmes.",
     level: "Avancé",
     tags: ["Rust", "Systèmes"],
-    icon,
+    icon: "network",
   },
   {
     id: "news",
     title: "Veille",
     description: "Un article.",
     tags: ["Veille"],
-    icon,
+    icon: "network",
   },
 ];
 

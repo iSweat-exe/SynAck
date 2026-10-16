@@ -69,6 +69,7 @@ export interface Config {
   collections: {
     paths: Path;
     courses: Course;
+    protocols: Protocol;
     articles: Article;
     users: User;
     'payload-kv': PayloadKv;
@@ -80,6 +81,7 @@ export interface Config {
   collectionsSelect: {
     paths: PathsSelect<false> | PathsSelect<true>;
     courses: CoursesSelect<false> | CoursesSelect<true>;
+    protocols: ProtocolsSelect<false> | ProtocolsSelect<true>;
     articles: ArticlesSelect<false> | ArticlesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -159,26 +161,37 @@ export interface Course {
     | {
         title: string;
         content?:
-          | {
-              body: {
-                root: {
-                  type: string;
-                  children: {
-                    type: any;
-                    version: number;
+          | (
+              | {
+                  body: {
+                    root: {
+                      type: string;
+                      children: {
+                        type: any;
+                        version: number;
+                        [k: string]: unknown;
+                      }[];
+                      direction: ('ltr' | 'rtl') | null;
+                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                      indent: number;
+                      version: number;
+                    };
                     [k: string]: unknown;
-                  }[];
-                  direction: ('ltr' | 'rtl') | null;
-                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                  indent: number;
-                  version: number;
-                };
-                [k: string]: unknown;
-              };
-              id?: string | null;
-              blockName?: string | null;
-              blockType: 'richText';
-            }[]
+                  };
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'richText';
+                }
+              | {
+                  /**
+                   * Pick a diagram from "Protocol diagrams". Create it there first if it does not exist yet.
+                   */
+                  diagram: number | Protocol;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'protocolDiagram';
+                }
+            )[]
           | null;
         id?: string | null;
       }[]
@@ -217,6 +230,131 @@ export interface User {
     | null;
   password?: string | null;
   collection: 'users';
+}
+/**
+ * An animated diagram of an exchange between two machines (TCP handshake, an HTTP request, a DNS lookup...). Describe the two machines, then the messages one by one: the site draws and animates it, and readers can play it, step through it, and simulate a lost packet. Use "Preview" to see it on the site.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "protocols".
+ */
+export interface Protocol {
+  id: number;
+  title: string;
+  /**
+   * Used in the page URL. Generated from the title when left empty.
+   */
+  slug: string;
+  /**
+   * One or two sentences shown above the diagram, to say what it explains.
+   */
+  summary: string;
+  level?: ('Débutant' | 'Intermédiaire' | 'Avancé') | null;
+  /**
+   * Logo shown on the card.
+   */
+  icon?:
+    | (
+        | 'binary'
+        | 'cpu'
+        | 'globe'
+        | 'layers'
+        | 'lock'
+        | 'network'
+        | 'newspaper'
+        | 'route'
+        | 'server'
+        | 'shield'
+        | 'docker'
+        | 'javascript'
+        | 'python'
+        | 'react'
+        | 'rust'
+        | 'typescript'
+      )
+    | null;
+  /**
+   * Themes used by the filters, e.g. Transport.
+   */
+  tags?: string[] | null;
+  author?: (number | null) | User;
+  machineA: {
+    /**
+     * Name shown on top, e.g. "Client".
+     */
+    label: string;
+    /**
+     * Small text under the name, e.g. "your browser".
+     */
+    sublabel?: string | null;
+    /**
+     * State shown before anything happens, e.g. "CLOSED". Leave empty to show none.
+     */
+    initialState?: string | null;
+  };
+  machineB: {
+    /**
+     * Name shown on top, e.g. "Client".
+     */
+    label: string;
+    /**
+     * Small text under the name, e.g. "your browser".
+     */
+    sublabel?: string | null;
+    /**
+     * State shown before anything happens, e.g. "CLOSED". Leave empty to show none.
+     */
+    initialState?: string | null;
+  };
+  /**
+   * The messages, in order from top to bottom. Each one is an arrow between the two machines.
+   */
+  steps: {
+    from: 'a' | 'b';
+    to: 'a' | 'b';
+    /**
+     * Name, e.g. "SYN".
+     */
+    label: string;
+    /**
+     * Under the arrow, e.g. "seq = x".
+     */
+    detail?: string | null;
+    /**
+     * What happens, in a sentence or two. It is shown while the message is played.
+     */
+    note: string;
+    tone?: ('primary' | 'secondary' | 'info' | 'success') | null;
+    /**
+     * Once the message has arrived. Empty = unchanged.
+     */
+    stateA?: string | null;
+    /**
+     * Once the message has arrived. Empty = unchanged.
+     */
+    stateB?: string | null;
+    /**
+     * Adds the "Simulate a packet loss" demo for this message: it is lost, the sender waits, then sends it again.
+     */
+    canBeLost?: boolean | null;
+    loss?: {
+      /**
+       * What the reader sees as the packet disappears.
+       */
+      lostNote: string;
+      /**
+       * Why the sender waits and what it concludes.
+       */
+      waitNote: string;
+      /**
+       * What happens on the retransmission.
+       */
+      retransmitNote: string;
+    };
+    id?: string | null;
+  }[];
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -283,6 +421,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'courses';
         value: number | Course;
+      } | null)
+    | ({
+        relationTo: 'protocols';
+        value: number | Protocol;
       } | null)
     | ({
         relationTo: 'articles';
@@ -371,6 +513,64 @@ export interface CoursesSelect<T extends boolean = true> {
                     id?: T;
                     blockName?: T;
                   };
+              protocolDiagram?:
+                | T
+                | {
+                    diagram?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+            };
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "protocols_select".
+ */
+export interface ProtocolsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  summary?: T;
+  level?: T;
+  icon?: T;
+  tags?: T;
+  author?: T;
+  machineA?:
+    | T
+    | {
+        label?: T;
+        sublabel?: T;
+        initialState?: T;
+      };
+  machineB?:
+    | T
+    | {
+        label?: T;
+        sublabel?: T;
+        initialState?: T;
+      };
+  steps?:
+    | T
+    | {
+        from?: T;
+        to?: T;
+        label?: T;
+        detail?: T;
+        note?: T;
+        tone?: T;
+        stateA?: T;
+        stateB?: T;
+        canBeLost?: T;
+        loss?:
+          | T
+          | {
+              lostNote?: T;
+              waitNote?: T;
+              retransmitNote?: T;
             };
         id?: T;
       };

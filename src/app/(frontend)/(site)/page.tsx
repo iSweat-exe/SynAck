@@ -1,35 +1,41 @@
 import { ContentCard } from "@/components/site/content-card";
 import { Badge } from "@/components/ui/badge";
-import { Layers, Network, Newspaper, Binary } from "lucide-react";
+import type { IconName } from "@/lib/icon-names";
 
-const SECTIONS = [
+const SECTIONS: {
+  href: string;
+  title: string;
+  description: string;
+  tags: string[];
+  icon: IconName;
+}[] = [
   {
     href: "/paths",
     title: "Parcours",
     description: "Des cours courts et des exercices dans le navigateur.",
     tags: ["Cours", "Exercices"],
-    icon: Binary,
+    icon: "binary",
   },
   {
     href: "/protocols",
     title: "Protocoles",
     description: "TCP, HTTP, DNS et TLS, animés et interactifs.",
     tags: ["Réseau", "Interactif"],
-    icon: Network,
+    icon: "network",
   },
   {
     href: "/articles",
     title: "Articles",
     description: "La veille technique, en articles courts.",
     tags: ["Veille"],
-    icon: Newspaper,
+    icon: "newspaper",
   },
   {
     href: "/roadmaps",
     title: "Cursus",
     description: "Des feuilles de route pour viser un métier.",
     tags: ["Roadmaps"],
-    icon: Layers,
+    icon: "layers",
   },
 ];
 

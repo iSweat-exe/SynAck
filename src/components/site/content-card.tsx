@@ -1,7 +1,9 @@
 import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
-import { bannerUrl, type CatalogIcon } from "@/lib/catalog";
+import { bannerUrl } from "@/lib/catalog";
+import { ICONS } from "@/lib/catalog-icons";
+import type { IconName } from "@/lib/icon-names";
 import { cn } from "@/lib/utils";
 
 // A card for a course, path, protocol, article or roadmap: a banner on top, a logo slot (the technology's
@@ -10,7 +12,7 @@ export function ContentCard({
   title,
   description,
   tags,
-  icon: Icon,
+  icon,
   seed,
   href,
   className,
@@ -18,11 +20,12 @@ export function ContentCard({
   title: string;
   description: string;
   tags: string[];
-  icon: CatalogIcon;
+  icon: IconName;
   seed: string;
   href?: string;
   className?: string;
 }) {
+  const Icon = ICONS[icon];
   const body = (
     <>
       <div className="content-card-banner">

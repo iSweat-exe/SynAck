@@ -1,5 +1,5 @@
 import { CatalogBrowser } from "@/components/site/catalog-browser";
-import type { Section } from "@/lib/catalog";
+import type { CatalogItem } from "@/lib/catalog";
 
 // Shared frame of the section pages (paths, protocols, articles, roadmaps): a title, an intro, and the
 // searchable, filterable list of cards.
@@ -7,10 +7,12 @@ export function CatalogPage({
   title,
   description,
   section,
+  items,
 }: {
   title: string;
   description: string;
-  section: Section;
+  section: string;
+  items: CatalogItem[];
 }) {
   return (
     <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-10 px-6 py-12">
@@ -21,7 +23,7 @@ export function CatalogPage({
         <p className="text-lg text-muted-foreground">{description}</p>
       </header>
 
-      <CatalogBrowser section={section} />
+      <CatalogBrowser section={section} items={items} />
     </main>
   );
 }

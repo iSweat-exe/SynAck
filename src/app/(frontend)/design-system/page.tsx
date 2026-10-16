@@ -8,10 +8,8 @@ import { ErrorCard } from "@/components/site/error-screen";
 import { AccountMenu } from "@/components/site/user-menu";
 import { SwitchDemo } from "@/components/design-system/switch-demo";
 import { ThemeScope } from "@/components/design-system/theme-scope";
-import { Network } from "lucide-react";
 
 import { tcpHandshake } from "@/lib/scenarios/tcp-handshake";
-import { SiPython } from "react-icons/si";
 
 import { Alert } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -578,14 +576,14 @@ export default function DesignSystemPage() {
               <ContentCard
                 href="#content-cards"
                 seed="ds-python"
-                icon={SiPython}
+                icon="python"
                 title="Python pour débuter"
                 description="Un langage lisible pour apprendre à raisonner en code."
                 tags={["Débutant", "Python"]}
               />
               <ContentCard
                 seed="ds-tcp"
-                icon={Network}
+                icon="network"
                 title="TCP : le handshake"
                 description="SYN, SYN-ACK, ACK, pertes et retransmissions, animés pas à pas."
                 tags={["Transport", "Animé"]}

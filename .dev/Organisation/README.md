@@ -148,7 +148,7 @@ Courses live in **Payload CMS**, not in versioned MDX files. A contributor write
 - Rich text, image, diagram
 - **Exercise**: language (JS or Python), prompt, difficulty, starter code, progressive hints, solution, tests
 - **Quiz**: questions and answers, explanations
-- **Protocol animation**: scenario choice (TCP, HTTP, DNS, TLS) and a few parameters
+- **Protocol diagram**: an animated sequence diagram between two machines, created by editors in the *Protocol diagrams* collection (machines, messages, explanations, optional packet loss), embedded in a chapter through this block or shown on its own page
 
 ### Exercise tests (two modes)
 - **Simple**: an "input → expected output" table, no code.

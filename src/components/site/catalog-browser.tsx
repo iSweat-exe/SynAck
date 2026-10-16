@@ -7,7 +7,7 @@ import { ContentCard } from "@/components/site/content-card";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { CATALOG, type Level, type Section } from "@/lib/catalog";
+import type { CatalogItem, Level } from "@/lib/catalog";
 import {
   facetsOf,
   filterItems,
@@ -61,8 +61,13 @@ function Chips<T extends string>({
 // The list of a section with an instant search and filters. Everything happens in the browser as the
 // user types or clicks: the search looks at every word (title, description, level, tags), the filters
 // combine, and several choices in the same group are alternatives.
-export function CatalogBrowser({ section }: { section: Section }) {
-  const items = CATALOG[section];
+export function CatalogBrowser({
+  section,
+  items,
+}: {
+  section: string;
+  items: CatalogItem[];
+}) {
   const facets = useMemo(() => facetsOf(items), [items]);
   const [filters, setFilters] = useState<Filters>(NO_FILTERS);
   const shown = useMemo(() => filterItems(items, filters), [items, filters]);

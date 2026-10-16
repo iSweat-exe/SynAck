@@ -50,6 +50,10 @@ npm run db:reset   # rebuild the local database from scratch
 npm run db:stop
 ```
 
+### Protocol diagrams
+
+Editors create animated protocol diagrams in the back office, *Protocol diagrams*: describe the two machines, then each message (sender, name, detail, a sentence of explanation, the machines' state afterwards, and whether readers can make it get lost). The page `/protocols/<slug>` is built from it, the *Preview* button shows the draft, and publishing refreshes the site. The format is documented in `.dev/Organisation/DESIGN.md` (Protocol diagrams).
+
 ### Content management (Payload CMS)
 
 The back office is served at `/admin`, the REST API at `/api`. Payload stores its tables in the `payload` schema of the same Postgres database, and schema changes always go through versioned migrations (auto-push is disabled):

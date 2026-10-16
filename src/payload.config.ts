@@ -8,6 +8,7 @@ import sharp from "sharp";
 import { Articles } from "@/collections/Articles";
 import { Courses } from "@/collections/Courses";
 import { Paths } from "@/collections/Paths";
+import { Protocols } from "@/collections/Protocols";
 import { Users } from "@/collections/Users";
 import { editor } from "@/lib/editor";
 
@@ -23,7 +24,7 @@ export default buildConfig({
     },
     importMap: { baseDir: path.resolve(dirname) },
   },
-  collections: [Paths, Courses, Articles, Users],
+  collections: [Paths, Courses, Protocols, Articles, Users],
   editor,
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: { outputFile: path.resolve(dirname, "payload-types.ts") },

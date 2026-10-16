@@ -184,7 +184,7 @@ Delivered in three PRs: (1) database, (2) app sign-in (P2.4), (3) Payload wired 
 *Exit: protocol modules playable without an account; badges, streaks, SM-2 reviews and a leaderboard secured server-side.*
 
 ### P3.1 Protocol modules `area: protocols`
-- [ ] Payload "Protocol animation" block (scenario + parameters)
+- [x] Payload "Protocol diagrams" collection (editors build the diagrams without code, preview, drafts, validation) and a "Protocol diagram" chapter block; the diagram always fits the screen
 - [x] **TCP**: SYN / SYN-ACK / ACK handshake, losses, retransmissions (`/protocols/tcp`, with the reusable `SequenceDiagram` engine; the Payload "Protocol animation" block and the other protocols are still to do)
 - [ ] **HTTP playground**: raw requests to a fake server simulated in a Worker
 - [ ] **DNS** then **TLS** (resolution, handshake)

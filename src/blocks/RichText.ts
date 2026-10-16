@@ -1,5 +1,6 @@
 import type { Block } from "payload";
 
+import { ProtocolDiagram } from "@/blocks/ProtocolDiagram";
 import { editor } from "@/lib/editor";
 
 export const RichText: Block = {
@@ -8,5 +9,5 @@ export const RichText: Block = {
   fields: [{ name: "body", type: "richText", editor, required: true }],
 };
 
-// Blocks available inside a chapter. Exercise, Quiz and Protocol animation blocks are added in P2.2, P2.6 and P3.1.
-export const chapterBlocks: Block[] = [RichText];
+// Blocks available inside a chapter. Exercise and Quiz blocks are added in P2.2 and P2.6.
+export const chapterBlocks: Block[] = [RichText, ProtocolDiagram];

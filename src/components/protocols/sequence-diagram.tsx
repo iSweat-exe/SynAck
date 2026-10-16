@@ -259,7 +259,18 @@ function Wait({
 
 // An animated sequence diagram of a protocol exchange between two machines. The user can play it,
 // step through it, jump to a step, and switch on a packet loss to see how the protocol recovers.
-export function SequenceDiagram({ scenario }: { scenario: Scenario }) {
+//
+// `variant="stage"` makes the whole diagram fit the screen: the drawing scales to the height that is
+// left, with the controls and the explanation beside it on wide screens (below it on small ones).
+// `variant="inline"` is the same inside a flowing page, capped at 70% of the screen height.
+export function SequenceDiagram({
+  scenario,
+  variant = "inline",
+}: {
+  scenario: Scenario;
+  variant?: "inline" | "stage";
+}) {
+  const stage = variant === "stage";
   const [loss, setLoss] = useState(false);
   const [shown, setShown] = useState(0); // how many steps have been played (the last one is animating)
   const [playing, setPlaying] = useState(false);
@@ -327,8 +338,16 @@ export function SequenceDiagram({ scenario }: { scenario: Scenario }) {
   ];
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
+    <div
+      className={
+        stage
+          ? "grid gap-6 lg:h-full lg:min-h-0 lg:grid-cols-[minmax(0,1fr)_22rem] lg:grid-rows-[auto_auto_auto_1fr]"
+          : "flex flex-col gap-6"
+      }
+    >
+      <div
+        className={`flex flex-wrap items-center gap-x-6 gap-y-4 ${stage ? "lg:col-start-2" : ""}`}
+      >
         <div className="flex items-center gap-3">
           <Button
             size="icon-sm"
@@ -391,12 +410,18 @@ export function SequenceDiagram({ scenario }: { scenario: Scenario }) {
         </p>
       </div>
 
-      <div className="overflow-x-auto pb-2">
+      <div
+        className={
+          stage
+            ? "h-[52dvh] min-h-0 lg:col-start-1 lg:row-span-4 lg:row-start-1 lg:h-full"
+            : "pb-2"
+        }
+      >
         <svg
           viewBox={`0 0 ${WIDTH} ${height}`}
           role="img"
           aria-label={`Diagramme animé : ${scenario.title}. Le détail des étapes est donné dans la liste qui suit.`}
-          className="mx-auto block h-auto w-full max-w-2xl min-w-[30rem]"
+          className={`mx-auto block w-full ${stage ? "h-full" : "h-auto max-h-[70dvh] max-w-2xl"}`}
           style={{ fontFamily: "var(--font-sans)" }}
         >
           {/* Lifelines and actors */}
@@ -514,7 +539,7 @@ export function SequenceDiagram({ scenario }: { scenario: Scenario }) {
       {/* What is happening, in words */}
       <div
         aria-live="polite"
-        className="flex min-h-28 flex-col gap-2 rounded-lg border-2 border-dashed border-border p-4 text-sm"
+        className={`flex min-h-28 flex-col gap-2 rounded-lg border-2 border-dashed border-border p-4 text-sm ${stage ? "lg:col-start-2" : ""}`}
       >
         {current ? (
           <>
@@ -537,7 +562,7 @@ export function SequenceDiagram({ scenario }: { scenario: Scenario }) {
       <div
         role="group"
         aria-label="Aller à une étape"
-        className="flex flex-wrap gap-2"
+        className={`flex flex-wrap content-start gap-2 ${stage ? "lg:col-start-2" : ""}`}
       >
         {steps.map((step, i) => (
           <button
