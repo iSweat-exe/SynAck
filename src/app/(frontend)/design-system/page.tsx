@@ -370,7 +370,7 @@ export default function DesignSystemPage() {
         >
           <Block
             title="Transition"
-            note="Toggling slides the knob while it shrinks to a small round knob in the middle, then it grows back. These are the three frames of the UI kit: off, the middle of the transition, on. Toggle the live one to see it play."
+            note="The whole switch moves in one smooth slide: the knob squashes to a small round shape halfway, stretches back, with a small bounce at the start and at the end. The three frames of the UI kit are off, the middle of the movement, and on. Toggle the live one to see it play."
           >
             <div className="flex flex-wrap items-center gap-x-10 gap-y-6">
               <Switch aria-label="Off" checked={false} readOnly />

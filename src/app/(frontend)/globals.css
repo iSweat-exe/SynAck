@@ -339,8 +339,9 @@
   /* Switch (DESIGN.md §4), proportions measured on the UI kit in units of the outline width --u:
      track 44u x 24u, knob 18u high (27u wide when elongated), 2u from the border, hard shadow 1u.
      Two states: off (gray knob on the left) and on (pink knob on the right). The third knob of the kit,
-     small, round and centered, is the middle of the transition between them: the knob shrinks while it
-     slides (see the keyframes). A native checkbox with role="switch". */
+     small, round and centered, is the middle of the movement between them: the whole knob travels in
+     one go while it squashes to a round shape and stretches back. The slide has a small bounce at the
+     start (anticipation) and at the end (overshoot). A native checkbox with role="switch". */
   .switch {
     --u: 2px;
     --depth: var(--u);
@@ -376,6 +377,24 @@
     height: var(--knob-h);
     border-radius: 9999px;
     background: var(--knob-bg);
+    /* Slide with a spring-like curve: a small step back, the travel, an overshoot, then it settles.
+       The first declaration is the fallback for browsers without linear(). */
+    transition: left 320ms cubic-bezier(0.34, 1.4, 0.64, 1);
+    transition: left 320ms
+      linear(
+        0,
+        -0.06 7%,
+        -0.08 11%,
+        0.02 20%,
+        0.3 32%,
+        0.7 46%,
+        1.08 60%,
+        1.15 68%,
+        1.09 77%,
+        1.01 88%,
+        0.995 94%,
+        1
+      );
   }
 
   .switch:checked {
@@ -385,12 +404,13 @@
     left: var(--knob-left-on);
   }
 
-  /* Transition: set by the component for the duration of the animation (data-motion="on" | "off"). */
+  /* Squash and stretch while the knob slides (data-motion is set by the component for the duration of the
+     animation). The slide itself is the `left` transition above, so both stay in sync. */
   .switch[data-motion="on"]::before {
-    animation: switch-knob-on 220ms ease-in-out;
+    animation: switch-knob-on 320ms ease-in-out;
   }
   .switch[data-motion="off"]::before {
-    animation: switch-knob-off 220ms ease-in-out;
+    animation: switch-knob-off 320ms ease-in-out;
   }
 
   /* The middle frame of the transition, held still (design-system page only). */
@@ -428,17 +448,18 @@
 
   @keyframes switch-knob-on {
     0% {
-      left: var(--knob-left-off);
       width: var(--knob-w);
       background: var(--neutral-400);
     }
-    50% {
-      left: calc(50% - var(--u) * 9);
-      width: calc(var(--u) * 18);
+    42% {
+      width: calc(var(--u) * 17);
       background: var(--primary-200);
     }
+    72% {
+      width: calc(var(--u) * 29);
+      background: var(--primary-400);
+    }
     100% {
-      left: var(--knob-left-on);
       width: var(--knob-w);
       background: var(--primary-400);
     }
@@ -446,17 +467,18 @@
 
   @keyframes switch-knob-off {
     0% {
-      left: var(--knob-left-on);
       width: var(--knob-w);
       background: var(--primary-400);
     }
-    50% {
-      left: calc(50% - var(--u) * 9);
-      width: calc(var(--u) * 18);
+    42% {
+      width: calc(var(--u) * 17);
       background: var(--primary-200);
     }
+    72% {
+      width: calc(var(--u) * 29);
+      background: var(--neutral-400);
+    }
     100% {
-      left: var(--knob-left-off);
       width: var(--knob-w);
       background: var(--neutral-400);
     }
@@ -486,6 +508,7 @@
     }
     .switch::before {
       animation: none !important;
+      transition: none;
     }
   }
 }

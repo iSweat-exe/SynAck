@@ -10,8 +10,9 @@ type SwitchProps = Omit<ComponentProps<"input">, "type" | "role">;
 // (Space) work for free. The look lives in globals.css (`.switch`). Always give it an accessible name:
 // wrap it in a <label> or pass `aria-label`.
 //
-// Toggling plays the knob transition (it shrinks to a round knob in the middle of the slide). The
-// animation is only a flag for the duration of the transition: the resting look comes from `:checked`.
+// Toggling plays one smooth slide with a small bounce at each end: the knob squashes to a round shape
+// halfway and stretches back (the kit's middle knob). The slide itself is a CSS transition; `data-motion`
+// only lives for the duration of the squash animation. The resting look comes from `:checked`.
 function Switch({
   className,
   onChange,
