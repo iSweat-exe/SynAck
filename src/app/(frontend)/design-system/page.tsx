@@ -366,7 +366,7 @@ export default function DesignSystemPage() {
         <Section
           id="switches"
           title="Switches"
-          description="Pill-shaped track with a hard shadow and a knob. Gray knob on the left is off, pink knob on the right is on. No animation."
+          description="Pill-shaped track with a hard shadow and a knob. Gray knob on the left is off, pink knob on the right is on. Toggling only slides the knob from one side to the other."
         >
           <Block
             title="States"

@@ -120,7 +120,7 @@ The style is **neo-brutalist**: thick, almost-black outline; hard drop shadow of
 ### Switches (three visible states)
 - Pill-shaped track, `primary-50` background, `neutral-950` outline, hard shadow.
 - Inner knob: `primary-400` (elongated), `primary-200` (round, centered), `neutral-400` (elongated).
-- **Two states, no animation** (decided by the project creator): pink knob on the right = **on**, gray knob on the left = **off**. The small light round knob on the kit is not used (it was only the middle frame of a possible animation, which was dropped). Disabled is a separate flat gray look, like a disabled button.
+- **Two states and one simple animation** (decided by the project creator): the knob just slides from one side to the other (150 ms), nothing else, no bounce or squash: pink knob on the right = **on**, gray knob on the left = **off**. The small light round knob on the kit is not used (it was only the middle frame of a possible animation, which was dropped). Disabled is a separate flat gray look, like a disabled button.
 - **Measured** (units of the outline width `u`): track 44u x 24u, knob 27u x 18u, 2u from the border, 3u from the side, hard shadow 1u. Implemented with `u` = 2 px (88 x 48 px, same height as a medium button).
 
 ### Starting values (Proposal)

@@ -338,8 +338,8 @@
 
   /* Switch (DESIGN.md §4), proportions measured on the UI kit in units of the outline width --u:
      track 44u x 24u, knob 18u high and 27u wide, 2u from the border, hard shadow 1u. Two states: off
-     (gray knob on the left) and on (pink knob on the right). No animation. A native checkbox with
-     role="switch". */
+     (gray knob on the left) and on (pink knob on the right). The only animation is the knob sliding
+     from one side to the other. A native checkbox with role="switch". */
   .switch {
     --u: 2px;
     --depth: var(--u);
@@ -368,6 +368,9 @@
     height: calc(var(--u) * 18);
     border-radius: 9999px;
     background: var(--knob-bg);
+    transition:
+      left 150ms ease-out,
+      background-color 150ms ease-out;
   }
 
   .switch:checked {
@@ -421,7 +424,8 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .btn {
+    .btn,
+    .switch::before {
       transition: none;
     }
   }
