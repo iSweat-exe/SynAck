@@ -45,7 +45,7 @@ V1 scope in one line: **1 path** ("Introduction to Programming", JS + Python), *
 ### P0.3 Accounts and services ($0) `area: infra`
 - [ ] **Supabase** project (free tier) + note the project ref; check the current limits (README §14)
 - [ ] **Vercel** project (Hobby, linked to the repository); disable automatic previews for non-`main` branches (see P0.4)
-- [ ] OAuth: a **GitHub** application and a **Google Cloud** project (consent screen) for sign-in
+- [ ] OAuth: a **GitHub** OAuth app and a **Discord** application for sign-in (client ID/secret go into the Supabase dashboard, not into GitHub secrets). Google (Cloud project + consent screen) is deferred until later
 - [ ] Uptime probe (UptimeRobot or Better Stack): to wire up in P4.4
 - [ ] **Private** repository for backups (for [backup.yml](../../.github/workflows/backup.yml))
 
@@ -56,11 +56,12 @@ V1 scope in one line: **1 path** ("Introduction to Programming", JS + Python), *
 | `SUPABASE_DB_PASSWORD` | secret (env `production`) | `db-migrate.yml` |
 | `SUPABASE_PROJECT_REF` | variable (env `production`) | `db-migrate.yml` |
 | `PRODUCTION_DATABASE_URL` | secret (env `production`), Supabase **session pooler** URL (IPv4) | `db-migrate.yml` (Payload migrations) |
-| `PAYLOAD_SECRET` | secret (env `production`; also a repository secret if `backup:content` exists) | `db-migrate.yml`, `backup.yml` |
+| `PAYLOAD_SECRET` | repository secret (same value as in Vercel) | `db-migrate.yml`, `backup.yml` |
 | `BACKUP_DATABASE_URL` | repository secret, Supabase **session pooler** URL (IPv4) | `backup.yml` |
 | `BACKUP_PASSPHRASE` | repository secret (also keep it outside GitHub: without it the backups are unreadable) | `backup.yml` |
 | `BACKUP_REPO_TOKEN` | repository secret, fine-grained PAT limited to the backup repository (Contents: write) | `backup.yml` |
 | `BACKUP_REPO` | variable, `owner/private-repo` | `backup.yml` |
+| `BACKUP_ENABLED` | variable, set to `true` once the four `BACKUP_*` values above exist (until then the scheduled run is skipped) | `backup.yml` |
 | `PRODUCTION_URL` | variable, `https://…` | `keepalive.yml`, `db-migrate.yml` (health check) |
 | `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` | secrets | `preview.yml` (on-demand previews) |
 
@@ -68,9 +69,9 @@ V1 scope in one line: **1 path** ("Introduction to Programming", JS + Python), *
 - [ ] Vercel: *Settings → Git → Ignored Build Step* = `bash -c '[ "$VERCEL_GIT_COMMIT_REF" = "main" ] && exit 1 || exit 0'` (build only `main`, previews through the `preview` label)
 
 ### P0.5 Decisions to make early `[BLOCKING]`
-- [ ] Package manager: **npm** (the workflows' assumption, `npm ci` + `package-lock.json`). If pnpm/yarn, adapt [ci.yml](../../.github/workflows/ci.yml)
-- [ ] Domain name and availability of "SynAck" (trademark, social handles)
-- [ ] Legal validation of the license (can wait until the repository is published)
+- [x] Package manager: **npm** (decided; `npm ci` + `package-lock.json`)
+- [x] Domain: the **Vercel-provided domain** for now (custom domain later). Still to check: "SynAck" trademark and social handles
+- [x] Licenses validated by the project creator
 - [ ] Check **Payload ↔ Supabase Postgres** compatibility (dedicated schema, pooling): to validate in P1.3 before going further
 
 ---
@@ -144,7 +145,7 @@ V1 scope in one line: **1 path** ("Introduction to Programming", JS + Python), *
 - [ ] Check weight and cold start
 
 ### P2.4 Authentication and profiles `area: auth` `area: db`
-- [ ] Supabase Auth: GitHub + Google; link several providers to one account (verified e-mail only)
+- [ ] Supabase Auth: GitHub + Discord (Google added later); link several providers to one account (verified e-mail only)
 - [ ] `profiles` (nickname, avatar, leaderboard opt-in), **minimum age 15** declaration at sign-up
 - [ ] RLS: everyone reads/writes only their own data
 - [ ] `progress`, `exercise_attempts`, `quiz_results`; progress per course (%)
@@ -230,7 +231,7 @@ V1 scope in one line: **1 path** ("Introduction to Programming", JS + Python), *
 
 ### P4.5 Production and launch `area: infra`
 - [ ] Production Supabase schema created by merging the existing migrations to `main` (the [db-migrate.yml](../../.github/workflows/db-migrate.yml) workflow applies them automatically; first run: trigger it manually as a dry run)
-- [ ] Vercel environment variables, domain, production OAuth, Vercel Analytics
+- [ ] Vercel environment variables, `*.vercel.app` domain, production OAuth (GitHub + Discord redirect URLs), Vercel Analytics
 - [ ] Gate validated, then **public opening** with the beta warning
 
 ---
@@ -266,8 +267,9 @@ Issues that condition this gate carry the **`gate: beta-launch`** label.
 
 | Decision | Decide before | Status |
 |---|---|---|
-| Domain name, SynAck trademark | P4.5 | ☐ |
-| Legal validation of the licenses | Repository publication | ☐ |
+| Custom domain (Vercel domain used for now), SynAck trademark | after launch | ☐ |
+| Legal validation of the licenses | Repository publication | ☑ done |
+| Google sign-in | after launch | ☐ |
 | Payload ↔ Supabase compatibility (schema, pooling) | P1.3 | ☐ |
 | Dark mode: hard shadow color, theme tints (or drop in V1) | P1.5 | ☐ |
 | Exact V1 permission list and preset contents | P1.4 | ☐ |

@@ -22,6 +22,9 @@ permissions:
 jobs:
   backup:
     name: Dump, encrypt, push
+    # Opt-in: set the repository variable BACKUP_ENABLED=true once the BACKUP_* secrets exist.
+    # A manual run always goes through (and fails loudly if something is missing).
+    if: vars.BACKUP_ENABLED == 'true' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
