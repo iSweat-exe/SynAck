@@ -25,6 +25,7 @@ Guiding principle: **creating a course must be pleasant and possible without tou
 | Business model | 100% free |
 | Accounts | Required to practice (exercises, progress, leaderboard) |
 | Sign-in | GitHub and Discord (OAuth) at launch; Google (OAuth) to be added later |
+| Back-office sign-in | **SSO only**: the CMS uses the same accounts as the app (GitHub and Discord through Supabase Auth), with no separate Payload password; recovery by SQL (see §5 bis) |
 | Content team | One admin + a few contributors |
 | Permissions | **Granular** (`resource.action`), grouped into editable **role presets** (see §5 bis) |
 | Review | Driven by permissions: senior instructors publish, junior instructors go through review |
@@ -141,7 +142,7 @@ Courses live in **Payload CMS**, not in versioned MDX files. A contributor write
 - **Paths**: ordered sequence of courses, with an associated level.
 - **Courses**: chapters made of blocks.
 - **Articles**: tech watch, tags, date, author.
-- **Users**: one or more roles per user; permissions come from roles (see §5 bis).
+- **Users**: back-office accounts, linked to Supabase accounts (same sign-in as the app); roles and permissions come from Postgres (see §5 bis).
 
 ### Blocks available in the editor
 - Rich text, image, diagram
@@ -169,13 +170,22 @@ Rights are **granular permissions** in the `resource.action` format (examples: `
 | Preset | Permissions (excerpt) |
 |---|---|
 | **Member** (default) | `exercises.run`, `progress.write_own`, `review.use`, `leaderboard.see` (subject to a level condition, see below) |
-| **Junior instructor** | `courses.create`, `courses.edit_own`, `courses.submit_review`, `quiz.create`, `articles.create` |
-| **Senior instructor** | everything above + `courses.edit`, `courses.publish`, `reviews.approve`, `articles.publish` |
-| **Administrator** | all permissions, including `courses.delete`, `users.manage`, `roles.manage`, `moderation.ban` |
+| **Junior instructor** | `cms.access`, `courses.create`, `courses.edit_own`, `courses.submit_review`, `quiz.create`, `articles.create` |
+| **Senior instructor** | everything above + `courses.edit`, `courses.publish`, `reviews.approve`, `articles.publish`, `paths.manage` |
+| **Administrator** | all permissions, including `courses.delete`, `users.manage`, `roles.manage`, `moderation.ban`, `audit.read` |
 
 A **Moderator** preset (with `moderation.ban`, no editorial rights) can be created from the back office if needed.
 
 Presets are **data**: the administrator can create or edit them from the back office.
+
+The complete closed list (20 permissions) is declared in `src/lib/permissions.ts`; a test checks that the presets seeded by the migration match it. Every account also holds the **Member** role: instructors hold it in addition to their own.
+
+### Identity and back-office access
+- **One identity**: Supabase Auth (GitHub, Discord) is the only sign-in, for learners and for the back office alike. Payload has no password of its own; a custom Payload auth strategy reads the Supabase session on the server and maps it to a Payload user through the Supabase user id.
+- **Who can enter `/admin`**: only accounts holding `cms.access`. A new account is a Member and cannot. The Payload user is created on the first sign-in of someone who has the permission.
+- **Granting roles**: server-side only (`private.grant_role` / `private.revoke_role`, executable by `service_role`), each call written to `audit_log`. The API roles cannot write to the permission tables.
+- **Lock-out protection**: the last administrator cannot be revoked. Recovery if every sign-in provider is down: an operator with database access can run `select private.grant_role('<user uuid>', 'administrator');` from the Supabase SQL editor.
+- **Database hardening**: new tables in `public` are not reachable by `anon` / `authenticated` until a migration grants access explicitly, on top of RLS.
 
 ### Design rules
 - **Single source of truth**: permissions are stored in Postgres (Supabase) and used by both the RLS policies and Payload's access functions, to prevent any divergence between the two systems.
@@ -387,7 +397,6 @@ Pace: **full time**, intermediate technical level (React / Next.js mastered). Th
 - **CSP**: exact content of the final policy, compatible with Monaco, Pyodide and SEO (Report-Only first)
 - Compatibility of **TOTP 2FA** with OAuth sign-in and Payload
 - Verification of the current Supabase and Vercel free-tier limits
-- Exact list of V1 permissions and the precise content of each preset
 - **Sign-up anti-bot**: CAPTCHA not adopted for now, to reconsider if abuse appears
 - Text and placement of the **beta warning**
 - Strategy for Rust and C after V1

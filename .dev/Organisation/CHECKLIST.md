@@ -106,13 +106,14 @@ V1 scope in one line: **1 path** ("Introduction to Programming", JS + Python), *
 - [x] **Done when**: a course created in the local Payload admin shows up in the database (verified with the Local API and REST against a local Supabase: published/draft visibility, slug generation, rejected anonymous writes; create one by hand in `/admin` as a final check)
 
 ### P1.4 Permissions and roles `area: auth` `area: db`
-- [ ] Single permissions file (closed TypeScript type, `resource.action` format)
-- [ ] Tables `roles`, `role_permissions`, `user_roles`, `audit_log`, SQL function `has_permission(user, permission)`
-- [ ] Starting presets: Member, Junior instructor, Senior instructor, Administrator
-- [ ] Wiring to Payload `access` and **RLS** policies (RLS enabled on **every** table from the start)
-- [ ] Short-lived JWT; re-read from the database for sensitive actions (publish, delete, moderate, manage roles)
-- [ ] Tests: Vitest (deny by default, preset inheritance, sensitive actions) and pgTAP (policies)
-- [ ] **Done when**: a test proves a role without a permission is refused by RLS **and** by Payload
+Delivered in three PRs: (1) database, (2) app sign-in (P2.4), (3) Payload wired to the same accounts. **Decision: the back office is SSO only** (GitHub and Discord through Supabase Auth, same accounts as the app, no Payload password).
+- [x] **PR 1, database**: single permissions file `src/lib/permissions.ts` (closed list of 20, `resource.action` format); tables `roles`, `role_permissions`, `user_roles`, `audit_log`; `private.has_permission(user, permission)` plus `public.has_permission(permission)` for the signed-in user; starting presets (Member, Junior instructor, Senior instructor, Administrator) with a test that the migration matches the TypeScript list; every new account becomes a Member; `private.grant_role` / `private.revoke_role` (service role only, audited, last administrator protected); RLS on all four tables, read-only through the API; new `public` tables closed to the API roles by default; pgTAP tests (RLS, deny by default, immediate effect of a revocation)
+- [ ] **PR 2, app sign-in** (see P2.4): Supabase Auth with GitHub and Discord, login/callback pages, session handling in Next.js
+- [ ] **PR 3, Payload on the same accounts**: custom auth strategy reading the Supabase session; local email/password strategy disabled; `/admin` reserved for accounts with `cms.access` (Payload user created on first sign-in); Payload `access` functions call `has_permission` instead of "any signed-in user"; sign-in buttons on the admin login page
+- [ ] Bootstrap: sign in once with GitHub, then grant yourself `administrator` with `select private.grant_role('<user uuid>', 'administrator');` in the Supabase SQL editor; then retire the first email/password Payload account
+- [ ] Short-lived JWT (Supabase settings); sensitive actions (publish, delete, moderate, manage roles) re-read permissions from the database, which `has_permission` already does
+- [ ] Tests: Vitest (deny by default, sensitive actions in Payload access functions)
+- [ ] **Done when**: a test proves a role without a permission is refused by RLS **and** by Payload (RLS part proven by pgTAP in PR 1)
 
 ### P1.5 Theme and layout `area: ui`
 - [ ] DESIGN.md §4 tokens as CSS variables + Tailwind theme (primary / neutral / semantic palette)

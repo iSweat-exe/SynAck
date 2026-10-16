@@ -175,7 +175,7 @@ jobs:
           done
 
           # Destructive statements need the `breaking-change` label.
-          hits=$(grep -n -i -E 'drop[[:space:]]+(table|column|schema|type)|truncate|delete[[:space:]]+from' $added || true)
+          hits=$(python3 .github/scripts/find-destructive-sql.py $added)
           if [ -n "$hits" ]; then
             echo "Destructive statements found:"
             echo "$hits"
