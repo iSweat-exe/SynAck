@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import { LoginButtons } from "@/components/auth/login-buttons";
+import { AuthShell } from "@/components/auth/auth-shell";
 import { Alert } from "@/components/ui/alert";
 import {
   Card,
@@ -34,7 +35,7 @@ export default async function LoginPage({
   }
 
   return (
-    <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center p-6">
+    <AuthShell>
       <Card>
         <CardHeader>
           <CardTitle>Connexion</CardTitle>
@@ -65,6 +66,6 @@ export default async function LoginPage({
           au moins 15 ans.
         </Alert>
       </Card>
-    </main>
+    </AuthShell>
   );
 }

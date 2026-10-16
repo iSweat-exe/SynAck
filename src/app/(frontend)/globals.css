@@ -132,6 +132,9 @@
   --link-color: var(--primary-700);
   /* Text on a colored fill is always neutral-950 (contrast, DESIGN.md §3) */
   --on-fill: var(--neutral-950);
+  /* Dashed background: base dash color and the color a dash takes when a ripple crosses it */
+  --pattern: var(--neutral-300);
+  --pattern-accent: var(--primary-400);
   --muted-bg: var(--neutral-200);
   --muted-ink: var(--neutral-600);
   --accent-bg: var(--primary-100);
@@ -170,6 +173,7 @@
   --ring-color: var(--primary-300);
   --link-color: var(--primary-300);
 
+  --pattern: var(--neutral-800);
   --btn-secondary-bg: var(--neutral-800);
   --btn-secondary-ink: var(--neutral-50);
   --btn-secondary-bevel: var(--neutral-700);

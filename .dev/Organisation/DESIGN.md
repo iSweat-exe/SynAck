@@ -198,6 +198,9 @@ The screenshots have no known scale: border, radius, shadow offset and bevel mus
 - **Badge**: outlined pill, 24 px high, `neutral` / `secondary` / `primary` (full `primary-400` fill) and the four semantic variants in the soft tones (100 background, 900 text; swapped in dark mode), because the saturated 500 fills clashed with the pink palette.
 - **Tabs**: small outlined boxes; the selected one is `primary-400` with a hard shadow; the panel is an outlined surface.
 
+### Dashed background (auth pages)
+Short diagonal dashes on a staggered grid, `neutral-300` on the page background (`neutral-800` in dark mode). Clicking the empty background drops a ripple: the dashes it crosses tilt, stretch and turn `primary-400` while the wave passes, fading with time and distance. Canvas component `DashBackground`; no ripple when the user prefers reduced motion.
+
 ### States and interactions (Proposal, absent from the screenshots)
 - **Hover**: the button shifts slightly down and to the right and the shadow shrinks.
 - **Press**: the button "sinks" (shadow to zero, shift equal to the shadow offset).

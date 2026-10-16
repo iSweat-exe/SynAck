@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
+import { AuthShell } from "@/components/auth/auth-shell";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
@@ -61,7 +62,7 @@ export default async function WelcomePage({
   if (profile?.age_declared_at) redirect("/account");
 
   return (
-    <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center p-6">
+    <AuthShell>
       <Card>
         <CardHeader>
           <CardTitle>Bienvenue sur SynAck</CardTitle>
@@ -92,6 +93,6 @@ export default async function WelcomePage({
           </form>
         </CardContent>
       </Card>
-    </main>
+    </AuthShell>
   );
 }

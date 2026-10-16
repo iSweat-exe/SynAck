@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { AuthShell } from "@/components/auth/auth-shell";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -51,7 +52,7 @@ export default async function AccountPage() {
     "Compte SynAck";
 
   return (
-    <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center p-6">
+    <AuthShell>
       <Card>
         <CardHeader>
           <CardTitle>Mon compte</CardTitle>
@@ -80,6 +81,6 @@ export default async function AccountPage() {
           </form>
         </CardContent>
       </Card>
-    </main>
+    </AuthShell>
   );
 }
