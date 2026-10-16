@@ -118,7 +118,7 @@ Delivered in three PRs: (1) database, (2) app sign-in (P2.4), (3) Payload wired 
 ### P1.5 Theme and layout `area: ui`
 - [x] DESIGN.md §3 tokens as CSS variables + Tailwind theme (primary / neutral / semantic palette, `bg-primary-400`...), role tokens (`--bg`, `--ink`, `--outline`, `--shadow`) with a light and a dark set; a Vitest test checks that the palette matches the document
 - [x] **Space Mono** (4 variants, `font-synthesis: none`, self-hosted through `next/font`, accents shown on `/design-system`). Not applied to the Payload admin, which keeps its own UI
-- [x] Button restyled: Primary / Secondary, 3 sizes, icon-only, hover / pressed / disabled states (no visible focus ring, by decision), inline link
+- [x] Button restyled: Primary / Secondary / Danger, 3 sizes, icon-only, hover / pressed / disabled states (no visible focus ring, by decision), inline link
 - [x] Switch: off / on with a simple knob slide, disabled, hover / pressed (native checkbox with `role="switch"`)
 - [x] Site header with the account menu (avatar, profile, admin panel with `cms.access`, sign-out), home as the landing page after sign-in, redesigned `/profile`; the receipt style stays for the sign-in page only
 - [x] `AuthCard` as a receipt (logo, dashed rules, beta badge, small print, barcode, torn edge) and a `Logo` component from the supplied PNGs; SVG, dark-mode variant and favicon still to produce

@@ -157,7 +157,7 @@ export function AccountMenu({ user }: { user: MenuUser }) {
 
             <form method="post" action="/auth/signout">
               <Menu.Item
-                className="menu-item"
+                className="menu-item menu-item-danger"
                 render={<button type="submit" />}
                 nativeButton
               >

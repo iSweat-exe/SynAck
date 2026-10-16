@@ -75,7 +75,6 @@ export default async function ProfilePage() {
           name={name}
           src={text(meta.avatar_url) ?? text(meta.picture)}
           size={104}
-          className="shadow-[4px_4px_0_var(--shadow)]"
         />
         <div className="flex flex-col gap-3">
           <h1 className="text-3xl leading-tight font-bold">{name}</h1>
@@ -123,7 +122,7 @@ export default async function ProfilePage() {
               </Button>
             ) : null}
             <form action="/auth/signout" method="post">
-              <Button type="submit" variant="secondary" className="w-full">
+              <Button type="submit" variant="danger" className="w-full">
                 Se déconnecter
               </Button>
             </form>

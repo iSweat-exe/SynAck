@@ -248,22 +248,22 @@ export default function DesignSystemPage() {
         >
           <Block
             title="Variants and sizes"
-            note="Primary is the main action of a screen, Secondary the other ones. Three sizes: sm, md (default), lg."
+            note="Primary is the main action of a screen, Secondary the other ones, Danger a destructive or sign-out action. Three sizes: sm, md (default), lg."
           >
             <div className="flex flex-col gap-8">
-              {(["primary", "secondary"] as const).map((variant) => (
+              {(["primary", "secondary", "danger"] as const).map((variant) => (
                 <div
                   key={variant}
                   className="flex flex-wrap items-center gap-x-8 gap-y-6"
                 >
                   <Button variant={variant} size="sm">
-                    {variant === "primary" ? "Primary" : "Secondary"} sm
+                    {variant[0].toUpperCase() + variant.slice(1)} sm
                   </Button>
                   <Button variant={variant} size="md">
-                    {variant === "primary" ? "Primary" : "Secondary"} md
+                    {variant[0].toUpperCase() + variant.slice(1)} md
                   </Button>
                   <Button variant={variant} size="lg">
-                    {variant === "primary" ? "Primary" : "Secondary"} lg
+                    {variant[0].toUpperCase() + variant.slice(1)} lg
                   </Button>
                 </div>
               ))}
@@ -275,24 +275,25 @@ export default function DesignSystemPage() {
             note="Hover moves the button toward its shadow, pressed sinks it, disabled is flat and gray. Try them for real on any button."
           >
             <div className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-5">
-              {(["primary", "secondary"] as const).flatMap((variant) =>
-                FORCED_STATES.map(({ label, force }) => (
-                  <div
-                    key={`${variant}-${label}`}
-                    className="flex flex-col items-start gap-4"
-                  >
-                    <span className="text-xs text-muted-foreground">
-                      {variant} / {label.toLowerCase()}
-                    </span>
-                    <Button
-                      variant={variant}
-                      disabled={force === "disabled"}
-                      data-force={force === "disabled" ? undefined : force}
+              {(["primary", "secondary", "danger"] as const).flatMap(
+                (variant) =>
+                  FORCED_STATES.map(({ label, force }) => (
+                    <div
+                      key={`${variant}-${label}`}
+                      className="flex flex-col items-start gap-4"
                     >
-                      {label}
-                    </Button>
-                  </div>
-                )),
+                      <span className="text-xs text-muted-foreground">
+                        {variant} / {label.toLowerCase()}
+                      </span>
+                      <Button
+                        variant={variant}
+                        disabled={force === "disabled"}
+                        data-force={force === "disabled" ? undefined : force}
+                      >
+                        {label}
+                      </Button>
+                    </div>
+                  )),
               )}
             </div>
           </Block>

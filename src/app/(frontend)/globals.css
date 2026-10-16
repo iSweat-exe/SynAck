@@ -154,6 +154,9 @@
   --btn-secondary-bg: var(--primary-50);
   --btn-secondary-ink: var(--neutral-950);
   --btn-secondary-bevel: var(--neutral-300);
+  --btn-danger-bg: var(--danger-bg);
+  --btn-danger-ink: var(--danger-ink);
+  --btn-danger-bevel: var(--danger-500);
   --btn-disabled-bg: var(--neutral-200);
   --btn-disabled-bevel: var(--neutral-300);
   --btn-disabled-ink: var(--neutral-500);
@@ -286,6 +289,13 @@
     --btn-bg: var(--btn-secondary-bg);
     --btn-bevel: var(--btn-secondary-bevel);
     --btn-ink: var(--btn-secondary-ink);
+  }
+
+  /* Danger: the soft red of the alerts (100 background, 900 text, 500 bevel; swapped in dark mode). */
+  .btn-danger {
+    --btn-bg: var(--btn-danger-bg);
+    --btn-bevel: var(--btn-danger-bevel);
+    --btn-ink: var(--btn-danger-ink);
   }
 
   /* Hover: the button moves toward its shadow, which shrinks. */
@@ -515,27 +525,15 @@
     height: 100%;
     object-fit: cover;
   }
-  /* The avatar as a button (the user menu trigger): moves toward its shadow like the buttons. */
+  /* The avatar as a button (the user menu trigger): no shadow, a slight dimming on hover. */
   .avatar-button {
-    --u: 2px;
-    --depth: calc(var(--u) * 1.5);
-    --offset: var(--depth);
     display: inline-flex;
     border-radius: 9999px;
-    box-shadow: var(--offset) var(--offset) 0 var(--shadow);
     cursor: pointer;
-    transition:
-      transform 80ms ease-out,
-      box-shadow 80ms ease-out;
   }
-  .avatar-button:hover {
-    --offset: calc(var(--depth) / 2);
-    transform: translate(calc(var(--depth) / 2), calc(var(--depth) / 2));
-  }
-  .avatar-button:active,
+  .avatar-button:hover,
   .avatar-button[data-popup-open] {
-    --offset: 0px;
-    transform: translate(var(--depth), var(--depth));
+    filter: brightness(0.94);
   }
 
   /* Dropdown menu: an outlined surface with a hard shadow; items light up like a secondary button. */
@@ -586,6 +584,13 @@
   }
   .menu-item[data-highlighted] {
     background: var(--primary-400);
+    color: var(--on-fill);
+  }
+  .menu-item-danger {
+    color: var(--danger-ink);
+  }
+  .menu-item-danger[data-highlighted] {
+    background: var(--danger-500);
     color: var(--on-fill);
   }
 

@@ -117,6 +117,9 @@ The style is **neo-brutalist**: thick, almost-black outline; hard drop shadow of
 - `neutral-300` bevel on the bottom and right edges.
 - Text in Space Mono Bold, `neutral-950`.
 
+### Danger button (derived from the kit)
+For destructive and sign-out actions: the soft red of the alerts (`danger-100` background, `danger-900` text, `danger-500` bevel; swapped in dark mode), same outline, shadow and states as the other buttons. In menus, a danger item is `danger-900` text and turns `danger-500` when highlighted.
+
 ### Switches (three visible states)
 - Pill-shaped track, `primary-50` background, `neutral-950` outline, hard shadow.
 - Inner knob: `primary-400` (elongated), `primary-200` (round, centered), `neutral-400` (elongated).
@@ -199,7 +202,7 @@ The screenshots have no known scale: border, radius, shadow offset and bevel mus
 - **Tabs**: small outlined boxes; the selected one is `primary-400` with a hard shadow; the panel is an outlined surface.
 
 ### Site header and account menu
-Sticky header with the bottom outline: the logo on the left, the account corner on the right. Signed out: a Primary "Se connecter" button. Signed in: the round avatar (provider picture, or the initials on `primary-400`) as a button with a small hard shadow; it opens a menu (outlined surface, hard shadow, dashed separators, highlighted item in `primary-400`) with the profile, the admin panel and the design system for accounts with `cms.access`, and the sign-out. The header reads the session in the browser so the pages stay static.
+Sticky header with the bottom outline: the logo on the left, the account corner on the right. Signed out: a Primary "Se connecter" button. Signed in: the round avatar (provider picture, or the initials on `primary-400`) as a button with no shadow; it opens a menu (outlined surface, hard shadow, dashed separators, highlighted item in `primary-400`) with the profile, the admin panel and the design system for accounts with `cms.access`, and the sign-out. The header reads the session in the browser so the pages stay static.
 
 ### Auth ticket
 The sign-in, welcome and account pages share `AuthCard`, styled as a **receipt**: the logo and a tagline centered on top, sections separated by dashed rules, a title with the "Bêta" badge, the actions, the small print, a decorative barcode and a torn (zigzag) bottom edge. No header band. The outline and the hard shadow follow the torn edge (chained drop-shadows on a wrapper, the paper is masked). The logo comes from the supplied PNGs (`public/brand`), through a `Logo` component.
