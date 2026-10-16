@@ -337,14 +337,18 @@
   }
 
   /* Switch (DESIGN.md §4), proportions measured on the UI kit in units of the outline width --u:
-     track 44u x 24u, knob 18u high (27u wide when elongated, 18u when round), 2u from the border,
-     hard shadow 1u. Three states: off (gray knob on the left), on (pink knob on the right) and
-     indeterminate (light round knob, centered). A native checkbox with role="switch". */
+     track 44u x 24u, knob 18u high (27u wide when elongated), 2u from the border, hard shadow 1u.
+     Two states: off (gray knob on the left) and on (pink knob on the right). The third knob of the kit,
+     small, round and centered, is the middle of the transition between them: the knob shrinks while it
+     slides (see the keyframes). A native checkbox with role="switch". */
   .switch {
     --u: 2px;
     --depth: var(--u);
     --offset: var(--depth);
     --knob-w: calc(var(--u) * 27);
+    --knob-h: calc(var(--u) * 18);
+    --knob-left-off: calc(var(--u) * 3);
+    --knob-left-on: calc(100% - var(--u) * 29.5);
     --knob-bg: var(--neutral-400);
 
     appearance: none;
@@ -367,32 +371,33 @@
     content: "";
     position: absolute;
     top: calc(var(--u) * 2);
-    left: calc(var(--u) * 3);
+    left: var(--knob-left-off);
     width: var(--knob-w);
-    height: calc(var(--u) * 18);
+    height: var(--knob-h);
     border-radius: 9999px;
     background: var(--knob-bg);
-    transition:
-      left 140ms ease-out,
-      width 140ms ease-out,
-      background-color 140ms ease-out;
   }
 
   .switch:checked {
     --knob-bg: var(--primary-400);
   }
   .switch:checked::before {
-    left: calc(100% - var(--u) * 29.5);
+    left: var(--knob-left-on);
   }
 
-  .switch:indeterminate,
-  .switch[data-indeterminate] {
-    --knob-bg: var(--primary-200);
-    --knob-w: calc(var(--u) * 18);
+  /* Transition: set by the component for the duration of the animation (data-motion="on" | "off"). */
+  .switch[data-motion="on"]::before {
+    animation: switch-knob-on 220ms ease-in-out;
   }
-  .switch:indeterminate::before,
-  .switch[data-indeterminate]::before {
+  .switch[data-motion="off"]::before {
+    animation: switch-knob-off 220ms ease-in-out;
+  }
+
+  /* The middle frame of the transition, held still (design-system page only). */
+  .switch[data-force="mid"]::before {
     left: calc(50% - var(--u) * 9);
+    width: calc(var(--u) * 18);
+    background: var(--primary-200);
   }
 
   .switch:not(:disabled):hover,
@@ -421,6 +426,42 @@
     cursor: not-allowed;
   }
 
+  @keyframes switch-knob-on {
+    0% {
+      left: var(--knob-left-off);
+      width: var(--knob-w);
+      background: var(--neutral-400);
+    }
+    50% {
+      left: calc(50% - var(--u) * 9);
+      width: calc(var(--u) * 18);
+      background: var(--primary-200);
+    }
+    100% {
+      left: var(--knob-left-on);
+      width: var(--knob-w);
+      background: var(--primary-400);
+    }
+  }
+
+  @keyframes switch-knob-off {
+    0% {
+      left: var(--knob-left-on);
+      width: var(--knob-w);
+      background: var(--primary-400);
+    }
+    50% {
+      left: calc(50% - var(--u) * 9);
+      width: calc(var(--u) * 18);
+      background: var(--primary-200);
+    }
+    100% {
+      left: var(--knob-left-off);
+      width: var(--knob-w);
+      background: var(--neutral-400);
+    }
+  }
+
   /* Inline link: primary-700 on light backgrounds (primary-400 would not have enough contrast). */
   .link {
     color: var(--link-color);
@@ -440,9 +481,11 @@
 
   @media (prefers-reduced-motion: reduce) {
     .btn,
-    .switch,
-    .switch::before {
+    .switch {
       transition: none;
+    }
+    .switch::before {
+      animation: none !important;
     }
   }
 }

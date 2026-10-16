@@ -1,34 +1,42 @@
 "use client";
 
-import { useEffect, useRef, type ComponentProps } from "react";
+import { useState, type ChangeEvent, type ComponentProps } from "react";
 
 import { cn } from "@/lib/utils";
 
-type SwitchProps = Omit<ComponentProps<"input">, "type" | "role"> & {
-  // A third state between off and on (for example a parent whose children are only partly on).
-  // It wins over `checked` for the look; the checked value is left to the caller.
-  indeterminate?: boolean;
-};
+type SwitchProps = Omit<ComponentProps<"input">, "type" | "role">;
 
 // SynAck switch (DESIGN.md §4): a native checkbox with role="switch", so forms, labels and the keyboard
 // (Space) work for free. The look lives in globals.css (`.switch`). Always give it an accessible name:
 // wrap it in a <label> or pass `aria-label`.
-function Switch({ className, indeterminate = false, ...props }: SwitchProps) {
-  const ref = useRef<HTMLInputElement>(null);
+//
+// Toggling plays the knob transition (it shrinks to a round knob in the middle of the slide). The
+// animation is only a flag for the duration of the transition: the resting look comes from `:checked`.
+function Switch({
+  className,
+  onChange,
+  onAnimationEnd,
+  ...props
+}: SwitchProps) {
+  const [motion, setMotion] = useState<"on" | "off" | null>(null);
 
-  // `indeterminate` is a DOM property, not an attribute.
-  useEffect(() => {
-    if (ref.current) ref.current.indeterminate = indeterminate;
-  }, [indeterminate]);
+  function handleChange(event: ChangeEvent<HTMLInputElement>) {
+    setMotion(event.target.checked ? "on" : "off");
+    onChange?.(event);
+  }
 
   return (
     <input
-      ref={ref}
       type="checkbox"
       role="switch"
       data-slot="switch"
-      data-indeterminate={indeterminate ? "" : undefined}
+      data-motion={motion ?? undefined}
       className={cn("switch", className)}
+      onChange={handleChange}
+      onAnimationEnd={(event) => {
+        setMotion(null);
+        onAnimationEnd?.(event);
+      }}
       {...props}
     />
   );

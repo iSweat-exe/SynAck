@@ -366,24 +366,42 @@ export default function DesignSystemPage() {
         <Section
           id="switches"
           title="Switches"
-          description="Pill-shaped track with a hard shadow and a sliding knob. Gray knob on the left is off, pink knob on the right is on, a small light round knob in the middle is indeterminate."
+          description="Pill-shaped track with a hard shadow and a sliding knob. Gray knob on the left is off, pink knob on the right is on."
         >
           <Block
-            title="States"
-            note="Off, on and indeterminate, each enabled and disabled. Hover, pressed and focus are forced on the last rows; try them for real on any switch."
+            title="Transition"
+            note="Toggling slides the knob while it shrinks to a small round knob in the middle, then it grows back. These are the three frames of the UI kit: off, the middle of the transition, on. Toggle the live one to see it play."
           >
-            <div className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-3">
+            <div className="flex flex-wrap items-center gap-x-10 gap-y-6">
+              <Switch aria-label="Off" checked={false} readOnly />
+              <Switch
+                aria-label="Middle of the transition"
+                data-force="mid"
+                readOnly
+                checked={false}
+              />
+              <Switch aria-label="On" checked readOnly />
+              <span className="text-xs text-muted-foreground">
+                off / middle frame / on
+              </span>
+            </div>
+            <label className="flex items-center gap-4">
+              <Switch defaultChecked />
+              <span>Live: click me</span>
+            </label>
+          </Block>
+
+          <Block
+            title="States"
+            note="Off and on, enabled and disabled. Hover, pressed and focus are forced on the last row; try them for real on any switch."
+          >
+            <div className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-4">
               {(
                 [
                   ["Off", {}],
                   ["On", { defaultChecked: true }],
-                  ["Indeterminate", { indeterminate: true }],
                   ["Off, disabled", { disabled: true }],
                   ["On, disabled", { disabled: true, defaultChecked: true }],
-                  [
-                    "Indeterminate, disabled",
-                    { disabled: true, indeterminate: true },
-                  ],
                   ["Hover", { "data-force": "hover" }],
                   ["Pressed", { "data-force": "active" }],
                   ["Focus", { "data-force": "focus", defaultChecked: true }],
@@ -399,7 +417,7 @@ export default function DesignSystemPage() {
 
           <Block
             title="In use"
-            note="A switch is a native checkbox with role=switch: it works in forms, with a label and with the Space key. The second example shows the indeterminate state of a parent whose options are only partly on."
+            note="A switch is a native checkbox with role=switch: it works in forms, with a label and with the Space key."
           >
             <SwitchDemo />
           </Block>
