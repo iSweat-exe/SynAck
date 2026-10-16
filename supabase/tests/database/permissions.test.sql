@@ -1,7 +1,7 @@
 -- pgTAP tests for roles and permissions (run with `supabase test db`).
 begin;
 
-select plan(22);
+select plan(26);
 
 -- Fixtures: three accounts (the on_auth_user_created trigger makes each of them a member).
 insert into auth.users (id, email) values
@@ -124,6 +124,29 @@ reset role;
 -- Anonymous visitors --------------------------------------------------------------------------
 set local role anon;
 select throws_ok($$ select * from public.user_roles $$, '42501', null, 'anon cannot read role assignments');
+reset role;
+
+-- my_permissions(): every permission of the signed-in user in one call ---------------------------
+select is(
+  private.user_permissions('00000000-0000-0000-0000-0000000000a1'),
+  (select array_agg(distinct permission order by permission) from public.role_permissions rp
+     join public.user_roles ur on ur.role_id = rp.role_id
+     where ur.user_id = '00000000-0000-0000-0000-0000000000a1'),
+  'user_permissions() lists the permissions of the roles held'
+);
+select is(
+  private.user_permissions('00000000-0000-0000-0000-00000000ffff'),
+  '{}'::text[],
+  'an unknown user has no permission'
+);
+
+set local role authenticated;
+select set_config('request.jwt.claims', '{"sub":"00000000-0000-0000-0000-0000000000a1","role":"authenticated"}', true);
+select ok('cms.access' = any (public.my_permissions()), 'my_permissions() includes the permissions of the caller');
+reset role;
+
+set local role anon;
+select throws_ok($$ select public.my_permissions() $$, '42501', null, 'anon cannot call my_permissions()');
 reset role;
 
 select * from finish();
