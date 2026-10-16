@@ -121,7 +121,7 @@ The style is **neo-brutalist**: thick, almost-black outline; hard drop shadow of
 - Pill-shaped track, `primary-50` background, `neutral-950` outline, hard shadow.
 - Inner knob: `primary-400` (elongated), `primary-200` (round, centered), `neutral-400` (elongated).
 - **Two states and one simple animation** (decided by the project creator): the knob just slides from one side to the other (150 ms), nothing else, no bounce or squash: pink knob on the right = **on**, gray knob on the left = **off**. The small light round knob on the kit is not used (it was only the middle frame of a possible animation, which was dropped). Disabled is a separate flat gray look, like a disabled button.
-- **Measured** (units of the outline width `u`): track 44u x 24u, knob 27u x 18u, 2u from the border, 3u from the side, hard shadow 1u. Implemented with `u` = 2 px (88 x 48 px, same height as a medium button).
+- **Measured** (units of the outline width `u`): track 44u x 24u, knob 27u x 18u, 2u from the border, 3u from the side, hard shadow 1u. Implemented with a geometry unit of 1.5 px (66 x 36 px, a bit smaller than a small button: 88 x 48 px looked too big), the outline and the shadow staying at 2 px.
 
 ### Starting values (Proposal)
 The screenshots have no known scale: border, radius, shadow offset and bevel must be calibrated by visual comparison with the kit.

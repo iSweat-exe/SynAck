@@ -355,12 +355,14 @@
     height: 1.25em;
   }
 
-  /* Switch (DESIGN.md §4), proportions measured on the UI kit in units of the outline width --u:
-     track 44u x 24u, knob 18u high and 27u wide, 2u from the border, hard shadow 1u. Two states: off
+  /* Switch (DESIGN.md §4), proportions measured on the UI kit, in a geometry unit --s:
+     track 44s x 24s, knob 27s x 18s, 2s from the border, where s = 1.5 px (66 x 36 px); the outline
+     and the hard shadow stay at --u = 2 px. Two states: off
      (gray knob on the left) and on (pink knob on the right). The only animation is the knob sliding
      from one side to the other. A native checkbox with role="switch". */
   .switch {
     --u: 2px;
+    --s: 1.5px;
     --depth: var(--u);
     --offset: var(--depth);
     --knob-bg: var(--neutral-400);
@@ -368,8 +370,8 @@
     appearance: none;
     position: relative;
     flex-shrink: 0;
-    width: calc(var(--u) * 44);
-    height: calc(var(--u) * 24);
+    width: calc(var(--s) * 44);
+    height: calc(var(--s) * 24);
     margin: 0;
     border: var(--u) solid var(--outline);
     border-radius: 9999px;
@@ -381,10 +383,10 @@
   .switch::before {
     content: "";
     position: absolute;
-    top: calc(var(--u) * 2);
-    left: calc(var(--u) * 3);
-    width: calc(var(--u) * 27);
-    height: calc(var(--u) * 18);
+    top: calc((100% - var(--s) * 18) / 2);
+    left: calc(var(--s) * 3);
+    width: calc(var(--s) * 27);
+    height: calc(var(--s) * 18);
     border-radius: 9999px;
     background: var(--knob-bg);
     transition:
@@ -396,7 +398,7 @@
     --knob-bg: var(--primary-400);
   }
   .switch:checked::before {
-    left: calc(100% - var(--u) * 29.5);
+    left: calc(100% - var(--s) * 29.5);
   }
 
   .switch:not(:disabled):hover,
