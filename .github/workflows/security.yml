@@ -43,6 +43,9 @@ jobs:
     name: Secret scan (gitleaks)
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    permissions:
+      contents: read
+      pull-requests: read # lets gitleaks list the commits of a PR
     steps:
       - uses: actions/checkout@v7
         with:
@@ -76,7 +79,8 @@ jobs:
 
   dependency-review:
     name: Dependency review
-    if: github.event_name == 'pull_request'
+    # Needs the dependency graph + GitHub Advanced Security: only available on public repositories (free).
+    if: github.event_name == 'pull_request' && github.event.repository.private == false
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
