@@ -198,8 +198,8 @@ The screenshots have no known scale: border, radius, shadow offset and bevel mus
 - **Badge**: outlined pill, 24 px high, `neutral` / `secondary` / `primary` (full `primary-400` fill) and the four semantic variants in the soft tones (100 background, 900 text; swapped in dark mode), because the saturated 500 fills clashed with the pink palette.
 - **Tabs**: small outlined boxes; the selected one is `primary-400` with a hard shadow; the panel is an outlined surface.
 
-### Auth card
-The sign-in, welcome and account pages share `AuthCard`: a header band (`primary-50`) with the logo and a "Bêta" badge, a large title with its description, the actions, and a small print under a dashed line. The logo comes from the supplied PNGs (`public/brand`), through a `Logo` component.
+### Auth ticket
+The sign-in, welcome and account pages share `AuthCard`, styled as a **receipt**: the logo and a tagline centered on top, sections separated by dashed rules, a title with the "Bêta" badge, the actions, the small print, a decorative barcode and a torn (zigzag) bottom edge. No header band. The outline and the hard shadow follow the torn edge (chained drop-shadows on a wrapper, the paper is masked). The logo comes from the supplied PNGs (`public/brand`), through a `Logo` component.
 
 ### Dashed background (auth pages)
 Short diagonal dashes on a staggered grid, `neutral-300` on the page background (`neutral-800` in dark mode). Clicking the empty background drops a ripple: the dashes it crosses tilt, stretch and turn `primary-400` while the wave passes, fading with time and distance. Canvas component `DashBackground`; no ripple when the user prefers reduced motion.

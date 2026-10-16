@@ -2,16 +2,9 @@ import type { ReactNode } from "react";
 
 import { Logo } from "@/components/brand/logo";
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 
-// Card of the sign-in, welcome and account pages: a header band with the logo and the beta badge, the
-// title and the actions, and an optional small print under a dashed line.
+// Receipt-style ticket of the sign-in, welcome and account pages: the logo on top, dashed rules between
+// the sections, an optional small print, a barcode and a torn bottom edge. No header band.
 export function AuthCard({
   title,
   description,
@@ -24,27 +17,45 @@ export function AuthCard({
   footer?: ReactNode;
 }) {
   return (
-    <Card className="gap-0 overflow-hidden p-0">
-      <div className="flex items-center justify-between border-b-2 border-border bg-secondary px-6 py-4 sm:px-8">
-        <Logo />
-        <Badge variant="primary">Bêta</Badge>
-      </div>
-
-      <div className="flex flex-col gap-7 p-6 sm:p-8">
-        <CardHeader className="gap-3">
-          <CardTitle className="text-3xl">{title}</CardTitle>
-          <CardDescription className="leading-relaxed">
-            {description}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="gap-5">{children}</CardContent>
-      </div>
-
-      {footer ? (
-        <div className="border-t-2 border-dashed border-border px-6 py-4 text-xs leading-relaxed text-muted-foreground sm:px-8">
-          {footer}
+    <div className="receipt-wrap">
+      <div className="receipt flex flex-col gap-6 px-6 pt-8 sm:px-8">
+        <div className="flex flex-col items-center gap-2 text-center">
+          <Logo className="w-36" />
+          <p className="text-[0.7rem] tracking-[0.2em] text-muted-foreground uppercase">
+            Programmation &amp; protocoles réseau
+          </p>
         </div>
-      ) : null}
-    </Card>
+
+        <hr className="receipt-rule" />
+
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center justify-between gap-4">
+            <h1 className="text-2xl leading-tight font-bold">{title}</h1>
+            <Badge variant="primary">Bêta</Badge>
+          </div>
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            {description}
+          </p>
+        </div>
+
+        <hr className="receipt-rule" />
+
+        <div className="flex flex-col gap-4">{children}</div>
+
+        <hr className="receipt-rule" />
+
+        <div className="flex flex-col items-center gap-3 text-center">
+          {footer ? (
+            <p className="text-xs leading-relaxed text-muted-foreground">
+              {footer}
+            </p>
+          ) : null}
+          <div aria-hidden className="barcode w-full max-w-48" />
+          <p className="text-[0.7rem] tracking-[0.2em] uppercase">
+            Merci de votre visite
+          </p>
+        </div>
+      </div>
+    </div>
   );
 }

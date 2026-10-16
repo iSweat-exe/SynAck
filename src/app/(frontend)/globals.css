@@ -445,6 +445,52 @@
     box-shadow: calc(var(--u) * 2) calc(var(--u) * 2) 0 var(--shadow);
   }
 
+  /* Receipt: a paper ticket with a torn (zigzag) bottom edge, as used by the auth pages. The wrapper
+     draws the outline and the hard shadow with chained drop-shadows so they follow the zigzag; the
+     paper itself is masked. */
+  .receipt-wrap {
+    --u: 2px;
+    filter: drop-shadow(var(--u) 0 0 var(--outline))
+      drop-shadow(calc(var(--u) * -1) 0 0 var(--outline))
+      drop-shadow(0 var(--u) 0 var(--outline))
+      drop-shadow(0 calc(var(--u) * -1) 0 var(--outline))
+      drop-shadow(calc(var(--u) * 2) calc(var(--u) * 2) 0 var(--shadow));
+  }
+  .receipt {
+    --tooth: 14px;
+    padding-bottom: calc(var(--tooth) + 0.75rem);
+    border-radius: 6px 6px 0 0;
+    background: var(--surface);
+    color: var(--ink);
+    mask:
+      linear-gradient(#000 0 0) top / 100% calc(100% - var(--tooth) + 1px)
+        no-repeat,
+      conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg)
+        bottom / var(--tooth) var(--tooth) repeat-x;
+  }
+  .receipt-rule {
+    border: 0;
+    border-top: 2px dashed var(--outline);
+    margin: 0;
+  }
+  /* Decorative barcode */
+  .barcode {
+    height: 2.25rem;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--ink) 0 2px,
+      transparent 2px 4px,
+      var(--ink) 4px 5px,
+      transparent 5px 8px,
+      var(--ink) 8px 11px,
+      transparent 11px 12px,
+      var(--ink) 12px 13px,
+      transparent 13px 17px,
+      var(--ink) 17px 19px,
+      transparent 19px 21px
+    );
+  }
+
   /* Alert: a message on a semantic background (100 tone; 900 tone in dark mode), outlined, no shadow
      because it is not something to press. */
   .alert {
