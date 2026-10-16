@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import { ArrowRight, Download, Plus } from "lucide-react";
 import type { ReactNode } from "react";
 
+import { SwitchDemo } from "@/components/design-system/switch-demo";
 import { ThemeScope } from "@/components/design-system/theme-scope";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import { NEUTRAL, PRIMARY, SEMANTIC, type Swatch } from "@/lib/design-tokens";
 
 export const metadata: Metadata = {
@@ -17,6 +19,7 @@ const SECTIONS = [
   { id: "typography", label: "Typography" },
   { id: "colors", label: "Colors" },
   { id: "buttons", label: "Buttons" },
+  { id: "switches", label: "Switches" },
   { id: "next", label: "To come" },
 ];
 
@@ -361,13 +364,54 @@ export default function DesignSystemPage() {
         </Section>
 
         <Section
+          id="switches"
+          title="Switches"
+          description="Pill-shaped track with a hard shadow and a sliding knob. Gray knob on the left is off, pink knob on the right is on, a small light round knob in the middle is indeterminate."
+        >
+          <Block
+            title="States"
+            note="Off, on and indeterminate, each enabled and disabled. Hover, pressed and focus are forced on the last rows; try them for real on any switch."
+          >
+            <div className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-3">
+              {(
+                [
+                  ["Off", {}],
+                  ["On", { defaultChecked: true }],
+                  ["Indeterminate", { indeterminate: true }],
+                  ["Off, disabled", { disabled: true }],
+                  ["On, disabled", { disabled: true, defaultChecked: true }],
+                  [
+                    "Indeterminate, disabled",
+                    { disabled: true, indeterminate: true },
+                  ],
+                  ["Hover", { "data-force": "hover" }],
+                  ["Pressed", { "data-force": "active" }],
+                  ["Focus", { "data-force": "focus", defaultChecked: true }],
+                ] as const
+              ).map(([label, props]) => (
+                <div key={label} className="flex flex-col items-start gap-4">
+                  <span className="text-xs text-muted-foreground">{label}</span>
+                  <Switch aria-label={label} {...props} />
+                </div>
+              ))}
+            </div>
+          </Block>
+
+          <Block
+            title="In use"
+            note="A switch is a native checkbox with role=switch: it works in forms, with a label and with the Space key. The second example shows the indeterminate state of a parent whose options are only partly on."
+          >
+            <SwitchDemo />
+          </Block>
+        </Section>
+
+        <Section
           id="next"
           title="To come"
           description="Components to add here, with all their variants, as they are designed (DESIGN.md §9)."
         >
           <ul className="grid gap-2 text-sm sm:grid-cols-2">
             {[
-              "Switch (three states)",
               "Input fields",
               "Cards",
               "Tabs",

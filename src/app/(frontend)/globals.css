@@ -336,6 +336,91 @@
     height: 1.25em;
   }
 
+  /* Switch (DESIGN.md §4), proportions measured on the UI kit in units of the outline width --u:
+     track 44u x 24u, knob 18u high (27u wide when elongated, 18u when round), 2u from the border,
+     hard shadow 1u. Three states: off (gray knob on the left), on (pink knob on the right) and
+     indeterminate (light round knob, centered). A native checkbox with role="switch". */
+  .switch {
+    --u: 2px;
+    --depth: var(--u);
+    --offset: var(--depth);
+    --knob-w: calc(var(--u) * 27);
+    --knob-bg: var(--neutral-400);
+
+    appearance: none;
+    position: relative;
+    flex-shrink: 0;
+    width: calc(var(--u) * 44);
+    height: calc(var(--u) * 24);
+    margin: 0;
+    border: var(--u) solid var(--outline);
+    border-radius: 9999px;
+    background: var(--btn-secondary-bg);
+    box-shadow: var(--offset) var(--offset) 0 var(--shadow);
+    cursor: pointer;
+    transition:
+      transform 80ms ease-out,
+      box-shadow 80ms ease-out;
+  }
+
+  .switch::before {
+    content: "";
+    position: absolute;
+    top: calc(var(--u) * 2);
+    left: calc(var(--u) * 3);
+    width: var(--knob-w);
+    height: calc(var(--u) * 18);
+    border-radius: 9999px;
+    background: var(--knob-bg);
+    transition:
+      left 140ms ease-out,
+      width 140ms ease-out,
+      background-color 140ms ease-out;
+  }
+
+  .switch:checked {
+    --knob-bg: var(--primary-400);
+  }
+  .switch:checked::before {
+    left: calc(100% - var(--u) * 29.5);
+  }
+
+  .switch:indeterminate,
+  .switch[data-indeterminate] {
+    --knob-bg: var(--primary-200);
+    --knob-w: calc(var(--u) * 18);
+  }
+  .switch:indeterminate::before,
+  .switch[data-indeterminate]::before {
+    left: calc(50% - var(--u) * 9);
+  }
+
+  .switch:not(:disabled):hover,
+  .switch[data-force="hover"]:not(:disabled) {
+    --offset: calc(var(--depth) / 2);
+    transform: translate(calc(var(--depth) / 2), calc(var(--depth) / 2));
+  }
+
+  .switch:not(:disabled):active,
+  .switch[data-force="active"]:not(:disabled) {
+    --offset: 0px;
+    transform: translate(var(--depth), var(--depth));
+  }
+
+  .switch:focus-visible,
+  .switch[data-force="focus"] {
+    outline: 3px solid var(--ring-color);
+    outline-offset: calc(var(--depth) + 3px);
+  }
+
+  .switch:disabled {
+    --knob-bg: var(--btn-disabled-bevel);
+    border-color: var(--btn-disabled-outline);
+    background: var(--btn-disabled-bg);
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+
   /* Inline link: primary-700 on light backgrounds (primary-400 would not have enough contrast). */
   .link {
     color: var(--link-color);
@@ -354,7 +439,9 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .btn {
+    .btn,
+    .switch,
+    .switch::before {
       transition: none;
     }
   }

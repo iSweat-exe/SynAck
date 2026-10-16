@@ -120,7 +120,8 @@ The style is **neo-brutalist**: thick, almost-black outline; hard drop shadow of
 ### Switches (three visible states)
 - Pill-shaped track, `primary-50` background, `neutral-950` outline, hard shadow.
 - Inner knob: `primary-400` (elongated), `primary-200` (round, centered), `neutral-400` (elongated).
-- **Proposed** interpretation: pink = on, light pink = intermediate or hover, gray = disabled. To confirm.
+- **Interpretation, read from the position of the knobs on the kit**: pink knob on the right = **on**, gray knob on the left = **off**, light round knob centered = **indeterminate** (partly on). Disabled is a separate flat gray look, like a disabled button.
+- **Measured** (units of the outline width `u`): track 44u x 24u, knob 18u high (27u wide when elongated, 18u when round), 2u from the border, 3u from the side, hard shadow 1u. Implemented with `u` = 2 px (88 x 48 px, same height as a medium button).
 
 ### Starting values (Proposal)
 The screenshots have no known scale: border, radius, shadow offset and bevel must be calibrated by visual comparison with the kit.
@@ -259,7 +260,6 @@ The exact three tints are still to be chosen (see §9). A more restrained altern
 
 ## 9. Open points
 
-- Confirm the interpretation of the three switch states
 - Calibrate border, radius, shadow offset and bevel against the screenshots
 - Validate dark mode (§6), notably the hard shadow color
 - Choose the three theme tints, or drop them in V1 (§7)
