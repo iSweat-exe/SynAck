@@ -10,10 +10,22 @@
 | [DESIGN.md](.dev/Organisation/DESIGN.md) | Visual identity: typography, colors, components, logo |
 | [CHECKLIST.md](.dev/Organisation/CHECKLIST.md) | Step-by-step checklist by phase, with definitions of done |
 
+## Getting started
+
+Requires Node 24 (see `.nvmrc`) and npm.
+
+```bash
+npm ci
+npm run dev
+```
+
+Checks run by CI: `npm run lint`, `npm run format:check`, `npm run typecheck`, `npm test`, `npm run build`.
+
 ## Repository
 
 - `.github/`: CI/CD workflows, labels, issue and PR templates, rulesets to import (see [rulesets/README.md](.github/rulesets/README.md))
 - `docs/design/`: logo and UI kit images
+- `src/`: the Next.js application (App Router)
 - `supabase/`: database migrations (to be created)
 
 ## Contributing

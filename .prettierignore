@@ -1,0 +1,12 @@
+.next
+node_modules
+coverage
+package-lock.json
+public
+supabase/.temp
+# Not application code: documentation, licenses and GitHub config keep their own formatting
+.dev
+.github
+docs
+LICENSE
+*.md

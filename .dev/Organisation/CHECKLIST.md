@@ -43,19 +43,19 @@ V1 scope in one line: **1 path** ("Introduction to Programming", JS + Python), *
 - [x] Open a first test PR: **CI gate** must pass with no application code
 
 ### P0.3 Accounts and services ($0) `area: infra`
-- [ ] **Supabase** project (free tier) + note the project ref; check the current limits (README §14)
-- [ ] **Vercel** project (Hobby, linked to the repository); disable automatic previews for non-`main` branches (see P0.4)
-- [ ] OAuth: a **GitHub** OAuth app and a **Discord** application for sign-in (client ID/secret go into the Supabase dashboard, not into GitHub secrets). Google (Cloud project + consent screen) is deferred until later
+- [x] **Supabase** project (free tier) + note the project ref; check the current limits (README §14)
+- [x] **Vercel** project (Hobby, linked to the repository); automatic previews for non-`main` branches still to disable (see P0.4)
+- [x] OAuth: a **GitHub** OAuth app and a **Discord** application for sign-in (client ID/secret go into the Supabase dashboard, not into GitHub secrets). Google (Cloud project + consent screen) is deferred until later
 - [ ] Uptime probe (UptimeRobot or Better Stack): to wire up in P4.4
 - [ ] **Private** repository for backups (for [backup.yml](../../.github/workflows/backup.yml))
 
 ### P0.4 GitHub secrets and variables `area: infra`
 | Name | Type | Used by |
 |---|---|---|
-| `SUPABASE_ACCESS_TOKEN` | secret (env `production`) | `db-migrate.yml` |
-| `SUPABASE_DB_PASSWORD` | secret (env `production`) | `db-migrate.yml` |
-| `SUPABASE_PROJECT_REF` | variable (env `production`) | `db-migrate.yml` |
-| `PRODUCTION_DATABASE_URL` | secret (env `production`), Supabase **session pooler** URL (IPv4) | `db-migrate.yml` (Payload migrations) |
+| `SUPABASE_ACCESS_TOKEN` | repository secret | `db-migrate.yml` |
+| `SUPABASE_DB_PASSWORD` | repository secret | `db-migrate.yml` |
+| `SUPABASE_PROJECT_REF` | repository variable | `db-migrate.yml` |
+| `PRODUCTION_DATABASE_URL` | repository secret, Supabase **session pooler** URL (IPv4) | `db-migrate.yml` (Payload migrations) |
 | `PAYLOAD_SECRET` | repository secret (same value as in Vercel) | `db-migrate.yml`, `backup.yml` |
 | `BACKUP_DATABASE_URL` | repository secret, Supabase **session pooler** URL (IPv4) | `backup.yml` |
 | `BACKUP_PASSPHRASE` | repository secret (also keep it outside GitHub: without it the backups are unreadable) | `backup.yml` |
@@ -65,7 +65,7 @@ V1 scope in one line: **1 path** ("Introduction to Programming", JS + Python), *
 | `PRODUCTION_URL` | variable, `https://…` | `keepalive.yml`, `db-migrate.yml` (health check) |
 | `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` | secrets | `preview.yml` (on-demand previews) |
 
-- [ ] Secrets created; no secret in the repository, the `service_role` key is never exposed to the client
+- [x] Secrets created for Phase 1 (`SUPABASE_*`, `PRODUCTION_DATABASE_URL`, `PAYLOAD_SECRET`, `VERCEL_TOKEN`, `PRODUCTION_URL`, `SUPABASE_PROJECT_REF`); `BACKUP_*`, `BACKUP_ENABLED`, `VERCEL_ORG_ID` and `VERCEL_PROJECT_ID` come later. No secret in the repository, the `service_role` key is never exposed to the client
 - [ ] Vercel: *Settings → Git → Ignored Build Step* = `bash -c '[ "$VERCEL_GIT_COMMIT_REF" = "main" ] && exit 1 || exit 0'` (build only `main`, previews through the `preview` label)
 
 ### P0.5 Decisions to make early `[BLOCKING]`
@@ -81,10 +81,11 @@ V1 scope in one line: **1 path** ("Introduction to Programming", JS + Python), *
 *Exit: `npm run dev` starts the app with local Supabase and Payload; the full CI is green; the permission system is tested.*
 
 ### P1.1 Initialize the application `area: ui`
-- [ ] Next.js (App Router) + React + strict TypeScript, Node **24** (`.nvmrc`)
-- [ ] ESLint, Prettier, scripts `lint`, `typecheck`, `format:check`, `test`, `build` (required by CI)
-- [ ] Tailwind + shadcn/ui
-- [ ] **Done when**: `npm run lint && npm run typecheck && npm run build` pass locally
+- [x] Next.js 16 (App Router) + React 19 + strict TypeScript, Node **24** (`.nvmrc`, `engines`)
+- [x] ESLint, Prettier (code only: docs, YAML and licenses are excluded), scripts `lint`, `typecheck`, `format:check`, `test` (Vitest), `build` (required by CI)
+- [x] Tailwind v4 + shadcn/ui (default theme, restyled in P1.5)
+- [x] Minimal `/api/health` route (JSON `ok`); the database query is added in P4.4 (until then it does not keep Supabase from pausing)
+- [x] **Done when**: `npm run lint && npm run typecheck && npm run build` pass locally
 
 ### P1.2 CI, security and local Supabase `area: infra`
 - [ ] Check that [ci.yml](../../.github/workflows/ci.yml) runs lint, types, Vitest, build and e2e (as soon as the scripts exist)
