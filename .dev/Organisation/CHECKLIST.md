@@ -92,9 +92,10 @@ V1 scope in one line: **1 path** ("Introduction to Programming", JS + Python), *
 - [x] [security.yml](../../.github/workflows/security.yml): `npm audit`, gitleaks, CodeQL, dependency review (all running on PRs)
 - [x] Dependabot active ([dependabot.yml](../../.github/dependabot.yml))
 - [x] Supabase CLI: `supabase init`, `supabase start` (Docker), versioned migrations in `supabase/migrations/`, `supabase/seed.sql`, `supabase/tests/` (pgTAP); npm scripts `db:start`, `db:stop`, `db:reset`, `db:test`
-- [ ] Add a first **pgTAP test** and verify the PR job **DB migrations** runs the full pipeline (upgrade path from `main`, fresh replay, linter, RLS check)
+- [x] First **pgTAP test** added; the PR job **DB migrations** runs on CI (fresh replay, linter, RLS check, pgTAP). The upgrade path (from `main`'s migrations) starts running with the next migration PR, since `main` had no migration before
 - [x] `CI gate` is in the required checks of the ruleset (`main-required-checks.json`)
-- [ ] **Done when**: a test PR with a migration passes CI, and a PR that edits an existing migration, creates a table without RLS or uses `DROP` without the `breaking-change` label is **rejected**
+- [x] **Done when**: a test PR with a migration passes CI, and a PR that creates a table without RLS or uses `DROP` without the `breaking-change` label is **rejected** (verified on PR #4, and the label lets a destructive migration through)
+- [ ] Verify on the next migration PR: editing an already-merged migration, or adding one older than `main`'s latest, is rejected (these rules need a migration on `main` to compare against)
 
 ### P1.3 Payload CMS `area: cms`
 - [ ] Integrate Payload into Next.js, Supabase Postgres database, **separate schema** (`payload`)
