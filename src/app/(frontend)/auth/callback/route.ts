@@ -18,5 +18,5 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  return NextResponse.redirect(new URL("/connexion?error=auth", origin));
+  return NextResponse.redirect(new URL("/sign-in?error=auth", origin));
 }

@@ -11,10 +11,10 @@ export const metadata: Metadata = {
 };
 
 async function requireUser() {
-  if (!getSupabaseEnv()) redirect("/connexion");
+  if (!getSupabaseEnv()) redirect("/sign-in");
   const supabase = await createClient();
   const { data } = await supabase.auth.getUser();
-  if (!data.user) redirect("/connexion?next=/bienvenue");
+  if (!data.user) redirect("/sign-in?next=/welcome");
   return { supabase, user: data.user };
 }
 
@@ -23,8 +23,8 @@ async function confirmAge() {
   "use server";
   const { supabase } = await requireUser();
   const { error } = await supabase.rpc("declare_age");
-  if (error) redirect("/bienvenue?error=1");
-  redirect("/compte");
+  if (error) redirect("/welcome?error=1");
+  redirect("/account");
 }
 
 // "I am under 15": the account is deleted right away.
@@ -32,9 +32,9 @@ async function refuseAge() {
   "use server";
   const { supabase } = await requireUser();
   const { error } = await supabase.rpc("delete_my_account");
-  if (error) redirect("/bienvenue?error=1");
+  if (error) redirect("/welcome?error=1");
   await supabase.auth.signOut();
-  redirect("/?compte=supprime");
+  redirect("/?account=deleted");
 }
 
 export default async function WelcomePage({
@@ -50,7 +50,7 @@ export default async function WelcomePage({
     .select("age_declared_at")
     .eq("user_id", user.id)
     .maybeSingle();
-  if (profile?.age_declared_at) redirect("/compte");
+  if (profile?.age_declared_at) redirect("/account");
 
   return (
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-6 p-6">

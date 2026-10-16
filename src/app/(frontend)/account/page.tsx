@@ -17,12 +17,12 @@ const PROVIDER_LABELS: Record<string, string> = {
 };
 
 export default async function AccountPage() {
-  if (!getSupabaseEnv()) redirect("/connexion");
+  if (!getSupabaseEnv()) redirect("/sign-in");
 
   const supabase = await createClient();
   const { data } = await supabase.auth.getUser();
   const user = data.user;
-  if (!user) redirect("/connexion?next=/compte");
+  if (!user) redirect("/sign-in?next=/account");
 
   // Everything below runs under the user's own session: row level security decides what is visible.
   const { data: profile } = await supabase
@@ -30,7 +30,7 @@ export default async function AccountPage() {
     .select("age_declared_at, nickname")
     .eq("user_id", user.id)
     .maybeSingle();
-  if (!profile?.age_declared_at) redirect("/bienvenue");
+  if (!profile?.age_declared_at) redirect("/welcome");
 
   const { data: canUseCms } = await supabase.rpc("has_permission", {
     p_permission: "cms.access",
