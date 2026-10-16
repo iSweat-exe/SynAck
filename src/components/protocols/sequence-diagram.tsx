@@ -146,7 +146,7 @@ function Arrow({
             fontWeight: 700,
             fontSize: 15,
             paintOrder: "stroke",
-            stroke: "var(--bg)",
+            stroke: "var(--diagram-bg, var(--bg))",
             strokeWidth: 6,
           }}
         >
@@ -161,7 +161,7 @@ function Arrow({
               fill: "var(--muted-ink)",
               fontSize: 12,
               paintOrder: "stroke",
-              stroke: "var(--bg)",
+              stroke: "var(--diagram-bg, var(--bg))",
               strokeWidth: 5,
             }}
           >

@@ -139,7 +139,7 @@ Delivered in three PRs: (1) database, (2) app sign-in (P2.4), (3) Payload wired 
 *Exit: a visitor reads a public course; a signed-in user runs a JS and a Python exercise, uses hints, takes a quiz; their progress is saved.*
 
 ### P2.1 Public course rendering `area: ui` `area: seo`
-- [ ] Path / Course / Chapter pages server-rendered, ISR with revalidation on publish
+- [x] Course page `/paths/<slug>` (chapters with a table of contents, text and protocol-diagram blocks, ISR refreshed on publish, draft preview) and the list of CMS courses on `/paths`; still to do: path pages, a page per chapter, meta tags, Open Graph, structured data
 - [ ] Meta tags, Open Graph, structured data, `sitemap.xml`, `robots.txt`
 - [ ] A first demo chapter readable on mobile (16–18 px body, ~65 characters wide)
 

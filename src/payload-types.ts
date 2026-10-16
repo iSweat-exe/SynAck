@@ -145,6 +145,8 @@ export interface Path {
   _status?: ('draft' | 'published') | null;
 }
 /**
+ * A course is a list of chapters; each chapter is made of blocks (text, protocol diagram...). Use "Preview" to see it on the site.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "courses".
  */
@@ -156,6 +158,34 @@ export interface Course {
    */
   slug: string;
   summary?: string | null;
+  level?: ('Débutant' | 'Intermédiaire' | 'Avancé') | null;
+  /**
+   * Logo shown on the card.
+   */
+  icon?:
+    | (
+        | 'binary'
+        | 'cpu'
+        | 'globe'
+        | 'layers'
+        | 'lock'
+        | 'network'
+        | 'newspaper'
+        | 'route'
+        | 'server'
+        | 'shield'
+        | 'docker'
+        | 'javascript'
+        | 'python'
+        | 'react'
+        | 'rust'
+        | 'typescript'
+      )
+    | null;
+  /**
+   * Themes used by the filters, e.g. Python.
+   */
+  tags?: string[] | null;
   author?: (number | null) | User;
   chapters?:
     | {
@@ -498,6 +528,9 @@ export interface CoursesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   summary?: T;
+  level?: T;
+  icon?: T;
+  tags?: T;
   author?: T;
   chapters?:
     | T

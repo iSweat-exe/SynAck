@@ -62,6 +62,8 @@ function refreshPages(slug: unknown) {
   try {
     revalidatePath("/protocols");
     if (typeof slug === "string") revalidatePath(`/protocols/${slug}`);
+    // Courses can embed the diagram.
+    revalidatePath("/paths/[slug]", "page");
   } catch {
     // nothing to refresh
   }

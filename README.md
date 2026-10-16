@@ -52,7 +52,7 @@ npm run db:stop
 
 ### Protocol diagrams
 
-Editors create animated protocol diagrams in the back office, *Protocol diagrams*: describe the two machines, then each message (sender, name, detail, a sentence of explanation, the machines' state afterwards, and whether readers can make it get lost). The page `/protocols/<slug>` is built from it, the *Preview* button shows the draft, and publishing refreshes the site. The format is documented in `.dev/Organisation/DESIGN.md` (Protocol diagrams).
+Editors create animated protocol diagrams in the back office, *Protocol diagrams*: describe the two machines, then each message (sender, name, detail, a sentence of explanation, the machines' state afterwards, and whether readers can make it get lost). The page `/protocols/<slug>` is built from it, the *Preview* button shows the draft, and publishing refreshes the site. The format is documented in `.dev/Organisation/DESIGN.md` (Protocol diagrams). A course (`/paths/<slug>`) embeds a diagram with the *Protocol diagram* block of a chapter.
 
 ### Content management (Payload CMS)
 
