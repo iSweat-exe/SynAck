@@ -214,6 +214,8 @@
   --input: var(--outline);
   --ring: var(--ring-color);
   --link: var(--link-color);
+  /* Keyboard focus: a thin, translucent ring. Deliberately discreet, but still there for keyboard users. */
+  --focus-ring: color-mix(in srgb, var(--ring-color) 45%, transparent);
 }
 
 @layer base {
@@ -298,8 +300,8 @@
   /* Keyboard focus: a ring that does not depend on hover, drawn outside the shadow. */
   .btn:focus-visible,
   .btn[data-force="focus"] {
-    outline: 3px solid var(--ring-color);
-    outline-offset: calc(var(--depth) + 3px);
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
   }
 
   .btn:disabled,
@@ -410,8 +412,8 @@
 
   .switch:focus-visible,
   .switch[data-force="focus"] {
-    outline: 3px solid var(--ring-color);
-    outline-offset: calc(var(--depth) + 3px);
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
   }
 
   .switch:disabled {
@@ -474,8 +476,7 @@
     --alert-ink: var(--danger-ink);
   }
 
-  /* Text fields: surface background, outline, radius like the buttons. Focus adds the ring and a small
-     hard shadow; an invalid field turns its outline red (aria-invalid). */
+  /* Text fields: surface background, outline, radius like the buttons. Focus adds a discreet ring; an invalid field turns its outline red (aria-invalid). */
   .input {
     --u: 2px;
     --depth: calc(var(--u) * 1.5);
@@ -502,7 +503,7 @@
     opacity: 1;
   }
   .input:focus-visible {
-    outline: 3px solid var(--ring-color);
+    outline: 2px solid var(--focus-ring);
     outline-offset: 2px;
     box-shadow: var(--depth) var(--depth) 0 var(--shadow);
   }
@@ -598,8 +599,8 @@
     box-shadow: calc(var(--u) * 1.5) calc(var(--u) * 1.5) 0 var(--shadow);
   }
   .tab:focus-visible {
-    outline: 3px solid var(--ring-color);
-    outline-offset: 3px;
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
   }
   .tab[data-disabled] {
     border-color: var(--btn-disabled-outline);
@@ -617,8 +618,8 @@
     color: var(--ink);
   }
   .tabs-panel:focus-visible {
-    outline: 3px solid var(--ring-color);
-    outline-offset: 3px;
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
   }
 
   /* Inline link: primary-700 on light backgrounds (primary-400 would not have enough contrast). */
@@ -633,8 +634,8 @@
     text-decoration-thickness: 3px;
   }
   .link:focus-visible {
-    outline: 3px solid var(--ring-color);
-    outline-offset: 3px;
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
     border-radius: 2px;
   }
 

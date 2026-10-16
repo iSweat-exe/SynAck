@@ -420,7 +420,7 @@ export default function DesignSystemPage() {
         <Section
           id="inputs"
           title="Inputs"
-          description="Text fields share the outline and radius of the buttons. Focus adds the ring and a small hard shadow, an invalid field turns its outline red."
+          description="Text fields share the outline and radius of the buttons. Focus adds a discreet ring, an invalid field turns its outline red."
         >
           <Block
             title="States"
