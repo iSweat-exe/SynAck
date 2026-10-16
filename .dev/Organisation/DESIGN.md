@@ -193,6 +193,11 @@ The screenshots have no known scale: border, radius, shadow offset and bevel mus
 - **Alert**: semantic tones, 100 background and 900 text in light mode, swapped in dark mode; same outline and radius, no shadow (nothing to press). Icon per variant (info, success, warning, danger).
 - Forms and auth pages sit in a Card; provider sign-in buttons are Secondary, full width, so Primary stays reserved for the main action of a screen.
 
+### Input, badge and tabs (derived from the kit, not in the screenshots)
+- **Input / textarea**: `surface` background, outline `u` = 2 px, radius 2u like the buttons, height 48 px. Focus: ring plus a small hard shadow. Invalid: `danger-500` outline. Disabled: like a disabled button.
+- **Badge**: outlined pill, 24 px high, `neutral` / `secondary` / `primary` and the four semantic fills (500 tone, `neutral-950` text).
+- **Tabs**: small outlined boxes; the selected one is `primary-400` with a hard shadow; the panel is an outlined surface.
+
 ### States and interactions (Proposal, absent from the screenshots)
 - **Hover**: the button shifts slightly down and to the right and the shadow shrinks.
 - **Press**: the button "sinks" (shadow to zero, shift equal to the shadow offset).

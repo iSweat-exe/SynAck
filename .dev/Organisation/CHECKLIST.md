@@ -121,7 +121,7 @@ Delivered in three PRs: (1) database, (2) app sign-in (P2.4), (3) Payload wired 
 - [x] Button restyled: Primary / Secondary, 3 sizes, icon-only, hover / pressed / focus / disabled states, inline link
 - [x] Switch: off / on with a simple knob slide, disabled, hover / pressed / focus (native checkbox with `role="switch"`)
 - [x] Card and Alert (semantic colors, light and dark), built from the button style (outline, hard shadow); the sign-in, welcome and account pages use them
-- [ ] Restyled components: Input, Tabs, Badge (add each to `/design-system` with all its variants)
+- [x] Input / Textarea / Label, Badge (7 variants) and Tabs (Base UI), all on `/design-system`
 - [ ] Light/dark mode (user's choice, toggle only scoped to `/design-system` for now); dark-mode shadow stays black (decided)
 - [ ] Single `Logo` component (variants), base layout (header, footer, beta banner), 404/error pages
 - [ ] Produce SVG logo, dark variant, favicon, Open Graph image (DESIGN.md §5)

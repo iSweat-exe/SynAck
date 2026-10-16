@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import { SwitchDemo } from "@/components/design-system/switch-demo";
 import { ThemeScope } from "@/components/design-system/theme-scope";
 import { Alert } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,7 +14,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Input, Textarea } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsList, TabsPanel, TabsTab } from "@/components/ui/tabs";
 import { NEUTRAL, PRIMARY, SEMANTIC, type Swatch } from "@/lib/design-tokens";
 
 export const metadata: Metadata = {
@@ -28,6 +32,9 @@ const SECTIONS = [
   { id: "colors", label: "Colors" },
   { id: "buttons", label: "Buttons" },
   { id: "switches", label: "Switches" },
+  { id: "inputs", label: "Inputs" },
+  { id: "badges", label: "Badges" },
+  { id: "tabs", label: "Tabs" },
   { id: "cards", label: "Cards" },
   { id: "alerts", label: "Alerts" },
   { id: "next", label: "To come" },
@@ -411,6 +418,120 @@ export default function DesignSystemPage() {
         </Section>
 
         <Section
+          id="inputs"
+          title="Inputs"
+          description="Text fields share the outline and radius of the buttons. Focus adds the ring and a small hard shadow, an invalid field turns its outline red."
+        >
+          <Block
+            title="States"
+            note="Always pair a field with a label. Errors are linked with aria-invalid and aria-describedby."
+          >
+            <div className="grid gap-8 pr-2 sm:grid-cols-2">
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="ds-default">Default</Label>
+                <Input id="ds-default" placeholder="Placeholder text" />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="ds-filled">Filled</Label>
+                <Input id="ds-filled" defaultValue="ada@example.test" />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="ds-help">With help text</Label>
+                <Input
+                  id="ds-help"
+                  placeholder="Nickname"
+                  aria-describedby="ds-help-text"
+                />
+                <p id="ds-help-text" className="text-xs text-muted-foreground">
+                  Shown on the leaderboard if you opt in.
+                </p>
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="ds-invalid">Invalid</Label>
+                <Input
+                  id="ds-invalid"
+                  defaultValue="not an email"
+                  aria-invalid="true"
+                  aria-describedby="ds-invalid-text"
+                />
+                <p
+                  id="ds-invalid-text"
+                  className="text-xs font-bold text-[var(--danger-ink)]"
+                >
+                  Enter a valid email address.
+                </p>
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="ds-disabled">Disabled</Label>
+                <Input
+                  id="ds-disabled"
+                  defaultValue="Read only value"
+                  disabled
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="ds-textarea">Textarea</Label>
+                <Textarea id="ds-textarea" placeholder="Write a message" />
+              </div>
+            </div>
+          </Block>
+        </Section>
+
+        <Section
+          id="badges"
+          title="Badges"
+          description="A small outlined pill for statuses and tags. Colored fills always carry dark text."
+        >
+          <Block title="Variants">
+            <div className="flex flex-wrap items-center gap-4">
+              <Badge>Neutral</Badge>
+              <Badge variant="secondary">Secondary</Badge>
+              <Badge variant="primary">Primary</Badge>
+              <Badge variant="success">Success</Badge>
+              <Badge variant="warning">Warning</Badge>
+              <Badge variant="danger">Danger</Badge>
+              <Badge variant="info">Info</Badge>
+            </div>
+          </Block>
+          <Block title="In context">
+            <p className="flex flex-wrap items-center gap-3">
+              Introduction to Programming
+              <Badge variant="primary">Beginner</Badge>
+              <Badge variant="success">Published</Badge>
+              <Badge variant="warning">Draft</Badge>
+            </p>
+          </Block>
+        </Section>
+
+        <Section
+          id="tabs"
+          title="Tabs"
+          description="Switch between views of the same content. Arrow keys move between tabs. The selected tab is filled with the main color and lifts on a shadow."
+        >
+          <Block title="Default and disabled tab">
+            <Tabs defaultValue="exercise">
+              <TabsList>
+                <TabsTab value="exercise">Exercise</TabsTab>
+                <TabsTab value="hints">Hints</TabsTab>
+                <TabsTab value="solution">Solution</TabsTab>
+                <TabsTab value="soon" disabled>
+                  Soon
+                </TabsTab>
+              </TabsList>
+              <TabsPanel value="exercise">
+                Write a function that returns the sum of two numbers.
+              </TabsPanel>
+              <TabsPanel value="hints">
+                Hints unlock one by one, after a few failed attempts.
+              </TabsPanel>
+              <TabsPanel value="solution">
+                The solution is revealed after three failed attempts.
+              </TabsPanel>
+            </Tabs>
+          </Block>
+        </Section>
+
+        <Section
           id="cards"
           title="Cards"
           description="An outlined surface with the same hard shadow as the buttons. Used to group content: the sign-in, welcome and account pages are built with it."
@@ -483,9 +604,6 @@ export default function DesignSystemPage() {
         >
           <ul className="grid gap-2 text-sm sm:grid-cols-2">
             {[
-              "Input fields",
-              "Tabs",
-              "Badges",
               "Beta warning banner",
               "Code editor",
               "Protocol animations",

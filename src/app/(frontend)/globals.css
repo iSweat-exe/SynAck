@@ -474,6 +474,153 @@
     --alert-ink: var(--danger-ink);
   }
 
+  /* Text fields: surface background, outline, radius like the buttons. Focus adds the ring and a small
+     hard shadow; an invalid field turns its outline red (aria-invalid). */
+  .input {
+    --u: 2px;
+    --depth: calc(var(--u) * 1.5);
+    display: block;
+    width: 100%;
+    height: 3rem;
+    padding-inline: 1rem;
+    border: var(--u) solid var(--outline);
+    border-radius: calc(var(--u) * 2);
+    background: var(--surface);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+  textarea.input {
+    height: auto;
+    min-height: 7rem;
+    padding-block: 0.75rem;
+    resize: vertical;
+  }
+  .input::placeholder {
+    color: var(--muted-ink);
+    opacity: 1;
+  }
+  .input:focus-visible {
+    outline: 3px solid var(--ring-color);
+    outline-offset: 2px;
+    box-shadow: var(--depth) var(--depth) 0 var(--shadow);
+  }
+  .input[aria-invalid="true"] {
+    border-color: var(--danger-500);
+  }
+  .input:disabled {
+    border-color: var(--btn-disabled-outline);
+    background: var(--btn-disabled-bg);
+    color: var(--btn-disabled-ink);
+    cursor: not-allowed;
+  }
+
+  .label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+
+  /* Badge: a small outlined pill. Colored fills always carry neutral-950 text (contrast). */
+  .badge {
+    --u: 2px;
+    --badge-bg: var(--muted-bg);
+    --badge-ink: var(--ink);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    height: 1.5rem;
+    padding-inline: 0.625rem;
+    border: var(--u) solid var(--outline);
+    border-radius: 9999px;
+    background: var(--badge-bg);
+    color: var(--badge-ink);
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .badge-secondary {
+    --badge-bg: var(--btn-secondary-bg);
+    --badge-ink: var(--btn-secondary-ink);
+  }
+  .badge-primary {
+    --badge-bg: var(--primary-400);
+    --badge-ink: var(--on-fill);
+  }
+  .badge-success {
+    --badge-bg: var(--success-500);
+    --badge-ink: var(--on-fill);
+  }
+  .badge-warning {
+    --badge-bg: var(--warning-500);
+    --badge-ink: var(--on-fill);
+  }
+  .badge-danger {
+    --badge-bg: var(--danger-500);
+    --badge-ink: var(--on-fill);
+  }
+  .badge-info {
+    --badge-bg: var(--info-500);
+    --badge-ink: var(--on-fill);
+  }
+
+  /* Tabs: each tab is a small outlined box; the selected one is filled with the main color and lifts on a
+     hard shadow. The panel is an outlined surface. */
+  .tabs-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .tab {
+    --u: 2px;
+    height: 2.5rem;
+    padding-inline: 1rem;
+    border: var(--u) solid var(--outline);
+    border-radius: calc(var(--u) * 2);
+    background: var(--btn-secondary-bg);
+    color: var(--btn-secondary-ink);
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .tab:not([data-active], :disabled):hover {
+    background: var(--accent-bg);
+    color: var(--accent-ink);
+  }
+  .tab[data-active] {
+    background: var(--btn-primary-bg);
+    color: var(--on-fill);
+    box-shadow: calc(var(--u) * 1.5) calc(var(--u) * 1.5) 0 var(--shadow);
+  }
+  .tab:focus-visible {
+    outline: 3px solid var(--ring-color);
+    outline-offset: 3px;
+  }
+  .tab[data-disabled] {
+    border-color: var(--btn-disabled-outline);
+    background: var(--btn-disabled-bg);
+    color: var(--btn-disabled-ink);
+    cursor: not-allowed;
+  }
+  .tabs-panel {
+    --u: 2px;
+    margin-top: 1.25rem;
+    padding: 1.25rem;
+    border: var(--u) solid var(--outline);
+    border-radius: calc(var(--u) * 4);
+    background: var(--surface);
+    color: var(--ink);
+  }
+  .tabs-panel:focus-visible {
+    outline: 3px solid var(--ring-color);
+    outline-offset: 3px;
+  }
+
   /* Inline link: primary-700 on light backgrounds (primary-400 would not have enough contrast). */
   .link {
     color: var(--link-color);
