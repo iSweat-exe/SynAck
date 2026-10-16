@@ -16,6 +16,11 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 export default buildConfig({
   admin: {
     user: Users.slug,
+    components: {
+      // Sign-in is Supabase SSO only (no Payload password), see src/lib/payload-auth.ts.
+      afterLogin: ["@/components/admin/SsoButtons#SsoButtons"],
+      logout: { Button: "@/components/admin/SignOutButton#SignOutButton" },
+    },
     importMap: { baseDir: path.resolve(dirname) },
   },
   collections: [Paths, Courses, Articles, Users],

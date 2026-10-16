@@ -66,7 +66,7 @@ V1 scope in one line: **1 path** ("Introduction to Programming", JS + Python), *
 | `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` | secrets | `preview.yml` (on-demand previews) |
 
 - [x] Secrets created for Phase 1 (`SUPABASE_*`, `PRODUCTION_DATABASE_URL`, `PAYLOAD_SECRET`, `VERCEL_TOKEN`, `PRODUCTION_URL`, `SUPABASE_PROJECT_REF`); `BACKUP_*`, `BACKUP_ENABLED`, `VERCEL_ORG_ID` and `VERCEL_PROJECT_ID` come later. No secret in the repository, the `service_role` key is never exposed to the client
-- [ ] Vercel: *Settings → Git → Ignored Build Step* = `bash -c '[ "$VERCEL_GIT_COMMIT_REF" = "main" ] && exit 1 || exit 0'` (build only `main`, previews through the `preview` label)
+- [x] Vercel: *Settings → Git → Ignored Build Step* = `bash -c '[ "$VERCEL_GIT_COMMIT_REF" = "main" ] && exit 1 || exit 0'` (build only `main`, previews through the `preview` label)
 
 ### P0.5 Decisions to make early `[BLOCKING]`
 - [x] Package manager: **npm** (decided; `npm ci` + `package-lock.json`)
@@ -109,10 +109,10 @@ V1 scope in one line: **1 path** ("Introduction to Programming", JS + Python), *
 Delivered in three PRs: (1) database, (2) app sign-in (P2.4), (3) Payload wired to the same accounts. **Decision: the back office is SSO only** (GitHub and Discord through Supabase Auth, same accounts as the app, no Payload password).
 - [x] **PR 1, database**: single permissions file `src/lib/permissions.ts` (closed list of 20, `resource.action` format); tables `roles`, `role_permissions`, `user_roles`, `audit_log`; `private.has_permission(user, permission)` plus `public.has_permission(permission)` for the signed-in user; starting presets (Member, Junior instructor, Senior instructor, Administrator) with a test that the migration matches the TypeScript list; every new account becomes a Member; `private.grant_role` / `private.revoke_role` (service role only, audited, last administrator protected); RLS on all four tables, read-only through the API; new `public` tables closed to the API roles by default; pgTAP tests (RLS, deny by default, immediate effect of a revocation)
 - [x] **PR 2, app sign-in** (see P2.4): Supabase Auth with GitHub and Discord (`/connexion`, `/auth/callback`, sign-out), session refresh in `src/proxy.ts`, `/compte` and the age gate `/bienvenue`. Code verified locally with real sessions; the OAuth round trip itself is validated on Vercel (see the setup list in the root README)
-- [ ] **PR 3, Payload on the same accounts**: custom auth strategy reading the Supabase session; local email/password strategy disabled; `/admin` reserved for accounts with `cms.access` (Payload user created on first sign-in); Payload `access` functions call `has_permission` instead of "any signed-in user"; sign-in buttons on the admin login page
+- [x] **PR 3, Payload on the same accounts**: custom auth strategy (`src/lib/payload-auth.ts`) reading the Supabase session; local email/password strategy disabled; `/admin` reserved for accounts with `cms.access` (Payload user created on first sign-in, linked by `supabaseId`); permissions read from Postgres on every request through `public.my_permissions()` and used by the Payload `access` functions and publish hooks instead of "any signed-in user"; GitHub/Discord buttons on the admin login page and a sign-out that ends the Supabase session. Unit-tested with mocks; the real OAuth round trip into `/admin` is still to validate on Vercel
 - [ ] Bootstrap: sign in once with GitHub, then grant yourself `administrator` with `select private.grant_role('<user uuid>', 'administrator');` in the Supabase SQL editor; then retire the first email/password Payload account
 - [ ] Short-lived JWT (Supabase settings); sensitive actions (publish, delete, moderate, manage roles) re-read permissions from the database, which `has_permission` already does
-- [ ] Tests: Vitest (deny by default, sensitive actions in Payload access functions)
+- [x] Tests: Vitest (deny by default, strategy behaviour); pgTAP for `my_permissions()`
 - [ ] **Done when**: a test proves a role without a permission is refused by RLS **and** by Payload (RLS part proven by pgTAP in PR 1)
 
 ### P1.5 Theme and layout `area: ui`
