@@ -98,12 +98,12 @@ V1 scope in one line: **1 path** ("Introduction to Programming", JS + Python), *
 - [ ] Verify on the next migration PR: editing an already-merged migration, or adding one older than `main`'s latest, is rejected (these rules need a migration on `main` to compare against)
 
 ### P1.3 Payload CMS `area: cms`
-- [ ] Integrate Payload into Next.js, Supabase Postgres database, **separate schema** (`payload`)
-- [ ] Collections **Paths**, **Courses** (chapters as blocks), **Articles**, **Users**
-- [ ] npm script `db:migrate:payload` (wraps `payload migrate`): used by CI (PR tests) and by the production migration workflow
-- [ ] Test pooling, cold starts and Vercel Hobby limits (README §11 bis)
-- [ ] Forbid raw HTML/script in blocks (stored XSS)
-- [ ] **Done when**: a course created in the local Payload admin shows up in the database
+- [x] Integrate Payload 3.91 into Next.js 16, Supabase Postgres database, **separate schema** (`payload`), versioned migrations only (`push: false`)
+- [x] Collections **Paths**, **Courses** (chapters as blocks; Exercise, Quiz and Protocol animation blocks come in P2.2, P2.6, P3.1), **Articles**, **Users**. Drafts enabled; visitors read published documents only (access rules are replaced by permission checks in P1.4)
+- [x] npm script `db:migrate:payload` (wraps `payload migrate`): used by CI (PR tests) and by the production migration workflow, which also checks that `anon`/`authenticated` have no access to Payload tables
+- [ ] Test pooling, cold starts and Vercel Hobby limits (README §11 bis): needs `DATABASE_URI` (transaction pooler, port 6543) and `PAYLOAD_SECRET` in the Vercel environment, then hit `/admin` and `/api/courses` on the Vercel deployment. Locally verified: the build needs no database, `/admin` and the REST API respond
+- [x] Forbid raw HTML/script in blocks (stored XSS): rich text is an explicit allow-list of Lexical features (no HTML feature), stored as JSON; links accept only `http(s)`, `mailto` and relative URLs (`javascript:` is rejected, tested)
+- [x] **Done when**: a course created in the local Payload admin shows up in the database (verified with the Local API and REST against a local Supabase: published/draft visibility, slug generation, rejected anonymous writes; create one by hand in `/admin` as a final check)
 
 ### P1.4 Permissions and roles `area: auth` `area: db`
 - [ ] Single permissions file (closed TypeScript type, `resource.action` format)

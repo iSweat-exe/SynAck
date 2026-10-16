@@ -50,7 +50,7 @@ jobs:
           echo "e2e=$(ls playwright.config.* >/dev/null 2>&1 && echo true || echo false)" >> "$GITHUB_OUTPUT"
           echo "supabase=$([ -f supabase/config.toml ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
           db_changed=false
-          if [ "$EVENT" = "pull_request" ] && git diff --name-only "$BASE_SHA" HEAD -- supabase | grep -q .; then
+          if [ "$EVENT" = "pull_request" ] && git diff --name-only "$BASE_SHA" HEAD -- supabase src/migrations | grep -q .; then
             db_changed=true
           fi
           echo "db_changed=$db_changed" >> "$GITHUB_OUTPUT"
@@ -121,7 +121,7 @@ jobs:
       - run: npm ci
       - run: npm run build
 
-  # Migration tests, only on PRs that touch supabase/.
+  # Migration tests, only on PRs that touch supabase/ or src/migrations (Payload).
   # 1. Rules: applied migrations are immutable, new ones sort after main's, destructive SQL needs a label.
   # 2. Upgrade path: build a production-like database from main's migrations, then apply the PR's on top.
   # 3. Fresh replay: rebuild the whole schema from scratch from the PR's migrations.
@@ -150,7 +150,8 @@ jobs:
           set -euo pipefail
 
           # Applied migrations are immutable: only additions are allowed.
-          changed=$(git diff --name-only --diff-filter=MDR "$BASE_SHA" HEAD -- 'supabase/migrations/*.sql' || true)
+          # (Payload migrations in src/migrations follow the same rule; index.ts is regenerated and not matched.)
+          changed=$(git diff --name-only --diff-filter=MDR "$BASE_SHA" HEAD -- 'supabase/migrations/*.sql' 'src/migrations/*_*.ts' 'src/migrations/*_*.json' || true)
           if [ -n "$changed" ]; then
             echo "::error::Existing migrations must never be edited, renamed or deleted. Add a new migration instead:"
             echo "$changed"
@@ -220,6 +221,21 @@ jobs:
           if [ -f package.json ] && node -e "process.exit(require('./package.json').scripts?.['db:migrate:payload']?0:1)"; then
             npm ci
             DATABASE_URI="$DB_URL" PAYLOAD_SECRET=ci-placeholder-secret npm run db:migrate:payload
+            # Payload tables have no RLS: they are protected by schema privileges. The API roles must have none.
+            exposed=$(psql "$DB_URL" -v ON_ERROR_STOP=1 -At -c "
+              select format('%I.%I', n.nspname, c.relname)
+              from pg_class c
+              join pg_namespace n on n.oid = c.relnamespace
+              where n.nspname = 'payload'
+                and c.relkind in ('r', 'p', 'v', 'm')
+                and (has_table_privilege('anon', c.oid, 'select,insert,update,delete')
+                  or has_table_privilege('authenticated', c.oid, 'select,insert,update,delete'));
+            ")
+            if [ -n "$exposed" ]; then
+              echo "::error::API roles (anon/authenticated) have access to Payload tables:"
+              echo "$exposed"
+              exit 1
+            fi
           else
             echo "No db:migrate:payload script yet: skipped."
           fi
