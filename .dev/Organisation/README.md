@@ -24,7 +24,7 @@ Guiding principle: **creating a course must be pleasant and possible without tou
 | Language | French only |
 | Business model | 100% free |
 | Accounts | Required to practice (exercises, progress, leaderboard) |
-| Sign-in | GitHub and Google (OAuth) |
+| Sign-in | GitHub and Discord (OAuth) at launch; Google (OAuth) to be added later |
 | Content team | One admin + a few contributors |
 | Permissions | **Granular** (`resource.action`), grouped into editable **role presets** (see §5 bis) |
 | Review | Driven by permissions: senior instructors publish, junior instructors go through review |
@@ -53,9 +53,10 @@ Guiding principle: **creating a course must be pleasant and possible without tou
 | Dependencies | Dependabot/Renovate + CI audit + strict CSP |
 | Minimum age | **15 years old** (declared at sign-up) |
 | Moderation | `moderation.ban` permission to remove a nickname from the leaderboard |
-| Accounts | Several providers (GitHub, Google) linked to the **same account** |
+| Accounts | Several providers (GitHub, Discord, later Google) linked to the **same account** |
 | Launch | **Public opening** with a **"beta" warning visible to everyone** (no invitations) |
-| Name | **SynAck** (name and domain availability to be checked) |
+| Name | **SynAck** (trademark and handle availability to be checked) |
+| Domain | The **Vercel-provided domain** (`*.vercel.app`) for now; a custom domain can be added later |
 | Levels | Computed from **cumulative point thresholds** |
 | Scoring | Solved exercise: **10 / 20 / 40** points (easy / medium / hard), no-hint bonus **+50%** |
 
@@ -209,7 +210,7 @@ No "Recruiter" role: access to learner profiles is not planned. The permission s
 - **Public repository**: no secrets in the code or in Git history; environment variables managed in Vercel; an `.env.example` file is provided; the Supabase `service_role` key is never exposed to the client.
 - **Iframe sandbox** for any untrusted embedded content, on a separate domain.
 - **COOP/COEP headers**: enable only if `SharedArrayBuffer` is required, since they can break third-party scripts and iframes.
-- **GDPR**: minimal data (GitHub/Google OAuth), privacy page, account deletion and data export to be provided. Vercel Analytics does not require a cookie banner in its standard configuration; to verify at launch.
+- **GDPR**: minimal data (GitHub/Discord OAuth), privacy page, account deletion and data export to be provided. Vercel Analytics does not require a cookie banner in its standard configuration; to verify at launch.
 
 ## 7. Data (first draft)
 
@@ -261,7 +262,7 @@ Chosen options (not legal advice: have them validated before publishing):
 - **Content** (courses, articles, diagrams): **CC BY-NC-SA 4.0** (attribution, no commercial use, share-alike). This replaces the previously considered **CC BY-SA**, which allowed commercial use and contradicted the goal.
 - **Name and logo**: to be protected separately (trademark), since a code license does not protect the name.
 - **Contributors**: a charter states that their content is published under the same license and that the project author may redistribute it.
-- Validate the final choice with a lawyer or an intellectual-property advisory service before publishing the repository.
+- **Validated** by the project creator (October 2026). Re-check with a lawyer or an intellectual-property advisory service if the project ever moves toward commercial use.
 
 ## 11. Legal notices
 
@@ -316,7 +317,7 @@ Free approach: a **scheduled regular export** (GitHub Actions) of editorial cont
 
 ### Accounts, age and privacy
 - **Minimum age 15**: age declaration checkbox at sign-up, stated in the terms of use. A user who declares being under 15 cannot create an account.
-- **One account, several providers**: GitHub and Google linked to the same account (manual linking from the profile, and automatic linking only on an e-mail address verified by the provider, to prevent account takeover). To test with Supabase Auth.
+- **One account, several providers**: GitHub, Discord and (later) Google linked to the same account (manual linking from the profile, and automatic linking only on an e-mail address verified by the provider, to prevent account takeover). To test with Supabase Auth.
 - Account deletion and data export available in the profile.
 
 ### Leaderboard moderation
@@ -338,7 +339,7 @@ Free approach: a **scheduled regular export** (GitHub Actions) of editorial cont
 
 ### Name
 - **SynAck**: a nod to the TCP handshake (SYN, SYN-ACK, ACK), short and memorable.
-- To do: check availability of the **domain name**, social media handles and any existing trademarks. Protect the name and logo separately from the code license (see §10).
+- To do: check availability of social media handles and any existing trademarks. The site uses the Vercel-provided domain for now. Protect the name and logo separately from the code license (see §10).
 
 ### Visual direction
 Typography, colors, components and logo are fixed and documented in **[DESIGN.md](DESIGN.md)**. This README does not repeat the details.
@@ -358,7 +359,7 @@ Pace: **full time**, intermediate technical level (React / Next.js mastered). Th
 6. Public course rendering (SSR, SEO) and a first demo chapter.
 7. Monaco editor component + JavaScript execution in a Worker + simple tests.
 8. Pyodide in a Worker.
-9. Supabase: GitHub/Google auth, profiles, RLS, progress.
+9. Supabase: GitHub/Discord auth (Google later), profiles, RLS, progress.
 10. Progressive hints and revealable solution.
 11. Quiz block.
 12. "Introduction to Programming" path (full content).
@@ -378,8 +379,8 @@ Pace: **full time**, intermediate technical level (React / Next.js mastered). Th
 
 ## 14. Open questions
 
-- **Domain name** for SynAck and protection of the name and logo (availability not verified)
-- **Legal validation** of the license (PolyForm Noncommercial code, CC BY-NC-SA content)
+- Protection of the name and logo (availability not verified); custom domain later
+- Google sign-in (to add after launch)
 - Dark mode, theme tints, vector logo and favicon: see [DESIGN.md](DESIGN.md) §9
 - **Daily points cap** (proposal: 300 per day) and exact level thresholds
 - **Rate-limiting thresholds** (starting proposals in §11 bis)
