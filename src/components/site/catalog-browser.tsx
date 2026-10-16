@@ -150,6 +150,7 @@ export function CatalogBrowser({ section }: { section: Section }) {
                 )}
                 icon={item.icon}
                 seed={item.id}
+                href={item.href}
                 className="w-full"
               />
             </li>

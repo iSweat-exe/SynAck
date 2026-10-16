@@ -711,6 +711,70 @@
     color: var(--on-fill);
   }
 
+  /* Animated protocol diagram (SequenceDiagram): the arrow draws itself, the packet flies along it and
+     fades when it lands, the label and the arrowhead appear once it has. --seq-ms is the flight time. */
+  .seq-draw {
+    animation: seq-draw var(--seq-ms, 900ms) ease-in-out both;
+  }
+  .seq-packet {
+    animation: seq-travel var(--seq-ms, 900ms) ease-in-out both;
+  }
+  .seq-packet-lost {
+    animation-name: seq-travel-lost;
+  }
+  .seq-appear {
+    animation: seq-appear 250ms ease-out var(--seq-ms, 900ms) both;
+  }
+  @keyframes seq-draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes seq-travel {
+    0% {
+      transform: translate(0, 0);
+      opacity: 1;
+    }
+    88% {
+      opacity: 1;
+    }
+    100% {
+      transform: translate(var(--dx), var(--dy));
+      opacity: 0;
+    }
+  }
+  @keyframes seq-travel-lost {
+    0% {
+      transform: translate(0, 0) scale(1);
+      opacity: 1;
+    }
+    70% {
+      opacity: 1;
+    }
+    100% {
+      transform: translate(var(--dx), var(--dy)) scale(0.6);
+      opacity: 0;
+    }
+  }
+  @keyframes seq-appear {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .seq-draw,
+    .seq-packet,
+    .seq-appear {
+      animation: none;
+    }
+  }
+
   /* Site header */
   .site-header {
     border-bottom: 2px solid var(--outline);

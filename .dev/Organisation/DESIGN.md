@@ -207,6 +207,14 @@ The header carries the four sections as links: **Parcours** (`/paths`), **Protoc
 ### Search and filters
 Each section page has an instant search (a field with a magnifier, every word must match the title, description, level or tags, accents and case ignored) and filter **chips** (toggle pills, `primary-400` when pressed) for the level and the theme. Criteria combine: the search and the groups all have to match, while several choices inside one group are alternatives. The result count is announced (`aria-live`), a "Réinitialiser" link clears everything, and an alert explains an empty result.
 
+### Protocol diagrams
+Animated **sequence diagrams** explain a protocol exchange between two machines (TCP, then HTTP, DNS, TLS).
+
+- **Engine**: `SequenceDiagram` draws a `Scenario` as SVG, animated with CSS (no animation library). Two lifelines (dashed), the actors on top with their **state** badge (`LISTEN`, `SYN_SENT`, `ESTABLISHED`...), and one slanted arrow per message (a message takes time): the arrow draws itself, a pill carrying the message name flies along it and fades when it lands, then the label and the arrowhead stay. Colors come from the tokens (primary for the main messages, secondary for acknowledgements, info for data, danger for a lost packet, warning for a wait).
+- **Scenario = data** (`src/lib/protocol-diagram.ts`, example `src/lib/scenarios/tcp-handshake.ts`): the actors, then steps with `from`, `to`, `label`, `detail`, `tone`, a `note` (the sentence shown while the message is played), the `states` of the actors once it has arrived, and an optional `lossy` block (what to say if the packet is lost, during the wait, and on the retransmission). It is plain JSON-like data so it can move to the CMS (the planned "Protocol animation" block) and be written without code.
+- **Interaction**: play / pause, previous, next, restart, a chip per step to jump to it (clicking an arrow works too), and a **"Simuler une perte de paquet"** switch: every `lossy` message is then lost on the way (red cross), followed by a wait and a retransmission, so the reader sees how the protocol recovers. Everything is keyboard-operable; a screen-reader list gives the text of every step; `prefers-reduced-motion` turns the animation off.
+- **Adding a protocol**: write a `Scenario` and a page (`/protocols/<name>`); no new component. What the engine does not cover yet (several machines, a timeline of a congestion window, user-driven sending of a packet, editable parameters such as the delay or the loss rate) will be added as new step kinds or widgets, with the same data-first approach.
+
 ### Error pages
 404 (global and in the site), 401, 403 and 500 (page and root layout) share one card: the status code in a `primary-400` block like the logo's "Ack", a title, an explanation and the way out, on the dashed background.
 

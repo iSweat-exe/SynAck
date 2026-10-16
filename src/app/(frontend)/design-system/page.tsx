@@ -2,12 +2,15 @@ import type { Metadata } from "next";
 import { ArrowRight, Download, Plus } from "lucide-react";
 import type { ReactNode } from "react";
 
+import { SequenceDiagram } from "@/components/protocols/sequence-diagram";
 import { ContentCard } from "@/components/site/content-card";
 import { ErrorCard } from "@/components/site/error-screen";
 import { AccountMenu } from "@/components/site/user-menu";
 import { SwitchDemo } from "@/components/design-system/switch-demo";
 import { ThemeScope } from "@/components/design-system/theme-scope";
 import { Network } from "lucide-react";
+
+import { tcpHandshake } from "@/lib/scenarios/tcp-handshake";
 import { SiPython } from "react-icons/si";
 
 import { Alert } from "@/components/ui/alert";
@@ -43,6 +46,7 @@ const SECTIONS = [
   { id: "tabs", label: "Tabs" },
   { id: "menus", label: "Menus" },
   { id: "content-cards", label: "Content cards" },
+  { id: "diagrams", label: "Diagrams" },
   { id: "errors", label: "Errors" },
   { id: "cards", label: "Cards" },
   { id: "alerts", label: "Alerts" },
@@ -587,6 +591,19 @@ export default function DesignSystemPage() {
                 tags={["Transport", "Animé"]}
               />
             </div>
+          </Block>
+        </Section>
+
+        <Section
+          id="diagrams"
+          title="Protocol diagrams"
+          description="Animated sequence diagrams that explain a protocol exchange. A scenario is plain data (actors, messages, a sentence per step, the state of each machine): the same engine draws any protocol. Play it, step through it, jump to a step, or switch on a packet loss."
+        >
+          <Block
+            title="Sequence diagram"
+            note="The TCP handshake. The full page is /protocols/tcp."
+          >
+            <SequenceDiagram scenario={tcpHandshake} />
           </Block>
         </Section>
 

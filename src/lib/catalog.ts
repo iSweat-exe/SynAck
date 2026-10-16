@@ -34,6 +34,8 @@ export type CatalogItem = {
   level?: Level;
   tags: string[];
   icon: CatalogIcon;
+  // Page of the item once it exists; without it the card shows "Bientôt disponible".
+  href?: string;
 };
 
 export type Section = "paths" | "protocols" | "articles" | "roadmaps";
@@ -96,6 +98,7 @@ const PATHS: CatalogItem[] = [
 const PROTOCOLS: CatalogItem[] = [
   {
     id: "tcp",
+    href: "/protocols/tcp",
     title: "TCP : le handshake",
     description:
       "SYN, SYN-ACK, ACK, pertes et retransmissions, animés pas à pas.",

@@ -185,7 +185,7 @@ Delivered in three PRs: (1) database, (2) app sign-in (P2.4), (3) Payload wired 
 
 ### P3.1 Protocol modules `area: protocols`
 - [ ] Payload "Protocol animation" block (scenario + parameters)
-- [ ] **TCP**: SYN / SYN-ACK / ACK handshake, losses, retransmissions
+- [x] **TCP**: SYN / SYN-ACK / ACK handshake, losses, retransmissions (`/protocols/tcp`, with the reusable `SequenceDiagram` engine; the Payload "Protocol animation" block and the other protocols are still to do)
 - [ ] **HTTP playground**: raw requests to a fake server simulated in a Worker
 - [ ] **DNS** then **TLS** (resolution, handshake)
 - [ ] Available without an account (acquisition lever)
