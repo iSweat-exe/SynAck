@@ -478,7 +478,7 @@ export default function DesignSystemPage() {
         <Section
           id="badges"
           title="Badges"
-          description="A small outlined pill for statuses and tags. Colored fills always carry dark text."
+          description="A small outlined pill for statuses and tags. The semantic variants use the soft tones, like the alerts."
         >
           <Block title="Variants">
             <div className="flex flex-wrap items-center gap-4">

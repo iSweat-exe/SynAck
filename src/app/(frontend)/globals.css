@@ -527,7 +527,8 @@
     line-height: 1.4;
   }
 
-  /* Badge: a small outlined pill. Colored fills always carry neutral-950 text (contrast). */
+  /* Badge: a small outlined pill. The semantic variants use the soft tones (like the alerts) so they sit
+     well next to the pink palette; only the primary one is a full fill. */
   .badge {
     --u: 2px;
     --badge-bg: var(--muted-bg);
@@ -555,20 +556,20 @@
     --badge-ink: var(--on-fill);
   }
   .badge-success {
-    --badge-bg: var(--success-500);
-    --badge-ink: var(--on-fill);
+    --badge-bg: var(--success-bg);
+    --badge-ink: var(--success-ink);
   }
   .badge-warning {
-    --badge-bg: var(--warning-500);
-    --badge-ink: var(--on-fill);
+    --badge-bg: var(--warning-bg);
+    --badge-ink: var(--warning-ink);
   }
   .badge-danger {
-    --badge-bg: var(--danger-500);
-    --badge-ink: var(--on-fill);
+    --badge-bg: var(--danger-bg);
+    --badge-ink: var(--danger-ink);
   }
   .badge-info {
-    --badge-bg: var(--info-500);
-    --badge-ink: var(--on-fill);
+    --badge-bg: var(--info-bg);
+    --badge-ink: var(--info-ink);
   }
 
   /* Tabs: each tab is a small outlined box; the selected one is filled with the main color and lifts on a

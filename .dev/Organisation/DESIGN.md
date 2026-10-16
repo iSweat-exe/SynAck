@@ -195,7 +195,7 @@ The screenshots have no known scale: border, radius, shadow offset and bevel mus
 
 ### Input, badge and tabs (derived from the kit, not in the screenshots)
 - **Input / textarea**: `surface` background, outline `u` = 2 px, radius 2u like the buttons, height 48 px. Invalid: `danger-500` outline. Disabled: like a disabled button.
-- **Badge**: outlined pill, 24 px high, `neutral` / `secondary` / `primary` and the four semantic fills (500 tone, `neutral-950` text).
+- **Badge**: outlined pill, 24 px high, `neutral` / `secondary` / `primary` (full `primary-400` fill) and the four semantic variants in the soft tones (100 background, 900 text; swapped in dark mode), because the saturated 500 fills clashed with the pink palette.
 - **Tabs**: small outlined boxes; the selected one is `primary-400` with a hard shadow; the panel is an outlined surface.
 
 ### States and interactions (Proposal, absent from the screenshots)
