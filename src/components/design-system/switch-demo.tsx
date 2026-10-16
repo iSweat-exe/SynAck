@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { Switch } from "@/components/ui/switch";
 
-// Live examples: controlled switches that play the on / off transition.
+// Live examples: controlled switches.
 export function SwitchDemo() {
   const [email, setEmail] = useState(true);
   const [hints, setHints] = useState(false);

@@ -366,31 +366,8 @@ export default function DesignSystemPage() {
         <Section
           id="switches"
           title="Switches"
-          description="Pill-shaped track with a hard shadow and a sliding knob. Gray knob on the left is off, pink knob on the right is on."
+          description="Pill-shaped track with a hard shadow and a knob. Gray knob on the left is off, pink knob on the right is on. No animation."
         >
-          <Block
-            title="Transition"
-            note="The whole switch moves in one smooth slide: the knob squashes to a small round shape halfway, stretches back, with a small bounce at the start and at the end. The three frames of the UI kit are off, the middle of the movement, and on. Toggle the live one to see it play."
-          >
-            <div className="flex flex-wrap items-center gap-x-10 gap-y-6">
-              <Switch aria-label="Off" checked={false} readOnly />
-              <Switch
-                aria-label="Middle of the transition"
-                data-force="mid"
-                readOnly
-                checked={false}
-              />
-              <Switch aria-label="On" checked readOnly />
-              <span className="text-xs text-muted-foreground">
-                off / middle frame / on
-              </span>
-            </div>
-            <label className="flex items-center gap-4">
-              <Switch defaultChecked />
-              <span>Live: click me</span>
-            </label>
-          </Block>
-
           <Block
             title="States"
             note="Off and on, enabled and disabled. Hover, pressed and focus are forced on the last row; try them for real on any switch."
