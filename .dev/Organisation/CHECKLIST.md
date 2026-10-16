@@ -108,7 +108,7 @@ V1 scope in one line: **1 path** ("Introduction to Programming", JS + Python), *
 ### P1.4 Permissions and roles `area: auth` `area: db`
 Delivered in three PRs: (1) database, (2) app sign-in (P2.4), (3) Payload wired to the same accounts. **Decision: the back office is SSO only** (GitHub and Discord through Supabase Auth, same accounts as the app, no Payload password).
 - [x] **PR 1, database**: single permissions file `src/lib/permissions.ts` (closed list of 20, `resource.action` format); tables `roles`, `role_permissions`, `user_roles`, `audit_log`; `private.has_permission(user, permission)` plus `public.has_permission(permission)` for the signed-in user; starting presets (Member, Junior instructor, Senior instructor, Administrator) with a test that the migration matches the TypeScript list; every new account becomes a Member; `private.grant_role` / `private.revoke_role` (service role only, audited, last administrator protected); RLS on all four tables, read-only through the API; new `public` tables closed to the API roles by default; pgTAP tests (RLS, deny by default, immediate effect of a revocation)
-- [ ] **PR 2, app sign-in** (see P2.4): Supabase Auth with GitHub and Discord, login/callback pages, session handling in Next.js
+- [x] **PR 2, app sign-in** (see P2.4): Supabase Auth with GitHub and Discord (`/connexion`, `/auth/callback`, sign-out), session refresh in `src/proxy.ts`, `/compte` and the age gate `/bienvenue`. Code verified locally with real sessions; the OAuth round trip itself is validated on Vercel (see the setup list in the root README)
 - [ ] **PR 3, Payload on the same accounts**: custom auth strategy reading the Supabase session; local email/password strategy disabled; `/admin` reserved for accounts with `cms.access` (Payload user created on first sign-in); Payload `access` functions call `has_permission` instead of "any signed-in user"; sign-in buttons on the admin login page
 - [ ] Bootstrap: sign in once with GitHub, then grant yourself `administrator` with `select private.grant_role('<user uuid>', 'administrator');` in the Supabase SQL editor; then retire the first email/password Payload account
 - [ ] Short-lived JWT (Supabase settings); sensitive actions (publish, delete, moderate, manage roles) re-read permissions from the database, which `has_permission` already does
@@ -148,11 +148,11 @@ Delivered in three PRs: (1) database, (2) app sign-in (P2.4), (3) Payload wired 
 - [ ] Check weight and cold start
 
 ### P2.4 Authentication and profiles `area: auth` `area: db`
-- [ ] Supabase Auth: GitHub + Discord (Google added later); link several providers to one account (verified e-mail only)
-- [ ] `profiles` (nickname, avatar, leaderboard opt-in), **minimum age 15** declaration at sign-up
-- [ ] RLS: everyone reads/writes only their own data
+- [x] Supabase Auth: GitHub + Discord sign-in (Google added later). Still to test: linking several providers to one account (verified e-mail only)
+- [x] `profiles` (nickname, avatar, leaderboard opt-in), created with the account; **minimum age 15** declaration recorded server-side (`declare_age()`), enforced by the `/bienvenue` gate (declining deletes the account). The nickname chooser UI comes with the leaderboard (P3.4)
+- [x] RLS: everyone reads/writes only their own profile, and cannot write the age declaration directly (pgTAP)
 - [ ] `progress`, `exercise_attempts`, `quiz_results`; progress per course (%)
-- [ ] Account deletion and data export in the profile
+- [ ] Account deletion and data export in the profile: `delete_my_account()` exists (used by the age refusal); a button in `/compte` and the data export are still to build
 - [ ] Sign-in rate limiting (`rate_limits` table + SQL function)
 
 ### P2.5 Hints and solution `area: exercises` `area: cms`

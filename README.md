@@ -25,6 +25,18 @@ npm run dev
 cp .env.example .env   # then set PAYLOAD_SECRET (openssl rand -base64 32) and DATABASE_URI
 ```
 
+### Sign-in (Supabase Auth: GitHub and Discord)
+
+The app needs `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` (public values: the project URL and the *publishable* key). Without them sign-in is disabled and the rest of the site keeps working.
+
+One-time setup for a hosted project:
+
+1. Vercel: add the two variables above (Supabase > Connect).
+2. Supabase > Authentication > URL Configuration: *Site URL* = the site URL; *Redirect URLs* = `<site URL>/auth/callback` (and `http://localhost:3000/auth/callback` for local work).
+3. GitHub OAuth app and Discord application: *callback URL* = `https://<project ref>.supabase.co/auth/v1/callback`; put each Client ID/secret in Supabase > Authentication > Providers.
+
+Pages: `/connexion` (sign-in), `/bienvenue` (age confirmation, 15+), `/compte` (account). Server code must read the user with `supabase.auth.getUser()`; the proxy only refreshes the session.
+
 ### Local database
 
 Requires Docker and the [Supabase CLI](https://supabase.com/docs/guides/cli/getting-started).
