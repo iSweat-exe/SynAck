@@ -6,10 +6,10 @@ import { useEffect, useRef } from "react";
 // "stone in the water": a ripple travels outward, and every dash it crosses tilts, stretches and turns
 // pink for a moment. The canvas sits behind the page content; give the content `pointer-events-none` and
 // re-enable them on what must stay clickable.
-const SPACING = 30; // distance between dashes
-const DASH = 9; // dash length
+const SPACING = 25; // distance between dashes
+const DASH = 5; // dash length
 const LINE_WIDTH = 2;
-const SPEED = 520; // ripple speed, px per second
+const SPEED = 400; // ripple speed, px per second
 const DURATION = 2.2; // seconds before a ripple has faded out
 const SIGMA = 70; // thickness of the wave front
 const WAVELENGTH = 90; // distance between the crests inside the front

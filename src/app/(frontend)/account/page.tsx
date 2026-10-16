@@ -2,15 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { AuthCard } from "@/components/auth/auth-card";
 import { AuthShell } from "@/components/auth/auth-shell";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { getSupabaseEnv } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 
@@ -53,34 +47,32 @@ export default async function AccountPage() {
 
   return (
     <AuthShell>
-      <Card>
-        <CardHeader>
-          <CardTitle>Mon compte</CardTitle>
-          <CardDescription>
+      <AuthCard
+        title="Mon compte"
+        description={
+          <>
             Connecté en tant que <strong>{name}</strong>
             {providers.length > 0
               ? ` via ${providers.map((p) => PROVIDER_LABELS[p] ?? p).join(", ")}`
               : ""}
             .
-          </CardDescription>
-        </CardHeader>
+          </>
+        }
+      >
+        {canUseCms ? (
+          <p className="text-sm">
+            <Link className="link" href="/admin" prefetch={false}>
+              Accéder à l&apos;espace de gestion du contenu
+            </Link>
+          </p>
+        ) : null}
 
-        <CardContent>
-          {canUseCms ? (
-            <p className="text-sm">
-              <Link className="link" href="/admin" prefetch={false}>
-                Accéder à l&apos;espace de gestion du contenu
-              </Link>
-            </p>
-          ) : null}
-
-          <form action="/auth/signout" method="post">
-            <Button type="submit" variant="secondary" className="w-full">
-              Se déconnecter
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+        <form action="/auth/signout" method="post">
+          <Button type="submit" variant="secondary" className="w-full">
+            Se déconnecter
+          </Button>
+        </form>
+      </AuthCard>
     </AuthShell>
   );
 }
