@@ -19,6 +19,8 @@
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
+    "content:check": "node scripts/check-course-code.mjs",
+    "content:import": "cross-env NODE_OPTIONS=--no-deprecation tsx --env-file-if-exists=.env scripts/import-course.ts",
     "db:migrate:payload": "cross-env NODE_OPTIONS=--no-deprecation payload migrate",
     "db:migrate:payload:create": "cross-env NODE_OPTIONS=--no-deprecation payload migrate:create"
   },
@@ -55,6 +57,7 @@
     "prettier-plugin-tailwindcss": "^0.8.1",
     "shadcn": "^4.22.0",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5",
     "vitest": "^5.0.5"
   },
