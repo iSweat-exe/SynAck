@@ -1,0 +1,65 @@
+name: PR hygiene
+
+# PR title in Conventional Commits format (the title becomes the squash-merge commit message)
+# + automatic labels from the changed paths.
+
+on:
+  pull_request_target:
+    types: [opened, edited, reopened, synchronize]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  title:
+    name: PR title
+    runs-on: ubuntu-latest
+    steps:
+      - uses: amannn/action-semantic-pull-request@v6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            docs
+            style
+            refactor
+            perf
+            test
+            build
+            ci
+            chore
+            content
+            security
+            revert
+          scopes: |
+            web
+            ui
+            cms
+            db
+            auth
+            exercises
+            protocols
+            gamification
+            seo
+            security
+            infra
+            legal
+            content
+            deps
+          requireScope: false
+          subjectPattern: ^(?![A-Z]).+$
+          subjectPatternError: The subject of the title must start with a lowercase letter.
+
+  labeler:
+    name: Auto-label
+    runs-on: ubuntu-latest
+    steps:
+      # pull_request_target: the workflow comes from `main`, no code from the PR is executed.
+      - uses: actions/labeler@v7
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          # false: never removes a label that was added by hand.
+          sync-labels: false

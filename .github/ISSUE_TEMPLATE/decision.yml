@@ -1,0 +1,30 @@
+name: Decision to make
+description: An open question from the plan (README §14)
+title: "decision: "
+labels: ["type: decision", "status: needs-decision"]
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+    validations:
+      required: true
+  - type: textarea
+    id: options
+    attributes:
+      label: Options and trade-offs
+      placeholder: |
+        - Option A: …
+        - Option B: …
+    validations:
+      required: true
+  - type: input
+    id: deadline
+    attributes:
+      label: Decide before
+      description: Checklist step that depends on it (e.g. P1.3).
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Decision taken
+      description: Fill in when closing, then reflect it in the README.

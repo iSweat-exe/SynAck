@@ -1,0 +1,54 @@
+name: Bug
+description: Something does not work as expected
+title: "fix: "
+labels: ["type: bug", "status: needs-triage"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happens
+      description: Observed behavior and expected behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Go to …
+        2. Click on …
+        3. See the error
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - UI / theme
+        - CMS (Payload)
+        - Database / Supabase
+        - Sign-in / permissions
+        - Exercises (editor, JS, Python)
+        - Protocols (TCP, HTTP, DNS, TLS)
+        - Progress / points / leaderboard
+        - Infra / CI
+        - I don't know
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: Environment
+      description: Browser and version, OS, desktop or mobile, local or production.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Screenshots, logs, console errors
+      description: Do not paste any secret or personal data.
+  - type: checkboxes
+    id: gate
+    attributes:
+      label: Impact
+      options:
+        - label: This bug blocks the public opening (path, sign-in, data loss, security)

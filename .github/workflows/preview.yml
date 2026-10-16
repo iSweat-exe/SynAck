@@ -1,0 +1,61 @@
+name: Preview (on demand)
+
+# Vercel previews on demand (README §11 bis): add the `preview` label to a PR.
+# Prerequisites: disable automatic deployments of non-`main` branches on the Vercel side
+# (Ignored Build Step, see CHECKLIST P0.4) and set VERCEL_TOKEN / VERCEL_ORG_ID / VERCEL_PROJECT_ID.
+
+on:
+  pull_request:
+    types: [labeled, synchronize, reopened]
+
+concurrency:
+  group: preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+jobs:
+  deploy:
+    name: Deploy preview
+    # Never for PRs coming from a fork (no access to secrets, and the code is untrusted).
+    if: >-
+      contains(github.event.pull_request.labels.*.name, 'preview') &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npx vercel@latest pull --yes --environment=preview --token="${{ secrets.VERCEL_TOKEN }}"
+      - run: npx vercel@latest build --token="${{ secrets.VERCEL_TOKEN }}"
+      - name: Deploy
+        id: deploy
+        run: |
+          url=$(npx vercel@latest deploy --prebuilt --token="${{ secrets.VERCEL_TOKEN }}")
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+      - uses: actions/github-script@v9
+        env:
+          PREVIEW_URL: ${{ steps.deploy.outputs.url }}
+        with:
+          script: |
+            const marker = '<!-- synack-preview -->';
+            const body = `${marker}\n**Preview**: ${process.env.PREVIEW_URL}`;
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+            const comments = await github.paginate(github.rest.issues.listComments, { owner, repo, issue_number });
+            const existing = comments.find((c) => c.body?.includes(marker));
+            if (existing) {
+              await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+            } else {
+              await github.rest.issues.createComment({ owner, repo, issue_number, body });
+            }

@@ -1,0 +1,36 @@
+name: Educational content
+description: A course, chapter, exercise, quiz or article to write or fix
+title: "content: "
+labels: ["type: content", "area: content", "status: needs-triage"]
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind
+      options:
+        - Path
+        - Course / chapter
+        - Exercise
+        - Quiz
+        - Protocol animation
+        - Watch article
+        - Fix for existing content
+    validations:
+      required: true
+  - type: input
+    id: target
+    attributes:
+      label: Where?
+      description: Title of the path, course or article concerned.
+  - type: textarea
+    id: brief
+    attributes:
+      label: Expected content
+      description: Topics, level, language (JS / Python), estimated duration.
+    validations:
+      required: true
+  - type: textarea
+    id: review
+    attributes:
+      label: Review
+      description: Who reviews it? (A junior instructor goes through a senior's review before publishing.)

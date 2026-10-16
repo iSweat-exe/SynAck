@@ -1,0 +1,41 @@
+name: Feature / task
+description: A step of the plan or a new idea
+title: "feat: "
+labels: ["type: feature", "status: needs-triage"]
+body:
+  - type: input
+    id: step
+    attributes:
+      label: Checklist reference
+      description: ID from .dev/Organisation/CHECKLIST.md (e.g. P2.5). Leave empty for a new idea.
+      placeholder: P2.5
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What problem does this solve, and for whom?
+    validations:
+      required: true
+  - type: textarea
+    id: done
+    attributes:
+      label: Definition of done
+      description: Verifiable criteria.
+      placeholder: |
+        - [ ] …
+        - [ ] Tests added
+    validations:
+      required: true
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Scope
+      options:
+        - V1 (in the plan)
+        - Post-V1 (do not start, keep for later)
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Technical notes / alternatives

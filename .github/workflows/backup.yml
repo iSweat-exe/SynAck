@@ -1,0 +1,101 @@
+name: Backup
+
+# Scheduled backup (README §11 bis): encrypted pg_dump (+ editorial content export if the script exists)
+# pushed to a PRIVATE repository. Secrets are repository secrets (not the `production` environment's)
+# so the scheduled run is never blocked by an environment protection rule.
+#
+# Prerequisite: BACKUP_DATABASE_URL = Supabase pooler URL in *session* mode (IPv4; the direct connection
+# is IPv6-only and GitHub runners have no IPv6). Restore: see CHECKLIST P4.4.
+
+on:
+  schedule:
+    - cron: "23 2 * * *" # every day at 02:23 UTC
+  workflow_dispatch:
+
+concurrency:
+  group: backup
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  backup:
+    name: Dump, encrypt, push
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      BACKUP_DATABASE_URL: ${{ secrets.BACKUP_DATABASE_URL }}
+      BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+      BACKUP_REPO_TOKEN: ${{ secrets.BACKUP_REPO_TOKEN }}
+      BACKUP_REPO: ${{ vars.BACKUP_REPO }}
+      KEEP: "30"
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Check configuration
+        run: |
+          for v in BACKUP_DATABASE_URL BACKUP_PASSPHRASE BACKUP_REPO_TOKEN BACKUP_REPO; do
+            if [ -z "${!v}" ]; then echo "::error::$v is not set"; exit 1; fi
+          done
+
+      - name: Dump database (public, payload, auth)
+        run: |
+          mkdir -p out
+          # Client version aligned with Postgres 17 (Supabase) through the official image.
+          docker run --rm -e DB_URL="$BACKUP_DATABASE_URL" postgres:17-alpine \
+            sh -c 'pg_dump "$DB_URL" --no-owner --no-privileges -n public -n payload -n auth' \
+            | gzip -9 > out/db.sql.gz
+          test -s out/db.sql.gz
+
+      - name: Export editorial content
+        id: content
+        run: |
+          if [ -f package.json ] && node -e "process.exit(require('./package.json').scripts?.['backup:content']?0:1)"; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "No backup:content script: content export skipped."
+          fi
+      - if: steps.content.outputs.run == 'true'
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - if: steps.content.outputs.run == 'true'
+        name: Run backup:content
+        env:
+          DATABASE_URI: ${{ secrets.BACKUP_DATABASE_URL }}
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+          BACKUP_OUT_DIR: out/content
+        run: |
+          npm ci
+          npm run backup:content
+          tar -czf out/content.tar.gz -C out content
+
+      - name: Encrypt (AES-256)
+        run: |
+          for f in out/db.sql.gz out/content.tar.gz; do
+            [ -f "$f" ] || continue
+            printf '%s' "$BACKUP_PASSPHRASE" | gpg --batch --yes --pinentry-mode loopback \
+              --passphrase-fd 0 --symmetric --cipher-algo AES256 -o "$f.gpg" "$f"
+          done
+          ls -l out
+
+      - name: Push to private repository
+        run: |
+          stamp=$(date -u +%Y-%m-%dT%H-%M-%SZ)
+          git clone --depth 1 "https://x-access-token:${BACKUP_REPO_TOKEN}@github.com/${BACKUP_REPO}.git" repo
+          mkdir -p repo/backups
+          cp out/db.sql.gz.gpg "repo/backups/${stamp}-db.sql.gz.gpg"
+          [ -f out/content.tar.gz.gpg ] && cp out/content.tar.gz.gpg "repo/backups/${stamp}-content.tar.gz.gpg" || true
+          cd repo
+          # Keep only the latest KEEP files of each kind.
+          for kind in db content; do
+            ls -1 backups | grep -- "-${kind}\." | sort | head -n -"$KEEP" | while read -r old; do git rm -q "backups/$old"; done
+          done
+          git config user.name "synack-backup"
+          git config user.email "synack-backup@users.noreply.github.com"
+          git add backups
+          git commit -m "backup: ${stamp}"
+          git push

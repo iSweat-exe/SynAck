@@ -1,0 +1,276 @@
+name: CI
+
+# Lint, types, unit tests, build, e2e and database migration tests.
+# Jobs skip themselves until the project is initialized (no package.json / supabase/config.toml),
+# so `main` can be protected from the very first commit. "CI gate" is the only required check.
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+env:
+  # Keep in sync with .github/workflows/db-migrate.yml.
+  SUPABASE_CLI_VERSION: "2.121.0"
+  # Dummy values for the build: no real secret in CI.
+  NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:54321
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: ci-placeholder
+  PAYLOAD_SECRET: ci-placeholder-secret
+  DATABASE_URI: postgresql://postgres:postgres@127.0.0.1:54322/postgres
+  NEXT_TELEMETRY_DISABLED: "1"
+
+jobs:
+  detect:
+    name: Detect project
+    runs-on: ubuntu-latest
+    outputs:
+      node: ${{ steps.d.outputs.node }}
+      e2e: ${{ steps.d.outputs.e2e }}
+      supabase: ${{ steps.d.outputs.supabase }}
+      db_changed: ${{ steps.d.outputs.db_changed }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - id: d
+        env:
+          EVENT: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          echo "node=$([ -f package.json ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+          echo "e2e=$(ls playwright.config.* >/dev/null 2>&1 && echo true || echo false)" >> "$GITHUB_OUTPUT"
+          echo "supabase=$([ -f supabase/config.toml ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+          db_changed=false
+          if [ "$EVENT" = "pull_request" ] && git diff --name-only "$BASE_SHA" HEAD -- supabase | grep -q .; then
+            db_changed=true
+          fi
+          echo "db_changed=$db_changed" >> "$GITHUB_OUTPUT"
+
+  lint:
+    name: Lint
+    needs: detect
+    if: needs.detect.outputs.node == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run format:check
+
+  typecheck:
+    name: Typecheck
+    needs: detect
+    if: needs.detect.outputs.node == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+
+  test:
+    name: Unit tests
+    needs: detect
+    if: needs.detect.outputs.node == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm test
+
+  build:
+    name: Build
+    needs: detect
+    if: needs.detect.outputs.node == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - uses: actions/cache@v6
+        with:
+          path: .next/cache
+          key: next-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-${{ hashFiles('src/**', 'app/**') }}
+          restore-keys: next-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-
+      - run: npm ci
+      - run: npm run build
+
+  # Migration tests, only on PRs that touch supabase/.
+  # 1. Rules: applied migrations are immutable, new ones sort after main's, destructive SQL needs a label.
+  # 2. Upgrade path: build a production-like database from main's migrations, then apply the PR's on top.
+  # 3. Fresh replay: rebuild the whole schema from scratch from the PR's migrations.
+  # Checks (linter, RLS on every public table, pgTAP, Payload migrations) run after steps 2 and 3.
+  db:
+    name: DB migrations
+    needs: detect
+    if: needs.detect.outputs.db_changed == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      DB_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
+      BASE_SHA: ${{ github.event.pull_request.base.sha }}
+      PR_LABELS: ${{ toJSON(github.event.pull_request.labels.*.name) }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: base
+
+      - name: Migration rules
+        run: |
+          set -euo pipefail
+
+          # Applied migrations are immutable: only additions are allowed.
+          changed=$(git diff --name-only --diff-filter=MDR "$BASE_SHA" HEAD -- 'supabase/migrations/*.sql' || true)
+          if [ -n "$changed" ]; then
+            echo "::error::Existing migrations must never be edited, renamed or deleted. Add a new migration instead:"
+            echo "$changed"
+            exit 1
+          fi
+
+          added=$(git diff --name-only --diff-filter=A "$BASE_SHA" HEAD -- 'supabase/migrations/*.sql' || true)
+          if [ -z "$added" ]; then
+            echo "No new migration in this PR."
+            exit 0
+          fi
+
+          # New migrations must sort after the latest one already on main (otherwise db push refuses them).
+          last_base=$(ls base/supabase/migrations 2>/dev/null | grep -E '^[0-9]+_' | sort | tail -n 1 | cut -d_ -f1 || true)
+          for f in $added; do
+            version=$(basename "$f" | cut -d_ -f1)
+            if [ -n "$last_base" ] && [ "$version" -le "$last_base" ]; then
+              echo "::error::$f is older than the latest migration on main ($last_base). Rebase and rename it with a newer timestamp."
+              exit 1
+            fi
+          done
+
+          # Destructive statements need the `breaking-change` label.
+          hits=$(grep -n -i -E 'drop[[:space:]]+(table|column|schema|type)|truncate|delete[[:space:]]+from' $added || true)
+          if [ -n "$hits" ]; then
+            echo "Destructive statements found:"
+            echo "$hits"
+            if echo "$PR_LABELS" | grep -q '"breaking-change"'; then
+              echo "::warning::Destructive migration allowed by the breaking-change label."
+            else
+              echo "::error::Add the breaking-change label to this PR to acknowledge the destructive migration (and make sure it is backward compatible)."
+              exit 1
+            fi
+          fi
+
+      - uses: supabase/setup-cli@v3
+        with:
+          version: ${{ env.SUPABASE_CLI_VERSION }}
+      - uses: actions/setup-node@v7
+        if: hashFiles('package.json') != ''
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Upgrade path (main migrations, then this PR's)
+        id: upgrade
+        run: |
+          set -euo pipefail
+          if [ -f base/supabase/config.toml ] && ls base/supabase/migrations/*.sql >/dev/null 2>&1; then
+            (cd base && supabase start -x studio,imgproxy,edge-runtime,logflare,vector)
+            supabase migration up --db-url "$DB_URL"
+            bash .github/scripts/db-checks.sh
+            (cd base && supabase stop --no-backup)
+          else
+            echo "No migrations on main yet: skipping the upgrade path (the fresh replay below covers it)."
+          fi
+
+      - name: Fresh replay (all migrations from scratch)
+        run: |
+          set -euo pipefail
+          supabase start -x studio,imgproxy,edge-runtime,logflare,vector
+          bash .github/scripts/db-checks.sh
+
+      - name: Payload migrations
+        run: |
+          set -euo pipefail
+          if [ -f package.json ] && node -e "process.exit(require('./package.json').scripts?.['db:migrate:payload']?0:1)"; then
+            npm ci
+            DATABASE_URI="$DB_URL" PAYLOAD_SECRET=ci-placeholder-secret npm run db:migrate:payload
+          else
+            echo "No db:migrate:payload script yet: skipped."
+          fi
+
+      - name: Stop local Supabase
+        if: always()
+        run: supabase stop --no-backup || true
+
+  e2e:
+    name: E2E (Playwright)
+    needs: detect
+    if: needs.detect.outputs.node == 'true' && needs.detect.outputs.e2e == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - if: needs.detect.outputs.supabase == 'true'
+        uses: supabase/setup-cli@v3
+        with:
+          version: ${{ env.SUPABASE_CLI_VERSION }}
+      - if: needs.detect.outputs.supabase == 'true'
+        name: Start local Supabase
+        run: supabase start -x studio,imgproxy,edge-runtime,logflare,vector
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+
+  # Single check required by the ruleset: passes unless a job failed or was cancelled
+  # (jobs "skipped" because the project is not initialized yet are accepted).
+  ci-gate:
+    name: CI gate
+    if: always()
+    needs: [detect, lint, typecheck, test, build, db, e2e]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Evaluate results
+        run: |
+          echo '${{ toJSON(needs) }}'
+          if [ "${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}" = "true" ]; then
+            echo "::error::At least one job failed or was cancelled."
+            exit 1
+          fi

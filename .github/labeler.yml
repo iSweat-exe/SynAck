@@ -1,0 +1,96 @@
+# `area: *` labels applied automatically from the changed files (actions/labeler).
+# Paths assume a classic Next.js + Payload layout: adjust after P1.1.
+
+"area: infra":
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/**"
+          - ".nvmrc"
+          - ".gitignore"
+          - ".env.example"
+          - "vercel.json"
+
+"area: db":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "supabase/**"
+
+"area: cms":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/collections/**"
+          - "src/blocks/**"
+          - "src/payload*"
+          - "payload.config.*"
+
+"area: auth":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/lib/auth/**"
+          - "src/lib/permissions/**"
+          - "src/app/**/auth/**"
+
+"area: ui":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/components/ui/**"
+          - "src/styles/**"
+          - "**/*.css"
+          - "public/fonts/**"
+          - "public/brand/**"
+
+"area: exercises":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/workers/**"
+          - "src/components/editor/**"
+          - "src/lib/exercises/**"
+
+"area: protocols":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/components/protocols/**"
+          - "src/lib/protocols/**"
+
+"area: gamification":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/lib/sm2/**"
+          - "src/lib/points/**"
+          - "src/lib/badges/**"
+          - "src/lib/leaderboard/**"
+
+"area: seo":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/app/sitemap.*"
+          - "src/app/robots.*"
+          - "src/app/**/feed.*"
+          - "src/app/**/rss*"
+
+"area: legal":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "LICENSE*"
+          - "src/app/**/legal-notice/**"
+          - "src/app/**/privacy/**"
+          - "src/app/**/terms/**"
+
+"type: docs":
+  - changed-files:
+      - any-glob-to-all-files:
+          - "**/*.md"
+
+"type: test":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/*.test.*"
+          - "**/*.spec.*"
+          - "e2e/**"
+          - "tests/**"
+          - "supabase/tests/**"
+
+"dependencies":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "package-lock.json"

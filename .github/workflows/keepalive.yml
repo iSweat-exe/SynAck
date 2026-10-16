@@ -1,0 +1,25 @@
+name: Keepalive
+
+# Calls /api/health (a light database query) to keep the free Supabase project from being paused.
+# The external uptime probe (UptimeRobot / Better Stack) does the same; this is the safety net.
+# Note: GitHub disables scheduled workflows after 60 days without repository activity.
+
+on:
+  schedule:
+    - cron: "41 6 */3 * *" # every 3 days
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  ping:
+    name: Ping /api/health
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Ping
+        env:
+          URL: ${{ vars.PRODUCTION_URL }}
+        run: |
+          if [ -z "$URL" ]; then echo "PRODUCTION_URL is not set: nothing to do."; exit 0; fi
+          curl -fsS --retry 3 --retry-delay 10 --max-time 30 "${URL%/}/api/health"
