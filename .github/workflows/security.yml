@@ -37,7 +37,8 @@ jobs:
         run: npm ci --ignore-scripts
       - if: steps.has.outputs.node == 'true'
         name: Audit (production dependencies, high and above)
-        run: npm audit --omit=dev --audit-level=high
+        # Accepted advisories live in .github/audit-allowlist.json (reason + expiry date).
+        run: node .github/scripts/npm-audit.mjs
 
   secrets:
     name: Secret scan (gitleaks)
@@ -94,4 +95,6 @@ jobs:
           # Dev tooling (lint, shadcn CLI) is covered by Dependabot alerts; runtime dependencies are the gate.
           # `npm audit --omit=dev` in the audit job enforces the same rule on the lockfile.
           fail-on-scopes: runtime
+          # Accepted advisories (see .github/audit-allowlist.json for the reason and expiry date).
+          allow-ghsas: GHSA-vfj7-8cjw-p6xm
           comment-summary-in-pr: on-failure

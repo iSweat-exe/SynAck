@@ -1,0 +1,9 @@
+[
+  {
+    "ghsa": "GHSA-vfj7-8cjw-p6xm",
+    "package": "braces",
+    "added": "2026-10-16",
+    "expires": "2027-01-16",
+    "reason": "ReDoS in braces, reachable only through the build-time sass/chokidar file watcher pulled in by @payloadcms/next; it never handles user input at runtime and no patched version exists yet."
+  }
+]

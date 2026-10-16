@@ -19,6 +19,12 @@ npm ci
 npm run dev
 ```
 
+### Environment
+
+```bash
+cp .env.example .env   # then set PAYLOAD_SECRET (openssl rand -base64 32) and DATABASE_URI
+```
+
 ### Local database
 
 Requires Docker and the [Supabase CLI](https://supabase.com/docs/guides/cli/getting-started).
@@ -30,7 +36,20 @@ npm run db:reset   # rebuild the local database from scratch
 npm run db:stop
 ```
 
-Create a migration with `supabase migration new <name> < /dev/null`, then edit the generated file. Never edit a migration that is already on `main`: add a new one. Migrations are tested on every PR and applied to production automatically after merge (see the project README, §11 bis).
+### Content management (Payload CMS)
+
+The back office is served at `/admin`, the REST API at `/api`. Payload stores its tables in the `payload` schema of the same Postgres database, and schema changes always go through versioned migrations (auto-push is disabled):
+
+```bash
+npm run db:migrate:payload                      # apply Payload migrations (after db:start)
+npm run db:migrate:payload:create -- <name>     # generate a migration after changing a collection
+npm run generate:types                          # refresh src/payload-types.ts
+npm run generate:importmap                      # refresh the admin import map
+```
+
+The first visit to `/admin` asks you to create the first user. Commit the generated migration, `src/payload-types.ts` and the import map together with the collection change.
+
+Create a database migration with `supabase migration new <name> < /dev/null`, then edit the generated file. Never edit a migration that is already on `main`: add a new one. Migrations are tested on every PR and applied to production automatically after merge (see the project README, §11 bis).
 
 Checks run by CI: `npm run lint`, `npm run format:check`, `npm run typecheck`, `npm test`, `npm run build`.
 
@@ -38,7 +57,7 @@ Checks run by CI: `npm run lint`, `npm run format:check`, `npm run typecheck`, `
 
 - `.github/`: CI/CD workflows, labels, issue and PR templates, rulesets to import (see [rulesets/README.md](.github/rulesets/README.md))
 - `docs/design/`: logo and UI kit images
-- `src/`: the Next.js application (App Router)
+- `src/`: the Next.js application (App Router); `src/collections`, `src/blocks` and `src/fields` hold the Payload CMS configuration, `src/migrations` its migrations
 - `supabase/`: database migrations (to be created)
 
 ## Contributing

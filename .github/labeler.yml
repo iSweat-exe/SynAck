@@ -20,6 +20,8 @@
       - any-glob-to-any-file:
           - "src/collections/**"
           - "src/blocks/**"
+          - "src/fields/**"
+          - "src/migrations/**"
           - "src/payload*"
           - "payload.config.*"
 
