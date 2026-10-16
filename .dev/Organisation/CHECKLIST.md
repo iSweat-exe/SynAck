@@ -34,12 +34,13 @@ V1 scope in one line: **1 path** ("Introduction to Programming", JS + Python), *
 - [x] Empty folders `.dev/Philosophy` and `.dev/Rules` deleted (Git cannot track empty folders anyway); recreate them when there is content
 
 ### P0.2 GitHub: governance `area: infra` (everything on `main`, see §Governance)
-- [ ] Repository settings: **squash merge only**, "Automatically delete head branches", squash commit title = **PR title**, "Always suggest updating pull request branches"
-- [ ] Import the rulesets: *Settings → Rules → Rulesets → New ruleset → Import a ruleset*, files in [.github/rulesets/](../../.github/rulesets/) (`main-protection.json`, then `main-required-checks.json`; see its README for the order)
-- [ ] Sync the labels: run the **Labels** workflow (`workflow_dispatch`) or push to `main`; it reads [.github/labels.yml](../../.github/labels.yml)
-- [ ] Enable: Dependabot alerts + security updates, Secret scanning + **Push protection**, Private vulnerability reporting, Code scanning (CodeQL through the workflow)
-- [ ] Create the **`production`** environment (*Settings → Environments*) restricted to the `main` branch (*Deployment branches*). No required reviewer: production migrations are automatic after the PR tests (see §Governance)
-- [ ] Open a first test PR: **CI gate** must pass with no application code
+- [x] Repository settings: **squash merge only**, "Automatically delete head branches", squash commit title = **PR title**, "Always suggest updating pull request branches"
+- [x] Import the rulesets: *Settings → Rules → Rulesets → New ruleset → Import a ruleset*, files in [.github/rulesets/](../../.github/rulesets/) (`main-protection.json`, then `main-required-checks.json`; see its README for the order). (GitHub requires a public repository or Pro for rulesets)
+- [x] Sync the labels: run the **Labels** workflow (`workflow_dispatch`) or push to `main`; it reads [.github/labels.yml](../../.github/labels.yml)
+- [x] Enabled: Dependabot alerts + security updates
+- [x] Enabled: Secret scanning + **Push protection**, Private vulnerability reporting; Code scanning runs through the CodeQL job of `security.yml` (the repository is public, so these are free)
+- [x] Create the **`production`** environment (*Settings → Environments*) restricted to the `main` branch (*Deployment branches*). No required reviewer: production migrations are automatic after the PR tests (see §Governance)
+- [x] Open a first test PR: **CI gate** must pass with no application code
 
 ### P0.3 Accounts and services ($0) `area: infra`
 - [ ] **Supabase** project (free tier) + note the project ref; check the current limits (README §14)
