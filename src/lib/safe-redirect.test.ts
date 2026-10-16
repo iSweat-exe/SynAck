@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { safeRedirectPath } from "@/lib/safe-redirect";
 
 describe("safeRedirectPath", () => {
-  it.each(["/account", "/courses/intro?chapter=2", "/", "/a/b#c"])(
+  it.each(["/profile", "/courses/intro?chapter=2", "/", "/a/b#c"])(
     "keeps the relative path %s",
     (path) => {
       expect(safeRedirectPath(path)).toBe(path);
@@ -20,11 +20,11 @@ describe("safeRedirectPath", () => {
     "/\n/evil.example.com",
     "",
   ])("falls back for %j", (path) => {
-    expect(safeRedirectPath(path)).toBe("/account");
+    expect(safeRedirectPath(path)).toBe("/");
   });
 
   it("falls back when the value is missing", () => {
-    expect(safeRedirectPath(null)).toBe("/account");
-    expect(safeRedirectPath(undefined, "/")).toBe("/");
+    expect(safeRedirectPath(null)).toBe("/");
+    expect(safeRedirectPath(undefined, "/profile")).toBe("/profile");
   });
 });

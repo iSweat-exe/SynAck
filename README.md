@@ -35,7 +35,7 @@ One-time setup for a hosted project:
 2. Supabase > Authentication > URL Configuration: *Site URL* = the site URL; *Redirect URLs* = `<site URL>/auth/callback` (and `http://localhost:3000/auth/callback` for local work).
 3. GitHub OAuth app and Discord application: *callback URL* = `https://<project ref>.supabase.co/auth/v1/callback`; put each Client ID/secret in Supabase > Authentication > Providers.
 
-Pages: `/sign-in` (sign-in), `/welcome` (age confirmation, 15+), `/account` (account).
+Pages: `/sign-in` (sign-in), `/welcome` (age confirmation, 15+), `/profile` (profile, behind the header's avatar menu). After signing in you land on the home page (or on `/welcome` first for a new account).
 
 The back office (`/admin`) has no password: it uses the same GitHub/Discord accounts and only lets in accounts holding the `cms.access` permission. To bootstrap the first administrator, sign in once on `/sign-in`, then run `select private.grant_role('<user uuid>', 'administrator');` in the Supabase SQL editor (the uuid is in Authentication > Users) and open `/admin`. Server code must read the user with `supabase.auth.getUser()`; the proxy only refreshes the session.
 

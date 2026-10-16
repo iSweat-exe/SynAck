@@ -198,6 +198,9 @@ The screenshots have no known scale: border, radius, shadow offset and bevel mus
 - **Badge**: outlined pill, 24 px high, `neutral` / `secondary` / `primary` (full `primary-400` fill) and the four semantic variants in the soft tones (100 background, 900 text; swapped in dark mode), because the saturated 500 fills clashed with the pink palette.
 - **Tabs**: small outlined boxes; the selected one is `primary-400` with a hard shadow; the panel is an outlined surface.
 
+### Site header and account menu
+Sticky header with the bottom outline: the logo on the left, the account corner on the right. Signed out: a Primary "Se connecter" button. Signed in: the round avatar (provider picture, or the initials on `primary-400`) as a button with a small hard shadow; it opens a menu (outlined surface, hard shadow, dashed separators, highlighted item in `primary-400`) with the profile, the admin panel and the design system for accounts with `cms.access`, and the sign-out. The header reads the session in the browser so the pages stay static.
+
 ### Auth ticket
 The sign-in, welcome and account pages share `AuthCard`, styled as a **receipt**: the logo and a tagline centered on top, sections separated by dashed rules, a title with the "Bêta" badge, the actions, the small print, a decorative barcode and a torn (zigzag) bottom edge. No header band. The outline and the hard shadow follow the torn edge (chained drop-shadows on a wrapper, the paper is masked). The logo comes from the supplied PNGs (`public/brand`), through a `Logo` component.
 

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ArrowRight, Download, Plus } from "lucide-react";
 import type { ReactNode } from "react";
 
+import { AccountMenu } from "@/components/site/user-menu";
 import { SwitchDemo } from "@/components/design-system/switch-demo";
 import { ThemeScope } from "@/components/design-system/theme-scope";
 import { Alert } from "@/components/ui/alert";
@@ -35,6 +36,7 @@ const SECTIONS = [
   { id: "inputs", label: "Inputs" },
   { id: "badges", label: "Badges" },
   { id: "tabs", label: "Tabs" },
+  { id: "menus", label: "Menus" },
   { id: "cards", label: "Cards" },
   { id: "alerts", label: "Alerts" },
   { id: "next", label: "To come" },
@@ -530,9 +532,31 @@ export default function DesignSystemPage() {
         </Section>
 
         <Section
+          id="menus"
+          title="Menus and avatars"
+          description="The account menu of the site header: the profile picture (or the initials) as a button, and a dropdown with the profile, the admin panel for accounts with the right permission, and the sign-out. Built on Base UI: arrow keys, Escape and focus handling included."
+        >
+          <Block
+            title="Account menu"
+            note="Open it. The first one is an account with back-office access, the second a plain member without a picture."
+          >
+            <div className="flex flex-wrap items-start gap-12 pb-48">
+              <AccountMenu
+                user={{
+                  name: "ada-lovelace",
+                  email: "ada@example.test",
+                  canUseCms: true,
+                }}
+              />
+              <AccountMenu user={{ name: "Grace Hopper", canUseCms: false }} />
+            </div>
+          </Block>
+        </Section>
+
+        <Section
           id="cards"
           title="Cards"
-          description="An outlined surface with the same hard shadow as the buttons. Used to group content: the sign-in, welcome and account pages are built with it."
+          description="An outlined surface with the same hard shadow as the buttons. Used to group content: the welcome and profile pages are built with it."
         >
           <Block
             title="Basic and with actions"
