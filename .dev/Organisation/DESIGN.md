@@ -188,6 +188,11 @@ The screenshots have no known scale: border, radius, shadow offset and bevel mus
 .btn-secondary { background: var(--primary-50);  --bevel: var(--neutral-300); }
 ```
 
+### Card and alert (derived from the kit, not in the screenshots)
+- **Card**: `surface` background, same outline (`u` = 2 px), radius 4u, hard shadow 2u (black).
+- **Alert**: semantic tones, 100 background and 900 text in light mode, swapped in dark mode; same outline and radius, no shadow (nothing to press). Icon per variant (info, success, warning, danger).
+- Forms and auth pages sit in a Card; provider sign-in buttons are Secondary, full width, so Primary stays reserved for the main action of a screen.
+
 ### States and interactions (Proposal, absent from the screenshots)
 - **Hover**: the button shifts slightly down and to the right and the shadow shrinks.
 - **Press**: the button "sinks" (shadow to zero, shift equal to the shadow offset).

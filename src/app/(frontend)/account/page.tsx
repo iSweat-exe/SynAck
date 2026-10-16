@@ -3,6 +3,13 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { getSupabaseEnv } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 
@@ -44,31 +51,35 @@ export default async function AccountPage() {
     "Compte SynAck";
 
   return (
-    <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-6 p-6">
-      <div className="flex flex-col gap-1">
-        <h1 className="text-2xl font-bold">Mon compte</h1>
-        <p className="text-sm text-muted-foreground">
-          Connecté en tant que <strong>{name}</strong>
-          {providers.length > 0
-            ? ` via ${providers.map((p) => PROVIDER_LABELS[p] ?? p).join(", ")}`
-            : ""}
-          .
-        </p>
-      </div>
+    <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center p-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Mon compte</CardTitle>
+          <CardDescription>
+            Connecté en tant que <strong>{name}</strong>
+            {providers.length > 0
+              ? ` via ${providers.map((p) => PROVIDER_LABELS[p] ?? p).join(", ")}`
+              : ""}
+            .
+          </CardDescription>
+        </CardHeader>
 
-      {canUseCms ? (
-        <p className="text-sm">
-          <Link className="link" href="/admin" prefetch={false}>
-            Accéder à l&apos;espace de gestion du contenu
-          </Link>
-        </p>
-      ) : null}
+        <CardContent>
+          {canUseCms ? (
+            <p className="text-sm">
+              <Link className="link" href="/admin" prefetch={false}>
+                Accéder à l&apos;espace de gestion du contenu
+              </Link>
+            </p>
+          ) : null}
 
-      <form action="/auth/signout" method="post">
-        <Button type="submit" variant="secondary">
-          Se déconnecter
-        </Button>
-      </form>
+          <form action="/auth/signout" method="post">
+            <Button type="submit" variant="secondary" className="w-full">
+              Se déconnecter
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </main>
   );
 }

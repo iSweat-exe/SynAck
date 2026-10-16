@@ -120,7 +120,8 @@ Delivered in three PRs: (1) database, (2) app sign-in (P2.4), (3) Payload wired 
 - [x] **Space Mono** (4 variants, `font-synthesis: none`, self-hosted through `next/font`, accents shown on `/design-system`). Not applied to the Payload admin, which keeps its own UI
 - [x] Button restyled: Primary / Secondary, 3 sizes, icon-only, hover / pressed / focus / disabled states, inline link
 - [x] Switch: off / on with a simple knob slide, disabled, hover / pressed / focus (native checkbox with `role="switch"`)
-- [ ] Restyled components: Card, Input, Tabs, Badge, Alert (add each to `/design-system` with all its variants)
+- [x] Card and Alert (semantic colors, light and dark), built from the button style (outline, hard shadow); the sign-in, welcome and account pages use them
+- [ ] Restyled components: Input, Tabs, Badge (add each to `/design-system` with all its variants)
 - [ ] Light/dark mode (user's choice, toggle only scoped to `/design-system` for now); dark-mode shadow stays black (decided)
 - [ ] Single `Logo` component (variants), base layout (header, footer, beta banner), 404/error pages
 - [ ] Produce SVG logo, dark variant, favicon, Open Graph image (DESIGN.md §5)

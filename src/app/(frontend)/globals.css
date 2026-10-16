@@ -136,6 +136,14 @@
   --muted-ink: var(--neutral-600);
   --accent-bg: var(--primary-100);
   --accent-ink: var(--neutral-950);
+  --success-bg: var(--success-100);
+  --success-ink: var(--success-900);
+  --warning-bg: var(--warning-100);
+  --warning-ink: var(--warning-900);
+  --danger-bg: var(--danger-100);
+  --danger-ink: var(--danger-900);
+  --info-bg: var(--info-100);
+  --info-ink: var(--info-900);
 
   /* Buttons */
   --btn-primary-bg: var(--primary-400);
@@ -174,6 +182,14 @@
   --muted-ink: var(--neutral-400);
   --accent-bg: var(--neutral-800);
   --accent-ink: var(--neutral-50);
+  --success-bg: var(--success-900);
+  --success-ink: var(--success-100);
+  --warning-bg: var(--warning-900);
+  --warning-ink: var(--warning-100);
+  --danger-bg: var(--danger-900);
+  --danger-ink: var(--danger-100);
+  --info-bg: var(--info-900);
+  --info-ink: var(--info-100);
 }
 
 :root,
@@ -404,6 +420,58 @@
     background: var(--btn-disabled-bg);
     box-shadow: none;
     cursor: not-allowed;
+  }
+
+  /* Card: a surface with the same outline and hard shadow as the buttons. */
+  .card {
+    --u: 2px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    border: var(--u) solid var(--outline);
+    border-radius: calc(var(--u) * 4);
+    background: var(--surface);
+    color: var(--ink);
+    box-shadow: calc(var(--u) * 2) calc(var(--u) * 2) 0 var(--shadow);
+  }
+
+  /* Alert: a message on a semantic background (100 tone; 900 tone in dark mode), outlined, no shadow
+     because it is not something to press. */
+  .alert {
+    --u: 2px;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border: var(--u) solid var(--outline);
+    border-radius: calc(var(--u) * 4);
+    background: var(--alert-bg);
+    color: var(--alert-ink);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+  .alert svg {
+    flex-shrink: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-top: 0.1rem;
+  }
+  .alert-info {
+    --alert-bg: var(--info-bg);
+    --alert-ink: var(--info-ink);
+  }
+  .alert-success {
+    --alert-bg: var(--success-bg);
+    --alert-ink: var(--success-ink);
+  }
+  .alert-warning {
+    --alert-bg: var(--warning-bg);
+    --alert-ink: var(--warning-ink);
+  }
+  .alert-danger {
+    --alert-bg: var(--danger-bg);
+    --alert-ink: var(--danger-ink);
   }
 
   /* Inline link: primary-700 on light backgrounds (primary-400 would not have enough contrast). */

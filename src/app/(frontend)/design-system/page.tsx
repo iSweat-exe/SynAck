@@ -4,7 +4,15 @@ import type { ReactNode } from "react";
 
 import { SwitchDemo } from "@/components/design-system/switch-demo";
 import { ThemeScope } from "@/components/design-system/theme-scope";
+import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { NEUTRAL, PRIMARY, SEMANTIC, type Swatch } from "@/lib/design-tokens";
 
@@ -20,6 +28,8 @@ const SECTIONS = [
   { id: "colors", label: "Colors" },
   { id: "buttons", label: "Buttons" },
   { id: "switches", label: "Switches" },
+  { id: "cards", label: "Cards" },
+  { id: "alerts", label: "Alerts" },
   { id: "next", label: "To come" },
 ];
 
@@ -401,6 +411,72 @@ export default function DesignSystemPage() {
         </Section>
 
         <Section
+          id="cards"
+          title="Cards"
+          description="An outlined surface with the same hard shadow as the buttons. Used to group content: the sign-in, welcome and account pages are built with it."
+        >
+          <Block
+            title="Basic and with actions"
+            note="A header (title and description) and a content area. Put the main action in Primary, the other ones in Secondary."
+          >
+            <div className="grid gap-8 pr-2 sm:grid-cols-2">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-xl">Card title</CardTitle>
+                  <CardDescription>
+                    A short description of what this card is about.
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-xl">With actions</CardTitle>
+                  <CardDescription>
+                    Buttons stack inside the content area.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button className="w-full">Primary action</Button>
+                  <Button variant="secondary" className="w-full">
+                    Secondary action
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          </Block>
+        </Section>
+
+        <Section
+          id="alerts"
+          title="Alerts"
+          description="A message on a semantic background (tone 100, tone 900 in dark mode) with an icon. Danger and warning are announced to screen readers."
+        >
+          <Block
+            title="Variants"
+            note="Info, success, warning and danger, with and without a title."
+          >
+            <div className="flex flex-col gap-4">
+              <Alert variant="info" title="Info">
+                A neutral message that gives some context.
+              </Alert>
+              <Alert variant="success" title="Success">
+                The action went through.
+              </Alert>
+              <Alert variant="warning" title="Warning">
+                Something needs attention before you continue.
+              </Alert>
+              <Alert variant="danger" title="Danger">
+                The action failed. Try again.
+              </Alert>
+              <Alert variant="info">Without a title, on one line.</Alert>
+              <Alert variant="danger">
+                Une erreur est survenue. Réessayez.
+              </Alert>
+            </div>
+          </Block>
+        </Section>
+
+        <Section
           id="next"
           title="To come"
           description="Components to add here, with all their variants, as they are designed (DESIGN.md §9)."
@@ -408,10 +484,8 @@ export default function DesignSystemPage() {
           <ul className="grid gap-2 text-sm sm:grid-cols-2">
             {[
               "Input fields",
-              "Cards",
               "Tabs",
               "Badges",
-              "Alert messages",
               "Beta warning banner",
               "Code editor",
               "Protocol animations",

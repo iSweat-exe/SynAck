@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
 
@@ -41,18 +42,16 @@ export function LoginButtons({ next }: { next: string }) {
         <Button
           key={id}
           type="button"
+          variant="secondary"
           size="lg"
+          className="w-full"
           disabled={pending !== null}
           onClick={() => signIn(id)}
         >
           {pending === id ? "Redirection…" : label}
         </Button>
       ))}
-      {error ? (
-        <p role="alert" className="text-sm text-destructive">
-          {error}
-        </p>
-      ) : null}
+      {error ? <Alert variant="danger">{error}</Alert> : null}
     </div>
   );
 }
