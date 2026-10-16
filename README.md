@@ -35,7 +35,7 @@ One-time setup for a hosted project:
 2. Supabase > Authentication > URL Configuration: *Site URL* = the site URL; *Redirect URLs* = `<site URL>/auth/callback` (and `http://localhost:3000/auth/callback` for local work).
 3. GitHub OAuth app and Discord application: *callback URL* = `https://<project ref>.supabase.co/auth/v1/callback`; put each Client ID/secret in Supabase > Authentication > Providers.
 
-Pages: `/connexion` (sign-in), `/bienvenue` (age confirmation, 15+), `/compte` (account). Server code must read the user with `supabase.auth.getUser()`; the proxy only refreshes the session.
+Pages: `/sign-in` (sign-in), `/welcome` (age confirmation, 15+), `/account` (account). Server code must read the user with `supabase.auth.getUser()`; the proxy only refreshes the session.
 
 ### Local database
 
