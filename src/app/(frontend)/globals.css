@@ -151,15 +151,14 @@
   --radius: 0.75rem;
 }
 
-/* Dark mode (DESIGN.md §6). The hard shadow is a deep pink: a light shadow would merge with the light
-   outline into a double frame, and black is invisible on the page background. */
+/* Dark mode (DESIGN.md §6). The hard shadow stays black: a light or colored shadow looks wrong here. */
 .dark {
   --bg: var(--neutral-950);
   --ink: var(--neutral-50);
   --surface: var(--neutral-900);
   --surface-raised: var(--neutral-800);
   --outline: var(--neutral-50);
-  --shadow: var(--primary-600);
+  --shadow: #000000;
   --ring-color: var(--primary-300);
   --link-color: var(--primary-300);
 
@@ -218,15 +217,17 @@
 }
 
 /* Buttons (DESIGN.md §4): thick near-black outline, hard offset shadow without blur, darker bevel on the
-   bottom and right edges, rounded corners. A button's border is one unit (--u); its radius is 3u, its
-   hard shadow and its bevel 2u each: the proportions measured on docs/design/ui-kit.png. */
+   bottom and right edges, rounded corners. A button's border is one unit (--u). Measured on
+   docs/design/ui-kit.png: shadow 2u, bevel 2u, radius 3u; the radius and the shadow depth are then
+   reduced (radius 2u, shadow 1.5u) because the kit proportions looked too round and too deep. */
 @layer components {
   .btn {
     --u: 2px;
     --btn-bg: var(--btn-primary-bg);
     --btn-bevel: var(--btn-primary-bevel);
     --btn-ink: var(--on-fill);
-    --offset: calc(var(--u) * 2);
+    --depth: calc(var(--u) * 1.5);
+    --offset: var(--depth);
 
     position: relative;
     display: inline-flex;
@@ -235,7 +236,7 @@
     justify-content: center;
     gap: 0.5em;
     border: var(--u) solid var(--outline);
-    border-radius: calc(var(--u) * 3);
+    border-radius: calc(var(--u) * 2);
     background: var(--btn-bg);
     color: var(--btn-ink);
     font-family: var(--font-sans);
@@ -267,22 +268,22 @@
   /* Hover: the button moves toward its shadow, which shrinks. */
   .btn:not(:disabled, [aria-disabled="true"]):hover,
   .btn[data-force="hover"]:not(:disabled, [aria-disabled="true"]) {
-    --offset: var(--u);
-    transform: translate(var(--u), var(--u));
+    --offset: calc(var(--depth) / 2);
+    transform: translate(calc(var(--depth) / 2), calc(var(--depth) / 2));
   }
 
   /* Press: the button sinks into the page (no shadow, shift equal to the shadow offset). */
   .btn:not(:disabled, [aria-disabled="true"]):active,
   .btn[data-force="active"]:not(:disabled, [aria-disabled="true"]) {
     --offset: 0px;
-    transform: translate(calc(var(--u) * 2), calc(var(--u) * 2));
+    transform: translate(var(--depth), var(--depth));
   }
 
   /* Keyboard focus: a ring that does not depend on hover, drawn outside the shadow. */
   .btn:focus-visible,
   .btn[data-force="focus"] {
     outline: 3px solid var(--ring-color);
-    outline-offset: calc(var(--u) * 2 + 3px);
+    outline-offset: calc(var(--depth) + 3px);
   }
 
   .btn:disabled,
