@@ -91,4 +91,7 @@ jobs:
       - uses: actions/dependency-review-action@v5
         with:
           fail-on-severity: high
+          # Dev tooling (lint, shadcn CLI) is covered by Dependabot alerts; runtime dependencies are the gate.
+          # `npm audit --omit=dev` in the audit job enforces the same rule on the lockfile.
+          fail-on-scopes: runtime
           comment-summary-in-pr: on-failure
