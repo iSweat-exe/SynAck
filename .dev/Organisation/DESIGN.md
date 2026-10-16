@@ -228,7 +228,7 @@ The screenshots only show light mode, but the `neutral` palette provides the nee
 | Raised surface | `neutral-50` | `neutral-800` |
 | Text | `neutral-950` | `neutral-50` |
 | Outline | `neutral-950` | `neutral-50` |
-| Hard shadow | `#000000` | `neutral-50` or `primary-400` (to test) |
+| Hard shadow | `#000000` | `primary-600` (chosen: `neutral-50` merged with the light outline into a double white frame) |
 | Primary button | `primary-400`, `neutral-950` text | same |
 | Secondary button | `primary-50` background | `neutral-800` background, `neutral-50` text |
 

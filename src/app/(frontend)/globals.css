@@ -151,14 +151,15 @@
   --radius: 0.75rem;
 }
 
-/* Dark mode (DESIGN.md §6, proposal to validate: the hard shadow color is still to test). */
+/* Dark mode (DESIGN.md §6). The hard shadow is a deep pink: a light shadow would merge with the light
+   outline into a double frame, and black is invisible on the page background. */
 .dark {
   --bg: var(--neutral-950);
   --ink: var(--neutral-50);
   --surface: var(--neutral-900);
   --surface-raised: var(--neutral-800);
   --outline: var(--neutral-50);
-  --shadow: var(--neutral-50);
+  --shadow: var(--primary-600);
   --ring-color: var(--primary-300);
   --link-color: var(--primary-300);
 
