@@ -11,7 +11,11 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "db:start": "supabase start",
+    "db:stop": "supabase stop",
+    "db:reset": "supabase db reset",
+    "db:test": "supabase test db"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
@@ -43,4 +47,9 @@
     "node": ">=24",
     "npm": ">=11"
   }
+}: {
+    "node": ">=24",
+    "npm": ">=11"
+  }
 }
+

@@ -88,12 +88,12 @@ V1 scope in one line: **1 path** ("Introduction to Programming", JS + Python), *
 - [x] **Done when**: `npm run lint && npm run typecheck && npm run build` pass locally
 
 ### P1.2 CI, security and local Supabase `area: infra`
-- [ ] Check that [ci.yml](../../.github/workflows/ci.yml) runs lint, types, Vitest, build and e2e (as soon as the scripts exist)
-- [ ] [security.yml](../../.github/workflows/security.yml): `npm audit`, gitleaks, CodeQL, dependency review
-- [ ] Dependabot active ([dependabot.yml](../../.github/dependabot.yml))
-- [ ] Supabase CLI: `supabase init`, `supabase start` (Docker), versioned migrations in `supabase/migrations/`, `supabase/seed.sql`, `supabase/tests/` (pgTAP)
+- [x] [ci.yml](../../.github/workflows/ci.yml) runs lint, types, Vitest and build (verified on `main`); the e2e job starts running once Playwright is added (P4.4)
+- [x] [security.yml](../../.github/workflows/security.yml): `npm audit`, gitleaks, CodeQL, dependency review (all running on PRs)
+- [x] Dependabot active ([dependabot.yml](../../.github/dependabot.yml))
+- [x] Supabase CLI: `supabase init`, `supabase start` (Docker), versioned migrations in `supabase/migrations/`, `supabase/seed.sql`, `supabase/tests/` (pgTAP); npm scripts `db:start`, `db:stop`, `db:reset`, `db:test`
 - [ ] Add a first **pgTAP test** and verify the PR job **DB migrations** runs the full pipeline (upgrade path from `main`, fresh replay, linter, RLS check)
-- [ ] Add `CI gate` to the required checks of the ruleset (already in `main-required-checks.json`)
+- [x] `CI gate` is in the required checks of the ruleset (`main-required-checks.json`)
 - [ ] **Done when**: a test PR with a migration passes CI, and a PR that edits an existing migration, creates a table without RLS or uses `DROP` without the `breaking-change` label is **rejected**
 
 ### P1.3 Payload CMS `area: cms`
