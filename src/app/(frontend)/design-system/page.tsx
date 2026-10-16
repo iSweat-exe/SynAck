@@ -115,7 +115,6 @@ const FORCED_STATES = [
   { label: "Default", force: undefined },
   { label: "Hover", force: "hover" },
   { label: "Pressed", force: "active" },
-  { label: "Focus", force: "focus" },
   { label: "Disabled", force: "disabled" },
 ] as const;
 
@@ -271,7 +270,7 @@ export default function DesignSystemPage() {
 
           <Block
             title="States"
-            note="Hover moves the button toward its shadow, pressed sinks it, focus adds a ring that does not depend on hover, disabled is flat and gray. Try them for real on any button."
+            note="Hover moves the button toward its shadow, pressed sinks it, disabled is flat and gray. Try them for real on any button."
           >
             <div className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-5">
               {(["primary", "secondary"] as const).flatMap((variant) =>
@@ -387,7 +386,7 @@ export default function DesignSystemPage() {
         >
           <Block
             title="States"
-            note="Off and on, enabled and disabled. Hover, pressed and focus are forced on the last row; try them for real on any switch."
+            note="Off and on, enabled and disabled. Hover and pressed are forced on the last row; try them for real on any switch."
           >
             <div className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-4">
               {(
@@ -398,7 +397,6 @@ export default function DesignSystemPage() {
                   ["On, disabled", { disabled: true, defaultChecked: true }],
                   ["Hover", { "data-force": "hover" }],
                   ["Pressed", { "data-force": "active" }],
-                  ["Focus", { "data-force": "focus", defaultChecked: true }],
                 ] as const
               ).map(([label, props]) => (
                 <div key={label} className="flex flex-col items-start gap-4">
@@ -420,7 +418,7 @@ export default function DesignSystemPage() {
         <Section
           id="inputs"
           title="Inputs"
-          description="Text fields share the outline and radius of the buttons. Focus adds a discreet ring, an invalid field turns its outline red."
+          description="Text fields share the outline and radius of the buttons. An invalid field turns its outline red."
         >
           <Block
             title="States"

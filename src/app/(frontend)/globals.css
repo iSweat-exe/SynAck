@@ -214,8 +214,9 @@
   --input: var(--outline);
   --ring: var(--ring-color);
   --link: var(--link-color);
-  /* Keyboard focus: a thin, translucent ring. Deliberately discreet, but still there for keyboard users. */
-  --focus-ring: color-mix(in srgb, var(--ring-color) 45%, transparent);
+  /* Keyboard focus is not drawn (decided by the project creator). The outline is kept transparent rather
+     than removed: Windows high-contrast mode still shows it. Set a color here to bring the ring back. */
+  --focus-ring: transparent;
 }
 
 @layer base {

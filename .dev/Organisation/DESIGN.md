@@ -194,14 +194,14 @@ The screenshots have no known scale: border, radius, shadow offset and bevel mus
 - Forms and auth pages sit in a Card; provider sign-in buttons are Secondary, full width, so Primary stays reserved for the main action of a screen.
 
 ### Input, badge and tabs (derived from the kit, not in the screenshots)
-- **Input / textarea**: `surface` background, outline `u` = 2 px, radius 2u like the buttons, height 48 px. Focus: the discreet ring. Invalid: `danger-500` outline. Disabled: like a disabled button.
+- **Input / textarea**: `surface` background, outline `u` = 2 px, radius 2u like the buttons, height 48 px. Invalid: `danger-500` outline. Disabled: like a disabled button.
 - **Badge**: outlined pill, 24 px high, `neutral` / `secondary` / `primary` and the four semantic fills (500 tone, `neutral-950` text).
 - **Tabs**: small outlined boxes; the selected one is `primary-400` with a hard shadow; the panel is an outlined surface.
 
 ### States and interactions (Proposal, absent from the screenshots)
 - **Hover**: the button shifts slightly down and to the right and the shadow shrinks.
 - **Press**: the button "sinks" (shadow to zero, shift equal to the shadow offset).
-- **Keyboard focus**: a thin (2 px), translucent ring (`primary-600` at 45%, 2 px away from the component), deliberately discreet at the project creator's request. It stays visible enough for keyboard users and does not depend on hover.
+- **Keyboard focus**: **not drawn**, at the project creator's request (no ring on buttons, switches, tabs, links or fields). The outline is kept transparent so Windows high-contrast mode still shows it, and `--focus-ring` in `globals.css` brings a ring back with one line. Note that without a visible focus indicator, keyboard users cannot see where they are (WCAG 2.4.7).
 - **Disabled**: `neutral-200` background, `neutral-300` bevel, `neutral-500` text, reduced or removed shadow.
 - **Inline links**: `primary-600` or `primary-700` on a light background (sufficient contrast), not `primary-400`.
 
